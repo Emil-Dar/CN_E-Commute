@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="email" type="id"/>
+    <item name="password" type="id"/>
+    <item name="user_type_group" type="id"/>
+    <item name="commuter" type="id"/>
+    <item name="driver" type="id"/>
+    <item name="operator" type="id"/>
+    <item name="admin" type="id"/>
+    <item name="sign_up_button" type="id"/>
+    <item name="sign_in_button" type="id"/>
+</resources>
