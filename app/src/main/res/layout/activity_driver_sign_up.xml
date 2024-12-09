@@ -6,13 +6,12 @@
     android:orientation="vertical"
     android:background="#163F74"
     android:gravity="center"
-    tools:context=".SignUpActivity">
+    tools:context=".DriverSignUpActivity">
 
     <TextView
-        android:id="@+id/sign_up_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign Up"
+        android:text="Driver Sign Up"
         android:textSize="24sp"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
@@ -20,10 +19,21 @@
         android:layout_marginBottom="24dp" />
 
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="Name"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CCCCCC"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/license_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="License Number"
         android:textColor="#FFFFFF"
         android:textColorHint="#CCCCCC"
         android:background="@drawable/edit_text_background"

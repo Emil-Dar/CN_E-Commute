@@ -26,9 +26,17 @@ public class UserRoleSelectionActivity extends AppCompatActivity {
         View.OnClickListener roleButtonClickListener = v -> {
             Intent intent;
             if (userType == R.id.sign_in_button) {
-                intent = new Intent(UserRoleSelectionActivity.this, SignInActivity.class);
+                if (v.getId() == R.id.driver_button) {
+                    intent = new Intent(UserRoleSelectionActivity.this, DriverSignInActivity.class);
+                } else {
+                    intent = new Intent(UserRoleSelectionActivity.this, SignInActivity.class);
+                }
             } else if (userType == R.id.sign_up_button) {
-                intent = new Intent(UserRoleSelectionActivity.this, SignUpActivity.class);
+                if (v.getId() == R.id.driver_button) {
+                    intent = new Intent(UserRoleSelectionActivity.this, DriverSignUpActivity.class);
+                } else {
+                    intent = new Intent(UserRoleSelectionActivity.this, SignUpActivity.class);
+                }
             } else {
                 return;
             }

@@ -6,10 +6,9 @@ import android.os.Handler;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -42,6 +41,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Delay for 3 seconds before starting the animation and showing buttons
         new Handler().postDelayed(() -> {
             Animation moveUp = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.move_up);
             logoImageView.startAnimation(moveUp);

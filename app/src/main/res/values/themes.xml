@@ -11,11 +11,12 @@
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
 
-        <!-- Customize your theme here -->
+        <!-- Custom button style to avoid theme override -->
         <item name="android:buttonStyle">@style/CustomButton</item>
     </style>
 
-    <style name="CustomButton" parent="Widget.MaterialComponents.Button">
+    <!-- Define the custom button style -->
+    <style name="CustomButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background</item>
         <item name="android:textColor">@color/colorOnPrimary</item>
     </style>

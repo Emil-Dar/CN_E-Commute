@@ -22,6 +22,8 @@
         </activity>
 
         <activity android:name=".UserRoleSelectionActivity" android:exported="true" />
+        <activity android:name=".DriverSignInActivity" android:exported="true" />
+        <activity android:name=".DriverSignUpActivity" android:exported="true" />
         <activity android:name=".SignInActivity" android:exported="true" />
         <activity android:name=".SignUpActivity" android:exported="true" />
         <activity android:name=".HomeActivity" android:exported="true" />
