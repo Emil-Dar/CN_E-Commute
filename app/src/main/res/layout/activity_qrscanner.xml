@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/backgroundColor">
+
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/qr_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QR SCANNER"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp" />
+
+    <!-- QR Code Frame with Camera -->
+    <FrameLayout
+        android:id="@+id/qr_frame"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/qr_title"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/qr_frame_border"/>
+
+    <!-- Prompt Text -->
+    <TextView
+        android:id="@+id/prompt_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Place a barcode inside the viewfinder rectangle to scan it"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:layout_below="@id/qr_frame"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Scan Button -->
+    <Button
+        android:id="@+id/scan_qr_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Scanning"
+        android:backgroundTint="#3778C2"
+        android:textColor="#FFFFFF"
+        android:layout_below="@id/prompt_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:padding="12dp" />
+
+</RelativeLayout>

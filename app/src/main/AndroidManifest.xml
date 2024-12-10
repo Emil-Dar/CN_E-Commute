@@ -5,12 +5,16 @@
     <!-- Permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" /> <!-- Feature Declaration for Camera -->
 
-    <!-- Feature Declaration for Camera -->
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!-- Camera Hardware Feature -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" /> <!-- Ensure Camera is required -->
 
+    <!-- Application -->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,6 +25,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CNECommute"
         tools:targetApi="31">
+
+        <!-- QR Scanner Activity -->
+        <activity
+            android:name=".QRScannerActivity"
+            android:exported="false" />
 
         <!-- Splash Screen Activity -->
         <activity
@@ -64,4 +73,5 @@
             android:exported="true" />
 
     </application>
+
 </manifest>

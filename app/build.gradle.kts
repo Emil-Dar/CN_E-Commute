@@ -58,4 +58,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")  // Firebase Authentication
     implementation("com.google.firebase:firebase-firestore")  // Firebase Firestore
+
+    // ZXing library for QR code scanning
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 }

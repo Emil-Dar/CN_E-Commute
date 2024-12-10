@@ -12,5 +12,10 @@
     <color name="black">#000000</color>  <!-- Example black color -->
     <color name="blue">#2196F3</color> <!-- Example blue color -->
     <color name="skyblue">#A0C5DB</color> <!-- Updated secondary color -->
+    <color name="light_gray">#ECECEC</color>
+    <color name="dark_gray">#333333</color>
+    <color name="medium_gray">#666666</color>
+    <color name="primary_blue">#3778C2</color>
+
 
 </resources>

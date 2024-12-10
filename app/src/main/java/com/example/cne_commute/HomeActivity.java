@@ -18,6 +18,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // Initialize buttons and floating action button
         homeButton = findViewById(R.id.home_button);
         mapButton = findViewById(R.id.map_button);
         historyButton = findViewById(R.id.history_button);
@@ -25,6 +26,7 @@ public class HomeActivity extends AppCompatActivity {
         reportButton = findViewById(R.id.report_button);
         fabQRCode = findViewById(R.id.fab_qr_code);
 
+        // Button click listeners
         homeButton.setOnClickListener(v -> showToast("Home Button Clicked"));
         mapButton.setOnClickListener(v -> openGoogleMaps());
         historyButton.setOnClickListener(v -> showToast("History Button Clicked"));
@@ -36,13 +38,19 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        fabQRCode.setOnClickListener(v -> showToast("QR Code Button Clicked"));
+        // Navigate to QRScannerActivity when the QR Code button is clicked
+        fabQRCode.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, QRScannerActivity.class);
+            startActivity(intent);
+        });
     }
 
+    // Helper method to display a toast message
     private void showToast(String message) {
         Toast.makeText(HomeActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
+    // Helper method to open Google Maps with a query
     private void openGoogleMaps() {
         Uri gmmIntentUri = Uri.parse("geo:0,0?q=Tricycles");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
