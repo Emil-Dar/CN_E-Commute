@@ -1,6 +1,9 @@
 package com.example.cne_commute;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,18 +15,18 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class ReportActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int TAKE_PHOTO_REQUEST = 2;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
 
     private Button selectFileButton, openCameraButton, submitButton;
     private Spinner spinner1, spinner2, spinner3, spinner4;
-    private ImageView imagePreview;  // Declare ImageView to display selected image
+    private ImageView imagePreview; // ImageView to display selected or captured image
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,7 @@ public class ReportActivity extends AppCompatActivity {
 
         // Set listeners for file selection and photo capture
         selectFileButton.setOnClickListener(v -> openFileChooser());
-        openCameraButton.setOnClickListener(v -> openCamera());
+        openCameraButton.setOnClickListener(v -> checkCameraPermissionAndOpen());
         submitButton.setOnClickListener(v -> submitReport());
     }
 
@@ -54,6 +57,16 @@ public class ReportActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, "Select an image"), PICK_IMAGE_REQUEST);
+    }
+
+    // Check camera permissions before opening the camera
+    private void checkCameraPermissionAndOpen() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            openCamera();
+        } else {
+            // Request camera permission
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+        }
     }
 
     // Open camera to take a photo
@@ -91,9 +104,26 @@ public class ReportActivity extends AppCompatActivity {
                 imagePreview.setImageURI(selectedImageUri);
                 showToast("Selected Image: " + selectedImageUri.toString());
             } else if (requestCode == TAKE_PHOTO_REQUEST && data != null) {
-                Bundle extras = data.getExtras();
-                showToast("Photo captured successfully!");
-                // Handle the captured photo here
+                // Extract the thumbnail image from the returned Intent
+                Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
+                if (capturedImage != null) {
+                    imagePreview.setImageBitmap(capturedImage);
+                    showToast("Photo captured successfully!");
+                } else {
+                    showToast("Failed to capture image.");
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                showToast("Camera permission is required to use this feature.");
             }
         }
     }
