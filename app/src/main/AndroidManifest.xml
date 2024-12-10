@@ -5,16 +5,13 @@
     <!-- Permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" /> <!-- Feature Declaration for Camera -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <!-- Camera Hardware Feature -->
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" /> <!-- Ensure Camera is required -->
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
 
-    <!-- Application -->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -27,9 +24,7 @@
         tools:targetApi="31">
 
         <!-- QR Scanner Activity -->
-        <activity
-            android:name=".QRScannerActivity"
-            android:exported="false" />
+        <activity android:name=".QRScannerActivity" android:exported="false" />
 
         <!-- Splash Screen Activity -->
         <activity
@@ -42,36 +37,23 @@
         </activity>
 
         <!-- User Role Selection Activity -->
-        <activity
-            android:name=".UserRoleSelectionActivity"
-            android:exported="true" />
+        <activity android:name=".UserRoleSelectionActivity" android:exported="true" />
 
         <!-- Driver Activities -->
-        <activity
-            android:name=".DriverSignInActivity"
-            android:exported="true" />
-        <activity
-            android:name=".DriverSignUpActivity"
-            android:exported="true" />
+        <activity android:name=".DriverSignInActivity" android:exported="true" />
+        <activity android:name=".DriverSignUpActivity" android:exported="true" />
 
         <!-- User Activities -->
-        <activity
-            android:name=".SignInActivity"
-            android:exported="true" />
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="true" />
+        <activity android:name=".SignInActivity" android:exported="true" />
+        <activity android:name=".SignUpActivity" android:exported="true" />
 
-        <!-- Home Activity -->
-        <activity
-            android:name=".HomeActivity"
-            android:exported="true" />
+        <!-- Home Activities -->
+        <activity android:name=".HomeActivity" android:exported="true" />
+        <activity android:name=".DriverHomeActivity" android:exported="true" />
+        <activity android:name=".AdminHomeActivity" android:exported="true" />
 
         <!-- Report Activity -->
-        <activity
-            android:name=".ReportActivity"
-            android:exported="true" />
+        <activity android:name=".ReportActivity" android:exported="true" />
 
     </application>
-
 </manifest>

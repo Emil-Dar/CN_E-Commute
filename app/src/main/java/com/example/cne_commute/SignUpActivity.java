@@ -2,7 +2,7 @@ package com.example.cne_commute;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,8 +11,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +27,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private static final String TAG = "SignUpActivity";
     private static final String CHANNEL_ID = "signup_notifications";
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private EditText emailEditText, passwordEditText;
@@ -42,6 +45,14 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.sign_up_button);
 
         createNotificationChannel();
+
+        // Check and request notification permission if not granted
+        if (ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS")
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{"android.permission.POST_NOTIFICATIONS"},
+                    REQUEST_NOTIFICATION_PERMISSION);
+        }
 
         signUpButton.setOnClickListener(v -> signUpUser());
     }
@@ -85,12 +96,15 @@ public class SignUpActivity extends AppCompatActivity {
 
                             db.collection("users").document(user.getUid()).set(userData)
                                     .addOnSuccessListener(aVoid -> {
+                                        // Show toast message
                                         Toast.makeText(SignUpActivity.this, "User Registered.", Toast.LENGTH_SHORT).show();
+
+                                        // Clear input fields
+                                        emailEditText.setText("");
+                                        passwordEditText.setText("");
+
+                                        // Send notification
                                         sendNotification("Account Created", "Your account has been successfully created.");
-                                        Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-                                        intent.putExtra("user_role", R.id.commuter_button); // For commuter sign-in
-                                        startActivity(intent);
-                                        finish();
                                     })
                                     .addOnFailureListener(e -> {
                                         Log.e(TAG, "Registration Failed: " + e.getMessage());
@@ -105,13 +119,30 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void sendNotification(String title, String message) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with your app's icon
-                .setContentTitle(title)
-                .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        if (ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS")
+                == PackageManager.PERMISSION_GRANTED) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with your app's icon
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(0, builder.build());
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.notify(0, builder.build());
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+                Log.d(TAG, "Notification permission granted");
+            } else {
+                // Permission denied
+                Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
