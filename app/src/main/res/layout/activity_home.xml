@@ -12,58 +12,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome to Home Screen"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
+        android:layout_centerInParent="true"
         android:textSize="18sp"
-        android:textColor="@color/black" />
-
-    <!-- Instructions Section -->
-    <TextView
-        android:id="@+id/instructions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/home_text"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Instructions:\n\n1. Scan the QR Code to get tricycle info.\n2. View operator info.\n3. Calculate fares.\n4. Report any issues."
-        android:textColor="@color/black"
-        android:textSize="16sp" />
-
-    <!-- Report Button -->
-    <Button
-        android:id="@+id/report_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/instructions"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/button_background"
-        android:padding="12dp"
-        android:text="Report"
-        android:textColor="#FFFFFF" />
+        android:textColor="#000000" />
 
     <!-- Floating Action Button for QR Code -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_qr_code"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="32dp"
         android:src="@drawable/ic_qr_code"
         android:contentDescription="QR Code Scanner"
         android:tint="@color/white"
         app:backgroundTint="@color/colorSecondary" />
 
-    <!-- Bottom Navigation Bar with Icons -->
+    <!-- Bottom Navigation Bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:background="@color/white"
+        android:background="#FFFFFF"
         android:padding="8dp"
         android:gravity="center">
 
@@ -72,47 +44,35 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_home"
-            android:contentDescription="Home"
-            android:padding="8dp"
-            android:text=""
-            android:drawablePadding="4dp" />
+            android:text="Home"
+            android:textColor="#5FA8D3"
+            android:background="@drawable/button_background" />
 
         <Button
             android:id="@+id/map_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_map"
-            android:contentDescription="Map"
-            android:padding="8dp"
-            android:text=""
-            android:drawablePadding="4dp" />
+            android:text="Map"
+            android:textColor="#5FA8D3"
+            android:background="@drawable/button_background" />
 
         <Button
             android:id="@+id/history_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_history"
-            android:contentDescription="History"
-            android:padding="8dp"
-            android:text=""
-            android:drawablePadding="4dp" />
+            android:text="History"
+            android:textColor="#5FA8D3"
+            android:background="@drawable/button_background" />
 
         <Button
             android:id="@+id/account_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_account"
-            android:contentDescription="Account"
-            android:padding="8dp"
-            android:text=""
-            android:drawablePadding="4dp" />
+            android:text="Account"
+            android:textColor="#5FA8D3"
+            android:background="@drawable/button_background" />
     </LinearLayout>
 </RelativeLayout>
