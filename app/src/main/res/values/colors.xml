@@ -1,12 +1,10 @@
 <resources>
-    <color name="backgroundColor">#BFDBEF</color> <!-- Updated background color -->
-    <color name="textColor">#000000</color> <!-- Ensure text color is defined -->
-    <color name="colorPrimary">#163F74</color> <!-- Updated primary color -->
-    <color name="colorPrimaryVariant">#0F3558</color> <!-- Updated primary dark color -->
-    <color name="colorOnPrimary">#FFFFFF</color> <!-- Ensure this color is defined -->
-    <color name="colorSecondary">#5FA8D3</color> <!-- Updated secondary color -->
-    <color name="colorSecondaryVariant">#4682B4</color> <!-- Ensure this color is defined -->
-    <color name="colorOnSecondary">#FFFFFF</color> <!-- Ensure this color is defined -->
-    <color name="colorAccent">#5FA8D3</color> <!-- Ensure this color is defined -->
-    <color name="white">#FFFFFF</color> <!-- Ensure this color is defined -->
+    <color name="colorPrimary">#163F74</color>
+    <color name="colorPrimaryVariant">#163F74</color>
+    <color name="colorSecondary">#5FA8D3</color>
+    <color name="colorSecondaryVariant">#5FA8D3</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
 </resources>

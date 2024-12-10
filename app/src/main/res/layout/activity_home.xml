@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor"
     tools:context=".HomeActivity">
 
     <!-- Content of the home screen -->
@@ -16,7 +15,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:textSize="18sp"
-        android:textColor="@color/textColor" />
+        android:textColor="@color/black" />
 
     <!-- Instructions Section -->
     <TextView
@@ -29,7 +28,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="Instructions:\n\n1. Scan the QR Code to get tricycle info.\n2. View operator info.\n3. Calculate fares.\n4. Report any issues."
-        android:textColor="@color/textColor"
+        android:textColor="@color/black"
         android:textSize="16sp" />
 
     <!-- Report Button -->
@@ -43,7 +42,7 @@
         android:background="@drawable/button_background"
         android:padding="12dp"
         android:text="Report"
-        android:textColor="@color/white" />
+        android:textColor="#FFFFFF" />
 
     <!-- Floating Action Button for QR Code -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -56,7 +55,7 @@
         android:src="@drawable/ic_qr_code"
         android:contentDescription="QR Code Scanner"
         android:tint="@color/white"
-        app:backgroundTint="@color/colorAccent" />
+        app:backgroundTint="@color/colorSecondary" />
 
     <!-- Bottom Navigation Bar with Icons -->
     <LinearLayout
@@ -64,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:background="@color/colorPrimary"
+        android:background="@color/white"
         android:padding="8dp"
         android:gravity="center">
 
@@ -76,10 +75,9 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_home"
             android:contentDescription="Home"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:padding="8dp"
             android:text=""
-            android:tint="@color/white" />
+            android:drawablePadding="4dp" />
 
         <Button
             android:id="@+id/map_button"
@@ -89,10 +87,9 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_map"
             android:contentDescription="Map"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:padding="8dp"
             android:text=""
-            android:tint="@color/white" />
+            android:drawablePadding="4dp" />
 
         <Button
             android:id="@+id/history_button"
@@ -102,10 +99,9 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_history"
             android:contentDescription="History"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:padding="8dp"
             android:text=""
-            android:tint="@color/white" />
+            android:drawablePadding="4dp" />
 
         <Button
             android:id="@+id/account_button"
@@ -115,9 +111,8 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_account"
             android:contentDescription="Account"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:padding="8dp"
             android:text=""
-            android:tint="@color/white" />
+            android:drawablePadding="4dp" />
     </LinearLayout>
 </RelativeLayout>
