@@ -29,7 +29,12 @@ public class HomeActivity extends AppCompatActivity {
         mapButton.setOnClickListener(v -> openGoogleMaps());
         historyButton.setOnClickListener(v -> showToast("History Button Clicked"));
         accountButton.setOnClickListener(v -> showToast("Account Button Clicked"));
-        reportButton.setOnClickListener(v -> showToast("Report Button Clicked"));
+
+        // Navigate to ReportActivity when the "Report" button is clicked
+        reportButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, ReportActivity.class);
+            startActivity(intent);
+        });
 
         fabQRCode.setOnClickListener(v -> showToast("QR Code Button Clicked"));
     }

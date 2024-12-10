@@ -35,11 +35,11 @@
     <!-- Report Button -->
     <Button
         android:id="@+id/report_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="55dp"
         android:layout_below="@id/instructions"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="300dp"
         android:background="@drawable/button_background"
         android:padding="12dp"
         android:text="Report"
@@ -48,11 +48,11 @@
     <!-- Floating Action Button for QR Code -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_qr_code"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="60dp"
         android:src="@drawable/ic_qr_code"
         android:contentDescription="QR Code Scanner"
         android:tint="@color/white"
@@ -61,7 +61,7 @@
     <!-- Bottom Navigation Bar with Icons -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:background="@color/colorPrimary"
@@ -76,8 +76,8 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_home"
             android:contentDescription="Home"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="8dp"
             android:text=""
             android:tint="@color/white" />
 
@@ -89,8 +89,8 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_map"
             android:contentDescription="Map"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="8dp"
             android:text=""
             android:tint="@color/white" />
 
@@ -102,8 +102,8 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_history"
             android:contentDescription="History"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="8dp"
             android:text=""
             android:tint="@color/white" />
 
@@ -115,8 +115,8 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_account"
             android:contentDescription="Account"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="8dp"
             android:text=""
             android:tint="@color/white" />
     </LinearLayout>

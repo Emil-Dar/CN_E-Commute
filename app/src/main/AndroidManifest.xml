@@ -1,5 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <!-- Feature Declaration for Camera -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +22,7 @@
         android:theme="@style/Theme.CNECommute"
         tools:targetApi="31">
 
+        <!-- Splash Screen Activity -->
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true">
@@ -21,13 +32,36 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".UserRoleSelectionActivity" android:exported="true" />
-        <activity android:name=".DriverSignInActivity" android:exported="true" />
-        <activity android:name=".DriverSignUpActivity" android:exported="true" />
-        <activity android:name=".SignInActivity" android:exported="true" />
-        <activity android:name=".SignUpActivity" android:exported="true" />
-        <activity android:name=".HomeActivity" android:exported="true" />
+        <!-- User Role Selection Activity -->
+        <activity
+            android:name=".UserRoleSelectionActivity"
+            android:exported="true" />
+
+        <!-- Driver Activities -->
+        <activity
+            android:name=".DriverSignInActivity"
+            android:exported="true" />
+        <activity
+            android:name=".DriverSignUpActivity"
+            android:exported="true" />
+
+        <!-- User Activities -->
+        <activity
+            android:name=".SignInActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="true" />
+
+        <!-- Home Activity -->
+        <activity
+            android:name=".HomeActivity"
+            android:exported="true" />
+
+        <!-- Report Activity -->
+        <activity
+            android:name=".ReportActivity"
+            android:exported="true" />
 
     </application>
-
 </manifest>

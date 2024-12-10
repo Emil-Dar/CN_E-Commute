@@ -1,4 +1,45 @@
 <resources>
+    <!-- App Name -->
     <string name="app_name">CN E-Commute</string>
+
+    <!-- General Labels -->
     <string name="logo">Logo</string>
+    <string name="submit">Submit</string>
+    <string name="select_file">Select File</string>
+    <string name="open_camera">Open Camera &amp; Take Photo</string> <!-- Fixed the & issue -->
+    <string name="report">Report</string>
+    <string name="choose_problem">Choose the problem you want to report</string>
+    <string name="upload_image_here">Upload Image Here</string>
+
+    <!-- Report Types -->
+    <string-array name="passenger_safety_violations">
+        <item>Overloading</item>
+        <item>Failure to wear helmets</item>
+        <item>Child safety violations</item>
+    </string-array>
+
+    <string-array name="operational_violations">
+        <item>Overcharging fares</item>
+        <item>Refusal to convey passengers</item>
+        <item>Operating without a franchise</item>
+    </string-array>
+
+    <string-array name="traffic_rule_violations">
+        <item>Reckless driving</item>
+        <item>Illegal parking</item>
+        <item>Disregarding traffic signs</item>
+    </string-array>
+
+    <string-array name="vehicle_condition_violations">
+        <item>Operating defective vehicles</item>
+        <item>Lack of proper maintenance</item>
+        <item>Colorum operations</item>
+    </string-array>
+
+    <string-array name="driver_conduct_violations">
+        <item>Discourteous behavior</item>
+        <item>Driving under the influence</item>
+        <item>Smoking while driving</item>
+    </string-array>
+
 </resources>

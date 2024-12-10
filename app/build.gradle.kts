@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.constraintlayout.v213)
     implementation(libs.firebase.database)
+    implementation(libs.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.v113)
     androidTestImplementation(libs.espresso.core.v340)

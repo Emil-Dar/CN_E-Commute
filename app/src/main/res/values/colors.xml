@@ -9,4 +9,8 @@
     <color name="colorOnSecondary">#FFFFFF</color> <!-- Ensure this color is defined -->
     <color name="colorAccent">#5FA8D3</color> <!-- Ensure this color is defined -->
     <color name="white">#FFFFFF</color> <!-- Ensure this color is defined -->
+    <color name="black">#000000</color>  <!-- Example black color -->
+    <color name="blue">#2196F3</color> <!-- Example blue color -->
+    <color name="skyblue">#A0C5DB</color> <!-- Updated secondary color -->
+
 </resources>
