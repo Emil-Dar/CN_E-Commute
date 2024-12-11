@@ -6,6 +6,7 @@
     android:background="#163F74"
     tools:context=".SplashScreenActivity">
 
+    <!-- Logo ImageView -->
     <ImageView
         android:id="@+id/logo"
         android:layout_width="200dp"
@@ -14,11 +15,25 @@
         android:contentDescription="@string/logo"
         android:src="@drawable/logo" />
 
+    <!-- Tagline TextView -->
+    <TextView
+        android:id="@+id/tagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="From fare to care,\nwe’ve got Cam Norte there."
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/lobster_regular"
+        android:gravity="center" />
+
     <LinearLayout
         android:id="@+id/button_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/logo"
+        android:layout_below="@id/tagline"
         android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:gravity="center">

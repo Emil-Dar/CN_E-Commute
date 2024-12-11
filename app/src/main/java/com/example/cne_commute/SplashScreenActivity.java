@@ -9,11 +9,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Button;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     private ImageView logoImageView;
+    private TextView taglineTextView;
     private LinearLayout buttonLayout;
     private Button signInButton, signUpButton;
 
@@ -23,6 +25,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         logoImageView = findViewById(R.id.logo);
+        taglineTextView = findViewById(R.id.tagline);
         buttonLayout = findViewById(R.id.button_layout);
         signInButton = findViewById(R.id.sign_in_button);
         signUpButton = findViewById(R.id.sign_up_button);
@@ -45,6 +48,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(() -> {
             Animation moveUp = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.move_up);
             logoImageView.startAnimation(moveUp);
+            taglineTextView.startAnimation(moveUp);
             moveUp.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
