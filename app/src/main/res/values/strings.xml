@@ -44,10 +44,25 @@
     <string name="smoking_while_driving">Smoking while driving</string>
 
     <!-- Input Placeholder -->
-    <string name="enter_violation_details">Enter violation details...</string>
+    <string name="enter_violation_details">Enter violation details</string>
 
     <string name="remove_photo">Remove Photo</string>
     <string name="image_preview">Image Preview</string>
     <string name="remove_image">Remove Image</string>
 
+
+    <!-- Sign up -->
+    <string name="create_account">CREATE ACCOUNT</string>
+    <string name="register_to_get_started">Register to get started</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="login_link">Already have an account? Log in</string>
+    <string name="signup_link">Dont have an account? Sign up</string>
+    <string name="username_field">Username field</string>
+    <string name="show_password">Show Password</string>
+    <string name="provide_your_login_details_to_proceed">Provide your login details to proceed</string>
 </resources>
