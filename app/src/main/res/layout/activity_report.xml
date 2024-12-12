@@ -24,105 +24,338 @@
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
-        <!-- Spinner 1: Passenger Safety Violations -->
+        <!-- Section: Speeding Violations -->
         <TextView
+            android:id="@+id/speeding_violations_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Passenger Safety Violations"
+            android:text="@string/speeding_violations"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
-            android:background="@color/skyblue"/>
-
-        <Spinner
-            android:id="@+id/spinner_passenger_safety"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:padding="10dp"
             android:minHeight="48dp"
-            android:layout_marginBottom="16dp"
-            android:spinnerMode="dropdown"
-            android:entries="@array/passenger_safety_violations" />
+            android:background="@color/skyblue"
+            android:clickable="true"
+            android:focusable="true" />
 
-        <!-- Spinner 2: Operational Violations -->
-        <TextView
+
+        <LinearLayout
+            android:id="@+id/speeding_violations_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Operational Violations"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/over_speeding"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/excessive_speed_in_restricted_zones"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/driving_too_fast_for_conditions"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_violation_details"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="4dp"
+                android:autofillHints="name"
+                android:inputType="textCapSentences|textMultiLine"
+                android:lines="1"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+
+        <!-- Section: Passenger Safety Violations -->
+        <TextView
+            android:id="@+id/passenger_safety_violations_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/passenger_safety_violations_title"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
-            android:background="@color/skyblue"/>
-
-        <Spinner
-            android:id="@+id/spinner_operational"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:padding="10dp"
             android:minHeight="48dp"
-            android:layout_marginBottom="16dp"
-            android:spinnerMode="dropdown"
-            android:entries="@array/operational_violations" />
+            android:background="@color/skyblue"
+            android:clickable="true"
+            android:focusable="true" />
 
-        <!-- Spinner 3: Traffic Rule Violations -->
-        <TextView
+        <LinearLayout
+            android:id="@+id/passenger_safety_violations_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Traffic Rule Violations"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/not_wearing_seatbelts"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/overloading"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/allowing_passengers_to_hang_outside_the_vehicle"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_violation_details"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="4dp"
+                android:autofillHints="name"
+                android:inputType="textCapSentences|textMultiLine"
+                android:lines="1"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+
+        <!-- Section: Operational Violations -->
+        <TextView
+            android:id="@+id/operational_violations_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/operational_violations_title"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
-            android:background="@color/skyblue"/>
-
-        <Spinner
-            android:id="@+id/spinner_traffic_rules"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:padding="10dp"
             android:minHeight="48dp"
-            android:layout_marginBottom="16dp"
-            android:spinnerMode="dropdown"
-            android:entries="@array/traffic_rule_violations" />
+            android:background="@color/skyblue"
+            android:clickable="true"
+            android:focusable="true" />
 
-        <!-- Spinner 4: Vehicle Condition Violations -->
-        <TextView
+        <LinearLayout
+            android:id="@+id/operational_violations_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Vehicle Condition Violations"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/overcharging_fares"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/refusal_to_convey_passengers"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/operating_without_franchise"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_violation_details"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="4dp"
+                android:autofillHints="name"
+                android:inputType="textCapSentences|textMultiLine"
+                android:lines="1"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+
+        <!-- Section: Traffic Rule Violations -->
+        <TextView
+            android:id="@+id/traffic_rule_violations_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/traffic_rule_violations_title"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
-            android:background="@color/skyblue"/>
-
-        <Spinner
-            android:id="@+id/spinner_vehicle_condition"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:padding="10dp"
             android:minHeight="48dp"
-            android:layout_marginBottom="16dp"
-            android:spinnerMode="dropdown"
-            android:entries="@array/vehicle_condition_violations" />
+            android:background="@color/skyblue"
+            android:clickable="true"
+            android:focusable="true" />
 
-        <!-- Spinner 5: Driver Conduct Violations -->
-        <TextView
+        <LinearLayout
+            android:id="@+id/traffic_rule_violations_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Driver Conduct Violations"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/reckless_driving"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/illegal_parking"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/disregarding_traffic_signs"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_violation_details"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="4dp"
+                android:autofillHints="name"
+                android:inputType="textCapSentences|textMultiLine"
+                android:lines="1"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+
+        <!-- Section: Driver Conduct Violations -->
+        <TextView
+            android:id="@+id/driver_conduct_violations_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/driver_conduct_violations_title"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
-            android:background="@color/skyblue"/>
+            android:padding="10dp"
+            android:minHeight="48dp"
+            android:background="@color/skyblue"
+            android:clickable="true"
+            android:focusable="true" />
 
-        <Spinner
-            android:id="@+id/spinner_driver_conduct"
+        <LinearLayout
+            android:id="@+id/driver_conduct_violations_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:layout_marginBottom="16dp"
-            android:spinnerMode="dropdown"
-            android:entries="@array/driver_conduct_violations" />
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/discourteous_behavior"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/driving_under_influence"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/smoking_while_driving"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_violation_details"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="4dp"
+                android:autofillHints="name"
+                android:inputType="textCapSentences|textMultiLine"
+                android:lines="1"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+
 
         <!-- File selection button -->
         <Button
@@ -132,15 +365,38 @@
             android:text="@string/select_file"
             android:layout_marginBottom="16dp" />
 
-        <!-- Image Preview Section -->
-        <ImageView
-            android:id="@+id/image_preview"
+        <!-- Image Preview Section with Remove Button -->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="16dp"
-            android:scaleType="centerCrop"
-            android:background="@android:color/darker_gray"
-            android:contentDescription="@string/upload_image_here" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <!-- Image Preview -->
+            <ImageView
+                android:id="@+id/image_preview"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="16dp"
+                android:background="@color/medium_gray"
+                android:contentDescription="@string/upload_image_here"
+                android:importantForAccessibility="yes" />
+
+            <!-- Remove Photo Button (X) -->
+            <ImageView
+                android:id="@+id/remove_photo_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="8dp"
+                android:contentDescription="@string/remove_photo"
+                android:visibility="gone" /> <!-- Initially hidden until image is selected -->
+
+
+        </RelativeLayout>
+
 
         <!-- Open camera button -->
         <Button

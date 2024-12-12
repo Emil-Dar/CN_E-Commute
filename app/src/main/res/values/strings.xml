@@ -10,36 +10,41 @@
     <string name="report">Report</string>
     <string name="choose_problem">Choose the problem you want to report</string>
     <string name="upload_image_here">Upload Image Here</string>
+    <string name="report_problem">Report: %1$s</string> <!-- Example for a dynamic placeholder -->
+
+    <!-- Speeding Violations -->
+    <string name="speeding_violations">Speeding Violations</string>
+    <string name="over_speeding">Over-speeding</string>
+    <string name="excessive_speed_in_restricted_zones">Excessive Speed in Restricted Zones</string>
+    <string name="driving_too_fast_for_conditions">Driving Too Fast for Conditions (e.g., poor weather)</string>
+
 
     <!-- Report Types -->
-    <string-array name="passenger_safety_violations">
-        <item>Overloading</item>
-        <item>Failure to wear helmets</item>
-        <item>Child safety violations</item>
-    </string-array>
+    <string name="passenger_safety_violations_title">Passenger Safety Violations</string>
+    <string name="not_wearing_seatbelts">Not wearing seatbelts</string>
+    <string name="overloading">Overloading</string>
+    <string name="allowing_passengers_to_hang_outside_the_vehicle">Allowing passengers to hang outside the vehicle</string>
 
-    <string-array name="operational_violations">
-        <item>Overcharging fares</item>
-        <item>Refusal to convey passengers</item>
-        <item>Operating without a franchise</item>
-    </string-array>
 
-    <string-array name="traffic_rule_violations">
-        <item>Reckless driving</item>
-        <item>Illegal parking</item>
-        <item>Disregarding traffic signs</item>
-    </string-array>
+    <string name="operational_violations_title">Operational Violations</string>
+    <string name="overcharging_fares">Overcharging fares</string>
+    <string name="refusal_to_convey_passengers">Refusal to convey passengers</string>
+    <string name="operating_without_franchise">Operating without a franchise</string>
 
-    <string-array name="vehicle_condition_violations">
-        <item>Operating defective vehicles</item>
-        <item>Lack of proper maintenance</item>
-        <item>Colorum operations</item>
-    </string-array>
 
-    <string-array name="driver_conduct_violations">
-        <item>Discourteous behavior</item>
-        <item>Driving under the influence</item>
-        <item>Smoking while driving</item>
-    </string-array>
+    <string name="traffic_rule_violations_title">Traffic Rule Violations</string>
+    <string name="reckless_driving">Reckless driving</string>
+    <string name="illegal_parking">Illegal parking</string>
+    <string name="disregarding_traffic_signs">Disregarding traffic signs</string>
 
+
+    <string name="driver_conduct_violations_title">Driver Conduct Violations</string>
+    <string name="discourteous_behavior">Discourteous behavior</string>
+    <string name="driving_under_influence">Driving under the influence</string>
+    <string name="smoking_while_driving">Smoking while driving</string>
+
+    <!-- Input Placeholder -->
+    <string name="enter_violation_details">Enter violation details...</string>
+
+    <string name="remove_photo">Remove Photo</string>
 </resources>

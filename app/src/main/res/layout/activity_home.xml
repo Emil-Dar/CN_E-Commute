@@ -93,7 +93,7 @@
         android:layout_below="@id/fare_matrix_card"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:backgroundTint="#3778C2"
+        android:backgroundTint="#4682B4"
         android:padding="12dp"
         android:text="Report"
         android:textColor="@color/white" />
@@ -117,7 +117,7 @@
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:background="@color/colorPrimary"
+        android:background="@color/primary_blue"
         android:padding="8dp"
         android:gravity="center">
 
@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_home"
+            android:drawableTop="@drawable/ic_home_dark"
             android:contentDescription="Home"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
