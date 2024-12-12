@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="3dp">
 
         <!-- Title -->
         <TextView
@@ -22,7 +22,7 @@
             android:textSize="16sp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="10dp" />
 
         <!-- Section: Speeding Violations -->
         <TextView
@@ -30,15 +30,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/speeding_violations"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
             android:padding="10dp"
-            android:minHeight="48dp"
-            android:background="@color/skyblue"
+            android:minHeight="40dp"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:background="@drawable/rounded_background" /><!-- Use the drawable here -->
 
 
         <LinearLayout
@@ -97,15 +97,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/passenger_safety_violations_title"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
             android:padding="10dp"
-            android:minHeight="48dp"
-            android:background="@color/skyblue"
+            android:minHeight="40dp"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:background="@drawable/rounded_background" />
 
         <LinearLayout
             android:id="@+id/passenger_safety_violations_options"
@@ -163,15 +163,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/operational_violations_title"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
             android:padding="10dp"
-            android:minHeight="48dp"
-            android:background="@color/skyblue"
+            android:minHeight="40dp"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:background="@drawable/rounded_background" />
 
         <LinearLayout
             android:id="@+id/operational_violations_options"
@@ -229,12 +229,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/traffic_rule_violations_title"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
             android:padding="10dp"
-            android:minHeight="48dp"
+            android:minHeight="40dp"
             android:background="@color/skyblue"
             android:clickable="true"
             android:focusable="true" />
@@ -295,15 +295,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/driver_conduct_violations_title"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
             android:padding="10dp"
-            android:minHeight="48dp"
-            android:background="@color/skyblue"
+            android:minHeight="40dp"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:background="@drawable/rounded_background" />
 
         <LinearLayout
             android:id="@+id/driver_conduct_violations_options"
@@ -363,7 +363,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/select_file"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="12dp"
+            android:textColor="@android:color/white"
+            android:padding="12dp" />
 
         <!-- Image Preview Section with Remove Button -->
         <RelativeLayout
@@ -377,7 +380,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="14dp"
                 android:background="@color/medium_gray"
                 android:contentDescription="@string/upload_image_here"
                 android:importantForAccessibility="yes" />
@@ -404,7 +407,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/open_camera"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="-16dp" />
 
         <!-- Submit button -->
         <Button
@@ -414,7 +418,7 @@
             android:text="@string/submit"
             android:backgroundTint="@color/blue"
             android:textColor="@android:color/white"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="60dp" />
 
     </LinearLayout>

@@ -109,6 +109,7 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     // Submit the report with selected violations
+    // Submit the report with selected violations
     private void submitReport() {
         String speedingViolations = extractInputFromSection(speedingOptions);
         String passengerSafetyViolations = extractInputFromSection(passengerSafetyViolationsOptions);
@@ -116,12 +117,33 @@ public class ReportActivity extends AppCompatActivity {
         String trafficRuleViolations = extractInputFromSection(trafficRulesOptions);
         String driverConductViolations = extractInputFromSection(driverConductOptions);
 
+        // Check if all inputs are empty
+        if (isEmpty(speedingViolations) && isEmpty(passengerSafetyViolations) &&
+                isEmpty(operationalViolations) && isEmpty(trafficRuleViolations) &&
+                isEmpty(driverConductViolations)) {
+
+            // Show a dialog prompting the user to select or input a report
+            new AlertDialog.Builder(this)
+                    .setTitle("Incomplete Report")
+                    .setMessage("Please select or input at least one violation before submitting.")
+                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                    .show();
+
+            return; // Stop further processing
+        }
+
         // Format and display the report message
         String reportMessage = String.format("Submitted violations:\nSpeeding: %s\nOperational: %s\nTraffic Rules: %s\nPassenger Safety: %s\nDriver Conduct: %s",
                 speedingViolations, operationalViolations, trafficRuleViolations, passengerSafetyViolations, driverConductViolations);
 
         showToast(reportMessage);
     }
+
+    // Helper method to check if a string is empty or "None"
+    private boolean isEmpty(String input) {
+        return input == null || input.isEmpty() || input.equalsIgnoreCase("None");
+    }
+
 
     // Extract user input from EditText in a section
     private String extractInputFromSection(LinearLayout section) {
