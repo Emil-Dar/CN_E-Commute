@@ -47,4 +47,7 @@
     <string name="enter_violation_details">Enter violation details...</string>
 
     <string name="remove_photo">Remove Photo</string>
+    <string name="image_preview">Image Preview</string>
+    <string name="remove_image">Remove Image</string>
+
 </resources>
