@@ -51,7 +51,7 @@ public class DriverSignInActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
                             Toast.makeText(DriverSignInActivity.this, "Sign-in Successful.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(DriverSignInActivity.this, HomeActivity.class);
+                            Intent intent = new Intent(DriverSignInActivity.this, DriverHomeActivity.class); // Change to DriverHomeActivity
                             startActivity(intent);
                             finish();
                         }

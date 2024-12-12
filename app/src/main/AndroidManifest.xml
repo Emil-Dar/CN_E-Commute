@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- Camera Hardware Feature -->
     <uses-feature android:name="android.hardware.camera" android:required="true" />
@@ -54,6 +54,11 @@
 
         <!-- Report Activity -->
         <activity android:name=".ReportActivity" android:exported="true" />
+
+        <!-- New Driver Activities -->
+        <activity android:name=".WalletActivity" android:exported="true" />
+        <activity android:name=".DriverNotificationActivity" android:exported="true" />
+        <activity android:name=".DriverAccountActivity" android:exported="true" />
 
     </application>
 </manifest>

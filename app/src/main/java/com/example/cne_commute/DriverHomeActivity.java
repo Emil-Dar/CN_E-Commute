@@ -24,11 +24,16 @@ public class DriverHomeActivity extends AppCompatActivity {
         accountButton = findViewById(R.id.account_button);
         fabQRCode = findViewById(R.id.fab_qr_code);
 
-        homeButton.setOnClickListener(v -> showToast("Home Button Clicked"));
-        mapButton.setOnClickListener(v -> showToast("Map Button Clicked"));
-        historyButton.setOnClickListener(v -> showToast("History Button Clicked"));
-        accountButton.setOnClickListener(v -> showToast("Account Button Clicked"));
+        homeButton.setOnClickListener(v -> navigateToActivity(DriverHomeActivity.class));
+        mapButton.setOnClickListener(v -> navigateToActivity(WalletActivity.class));
+        historyButton.setOnClickListener(v -> navigateToActivity(DriverNotificationActivity.class));
+        accountButton.setOnClickListener(v -> navigateToActivity(DriverAccountActivity.class));
         fabQRCode.setOnClickListener(v -> showToast("QR Code Button Clicked"));
+    }
+
+    private void navigateToActivity(Class<?> targetActivity) {
+        Intent intent = new Intent(DriverHomeActivity.this, targetActivity);
+        startActivity(intent);
     }
 
     private void showToast(String message) {
