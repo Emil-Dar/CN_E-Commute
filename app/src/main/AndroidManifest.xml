@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <!-- Camera Hardware Feature -->
     <uses-feature android:name="android.hardware.camera" android:required="true" />
@@ -16,49 +16,44 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/logo"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/logo"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CNECommute"
         tools:targetApi="31">
 
-    <!-- QR Scanner Activity -->
-    <activity android:name=".QRScannerActivity" android:exported="false" />
+        <!-- QR Scanner Activity -->
+        <activity android:name=".QRScannerActivity" android:exported="false" />
 
-    <!-- Splash Screen Activity -->
-    <activity
-        android:name=".SplashScreenActivity"
-        android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+        <!-- Splash Screen Activity -->
+        <activity
+            android:name=".SplashScreenActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-    <!-- User Role Selection Activity -->
-    <activity android:name=".UserRoleSelectionActivity" android:exported="true" />
+        <!-- User Role Selection Activity -->
+        <activity android:name=".UserRoleSelectionActivity" android:exported="true" />
 
-    <!-- Driver Activities -->
-    <activity android:name=".DriverSignInActivity" android:exported="true" />
-    <activity android:name=".DriverSignUpActivity" android:exported="true" />
+        <!-- Driver Activities -->
+        <activity android:name=".DriverSignInActivity" android:exported="true" />
+        <activity android:name=".DriverSignUpActivity" android:exported="true" />
 
-    <!-- User Activities -->
-    <activity android:name=".SignInActivity" android:exported="true" />
-    <activity android:name=".SignUpActivity" android:exported="true" />
+        <!-- User Activities -->
+        <activity android:name=".SignInActivity" android:exported="true" />
+        <activity android:name=".SignUpActivity" android:exported="true" />
 
-    <!-- Home Activities -->
-    <activity android:name=".HomeActivity" android:exported="true" />
-    <activity android:name=".DriverHomeActivity" android:exported="true" />
-    <activity android:name=".AdminHomeActivity" android:exported="true" />
+        <!-- Home Activities -->
+        <activity android:name=".HomeActivity" android:exported="true" />
+        <activity android:name=".DriverHomeActivity" android:exported="true" />
+        <activity android:name=".AdminHomeActivity" android:exported="true" />
 
-    <!-- Report Activity -->
-    <activity android:name=".ReportActivity" android:exported="true" />
+        <!-- Report Activity -->
+        <activity android:name=".ReportActivity" android:exported="true" />
 
-    <!-- New Driver Activities -->
-    <activity android:name=".WalletActivity" android:exported="true" />
-    <activity android:name=".DriverNotificationActivity" android:exported="true" />
-    <activity android:name=".DriverAccountActivity" android:exported="true" />
-
-</application>
-    </manifest>
+    </application>
+</manifest>
