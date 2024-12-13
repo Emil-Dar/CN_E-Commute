@@ -2,14 +2,20 @@ package com.example.cne_commute;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -28,10 +34,12 @@ public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignUpActivity";
     private static final String CHANNEL_ID = "signup_notifications";
     private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
+
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private EditText emailEditText, passwordEditText;
-    private Button signUpButton;
+
+    private boolean isPasswordVisible = false;
+    private boolean isConfirmPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +48,18 @@ public class SignUpActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        emailEditText = findViewById(R.id.email);
-        passwordEditText = findViewById(R.id.password);
-        signUpButton = findViewById(R.id.sign_up_button);
+
+        EditText usernameEditText = findViewById(R.id.username);
+        EditText emailEditText = findViewById(R.id.email);
+        EditText passwordEditText = findViewById(R.id.password);
+        EditText confirmPasswordEditText = findViewById(R.id.confirm_password);
+        ImageView passwordEyeIcon = findViewById(R.id.password_eye_icon);
+        Button signUpButton = findViewById(R.id.sign_up_button);
+        TextView loginLink = findViewById(R.id.login_link);
 
         createNotificationChannel();
 
-        // Check and request notification permission if not granted
+        // Check for notification permission
         if (ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS")
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -54,7 +67,34 @@ public class SignUpActivity extends AppCompatActivity {
                     REQUEST_NOTIFICATION_PERMISSION);
         }
 
-        signUpButton.setOnClickListener(v -> signUpUser());
+        // Handle Sign Up button click
+        signUpButton.setOnClickListener(v -> signUpUser(
+                usernameEditText.getText().toString().trim(),
+                emailEditText.getText().toString().trim(),
+                passwordEditText.getText().toString().trim(),
+                confirmPasswordEditText.getText().toString().trim(),
+                usernameEditText, emailEditText, passwordEditText, confirmPasswordEditText
+        ));
+
+        // Handle Login link click to navigate to SignInActivity
+        loginLink.setOnClickListener(v -> {
+            Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+            startActivity(intent);
+            finish(); // Close SignUpActivity after navigating
+        });
+
+        // Toggle password visibility
+        passwordEyeIcon.setOnClickListener(v -> {
+            isPasswordVisible = !isPasswordVisible;
+            if (isPasswordVisible) {
+                passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                passwordEyeIcon.setImageResource(R.drawable.ic_eye_on); // Replace with the visible icon
+            } else {
+                passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                passwordEyeIcon.setImageResource(R.drawable.ic_eye_off); // Replace with the hidden icon
+            }
+            passwordEditText.setSelection(passwordEditText.getText().length()); // Move cursor to the end
+        });
     }
 
     private void createNotificationChannel() {
@@ -69,9 +109,17 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private void signUpUser() {
-        final String email = emailEditText.getText().toString().trim();
-        final String password = passwordEditText.getText().toString().trim();
+    private void signUpUser(@NonNull String username, @NonNull String email, @NonNull String password,
+                            @NonNull String confirmPassword,
+                            @NonNull EditText usernameEditText, @NonNull EditText emailEditText,
+                            @NonNull EditText passwordEditText, @NonNull EditText confirmPasswordEditText) {
+
+        // Validate inputs
+        if (username.isEmpty()) {
+            usernameEditText.setError("Enter a valid username");
+            usernameEditText.requestFocus();
+            return;
+        }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailEditText.setError("Enter a valid email");
@@ -85,26 +133,34 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        if (!password.equals(confirmPassword)) {
+            confirmPasswordEditText.setError("Passwords do not match");
+            confirmPasswordEditText.requestFocus();
+            return;
+        }
+
+        // Create user with Firebase Authentication
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
+                            // Save user details in Firestore
                             Map<String, Object> userData = new HashMap<>();
+                            userData.put("username", username);
                             userData.put("email", email);
                             userData.put("userType", "Commuter");
 
                             db.collection("users").document(user.getUid()).set(userData)
                                     .addOnSuccessListener(aVoid -> {
-                                        // Show toast message
                                         Toast.makeText(SignUpActivity.this, "User Registered.", Toast.LENGTH_SHORT).show();
-
-                                        // Clear input fields
+                                        // Clear fields after successful registration
+                                        usernameEditText.setText("");
                                         emailEditText.setText("");
                                         passwordEditText.setText("");
-
+                                        confirmPasswordEditText.setText("");
                                         // Send notification
-                                        sendNotification("Account Created", "Your account has been successfully created.");
+                                        sendNotification();
                                     })
                                     .addOnFailureListener(e -> {
                                         Log.e(TAG, "Registration Failed: " + e.getMessage());
@@ -118,13 +174,13 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
-    private void sendNotification(String title, String message) {
+    private void sendNotification() {
         if (ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS")
                 == PackageManager.PERMISSION_GRANTED) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with your app's icon
-                    .setContentTitle(title)
-                    .setContentText(message)
+                    .setContentTitle("Account Created")
+                    .setContentText("Your account has been successfully created.")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -133,14 +189,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted
                 Log.d(TAG, "Notification permission granted");
             } else {
-                // Permission denied
                 Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show();
             }
         }

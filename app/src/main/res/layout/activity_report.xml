@@ -235,9 +235,9 @@
             android:layout_marginBottom="8dp"
             android:padding="14dp"
             android:minHeight="40dp"
-            android:background="@color/skyblue"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:background="@drawable/rounded_background" />
 
         <LinearLayout
             android:id="@+id/traffic_rule_violations_options"
@@ -358,18 +358,8 @@
 
 
         <!-- File selection button -->
-        <Button
-            android:id="@+id/select_file_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/select_file"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="12dp"
-            android:textColor="@android:color/white"
-            android:padding="12dp" />
-
-        <!-- Image Preview Section with Remove Button -->
-        <RelativeLayout
+        <!-- File selection replaced with ImageView -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp">
@@ -380,25 +370,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                android:layout_marginBottom="14dp"
-                android:background="@color/medium_gray"
-                android:contentDescription="@string/upload_image_here"
-                android:importantForAccessibility="yes" />
+                android:contentDescription="@string/image_preview"
+                android:background="@color/light_gray" />
 
-            <!-- Remove Photo Button (X) -->
+            <!-- Select File Icon -->
             <ImageView
-                android:id="@+id/remove_photo_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
+                android:id="@+id/select_file_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_file_upload"
+                android:contentDescription="@string/select_file"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="11dp"
+                android:background="?selectableItemBackgroundBorderless" />
+
+            <!-- Remove Image Button -->
+            <ImageButton
+                android:id="@+id/remove_image_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="top|end"
                 android:layout_margin="8dp"
-                android:contentDescription="@string/remove_photo"
-                android:visibility="gone" /> <!-- Initially hidden until image is selected -->
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/remove_image"
+                android:src="@drawable/ic_close" />
+        </FrameLayout>
 
-
-        </RelativeLayout>
 
 
         <!-- Open camera button -->
