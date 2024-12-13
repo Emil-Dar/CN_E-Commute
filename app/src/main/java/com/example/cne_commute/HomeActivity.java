@@ -28,7 +28,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Button click listeners
         homeButton.setOnClickListener(v -> showToast("Home Button Clicked"));
-        mapButton.setOnClickListener(v -> openGoogleMaps());
+        mapButton.setOnClickListener(v -> showToast("Fare Calculator Button Clicked"));
         historyButton.setOnClickListener(v -> showToast("History Button Clicked"));
         accountButton.setOnClickListener(v -> showToast("Account Button Clicked"));
 
@@ -43,6 +43,12 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, QRScannerActivity.class);
             startActivity(intent);
         });
+
+        mapButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, FareCalculatorActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     // Helper method to display a toast message
@@ -51,14 +57,5 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Helper method to open Google Maps with a query
-    private void openGoogleMaps() {
-        Uri gmmIntentUri = Uri.parse("geo:0,0?q=Tricycles");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        if (mapIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(mapIntent);
-        } else {
-            showToast("Google Maps app is not installed");
-        }
-    }
+
 }

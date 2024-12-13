@@ -29,6 +29,11 @@ public class DriverHomeActivity extends AppCompatActivity {
         historyButton.setOnClickListener(v -> navigateToActivity(DriverNotificationActivity.class));
         accountButton.setOnClickListener(v -> navigateToActivity(DriverAccountActivity.class));
         fabQRCode.setOnClickListener(v -> showToast("QR Code Button Clicked"));
+
+        mapButton.setOnClickListener(v -> {
+            Intent intent = new Intent(DriverHomeActivity.this, FareCalculatorActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void navigateToActivity(Class<?> targetActivity) {

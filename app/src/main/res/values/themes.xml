@@ -12,7 +12,8 @@
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
 
         <!-- Custom button style to avoid theme override -->
-        <item name="android:buttonStyle">@style/CustomButton</item>
+        <item name="android:buttonStyle">@style/Widget.AppCompat.Button</item>
+
     </style>
 
     <!-- Define the custom button style -->
