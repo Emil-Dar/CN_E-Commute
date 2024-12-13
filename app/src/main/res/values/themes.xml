@@ -12,12 +12,11 @@
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
 
         <!-- Custom button style to avoid theme override -->
-        <item name="android:buttonStyle">@style/Widget.AppCompat.Button</item>
-
+        <item name="android:buttonStyle">@style/CustomButtonCNECommute</item>
     </style>
 
     <!-- Define the custom button style -->
-    <style name="CustomButton" parent="Widget.AppCompat.Button">
+    <style name="CustomButtonCNECommute" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background</item>
         <item name="android:textColor">@color/colorOnPrimary</item>
     </style>

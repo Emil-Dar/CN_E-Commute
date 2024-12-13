@@ -32,7 +32,7 @@
     <string name="fare_amount">₱000.00</string>
 
     <string name="taripa">TARIPA</string>
-    <string name="taripa_desc">First two (2) kilometers\nPhp 15.00 – 6 years old and above\nPhp 7.00 - 3-5 years old\nPhp 2.00 - for every succeeding kilometer\n\nChild/ren 0-3 years old FREE OF CHARGE, provided they are sitting on the lap of their guardian.\n\n20% DISCOUNT FOR SENIOR CITIZENS, PERSONS WITH DISABILITIES and STUDENTS\nPhp 12.00 - 6 years old and above\nPhp 1.60 - for every succeeding kilometer</string>
+    <string name="taripa_desc">First two (2) kilometers\nPhp 15.00 – 6 years old and above\nPhp 7.00 – 3–5 years old\nPhp 2.00 - for every succeeding kilometer\n\nChild/ren 0-3 years old FREE OF CHARGE, provided they are sitting on the lap of their guardian.\n\n20% DISCOUNT FOR SENIOR CITIZENS, PERSONS WITH DISABILITIES and STUDENTS\nPhp 12.00 - 6 years old and above\nPhp 1.60 - for every succeeding kilometer</string>
 
     <!-- Report Types -->
     <string-array name="passenger_safety_violations">
@@ -95,7 +95,7 @@
     <string name="smoking_while_driving">Smoking while driving</string>
 
     <!-- Input Placeholder -->
-    <string name="enter_violation_details">Enter violation details...</string>
+    <string name="enter_violation_details">Enter violation details</string>
 
     <string name="remove_photo">Remove Photo</string>
     <string name="image_preview">Image Preview</string>
