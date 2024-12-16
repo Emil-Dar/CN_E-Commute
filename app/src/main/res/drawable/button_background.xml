@@ -2,10 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="#3F7EBB" />
+            <solid android:color="#5FA8D3" />
             <corners android:radius="8dp" />
             <padding android:left="16dp" android:right="16dp" android:top="10dp" android:bottom="10dp" />
-            <elevation android:height="4dp" />
         </shape>
     </item>
     <item>
@@ -13,7 +12,6 @@
             <solid android:color="#5FA8D3" />
             <corners android:radius="8dp" />
             <padding android:left="16dp" android:right="16dp" android:top="10dp" android:bottom="10dp" />
-            <elevation android:height="2dp" />
         </shape>
     </item>
 </selector>
