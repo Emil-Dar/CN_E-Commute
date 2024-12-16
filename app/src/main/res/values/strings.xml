@@ -82,14 +82,18 @@
 
     <string name="fab_scan_qr_code">Open QR Code Scanner</string>
     <string name="app_logo_desc">app_logo_desc</string>
-    <string name="commuter">commuter</string>
+    <string name="commuter">COMMUTER</string>
     <string name="commuter_desc">commuter_desc</string>
-    <string name="driver">driver</string>
+    <string name="driver">DRIVER</string>
     <string name="driver_desc">driver_desc</string>
-    <string name="operator">operator</string>
+    <string name="operator">OPERATOR</string>
     <string name="operator_desc">operator_desc</string>
-    <string name="admin">admin</string>
+    <string name="admin">ADMIN</string>
     <string name="admin_desc">admin_desc</string>
+    <string name="commuter_icon_desc">commuter_icon_desc</string>
+    <string name="driver_icon_desc">driver_icon_desc</string>
+    <string name="operator_icon_desc">operator_icon_desc</string>
+    <string name="admin_icon_desc">admin_icon_desc</string>
 
 
 </resources>
