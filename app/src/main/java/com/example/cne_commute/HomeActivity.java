@@ -43,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, QRScannerActivity.class);
             startActivity(intent);
         });
-
+        
 
     }
 
