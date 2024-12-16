@@ -5,102 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
-    tools:context=".HomeActivity">
+    tools:context=".AdminHomeActivity">
 
-    <!-- Content of the home screen -->
+    <!-- Header Text -->
     <TextView
-        android:id="@+id/home_text"
+        android:id="@+id/admin_home_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Home Screen"
+        android:text="Welcome to Admin Home"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:textSize="18sp"
-        android:textStyle="bold"
         android:textColor="@color/textColor" />
 
-    <!-- SCAN THE QR CODE Instruction -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/scan_qr_code_card"
+    <!-- Instructions Section -->
+    <TextView
+        android:id="@+id/instructions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/home_text"
-        android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
-
-        <TextView
-            android:id="@+id/scan_qr_code_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="SCAN THE QR CODE\nTap to scan and get tricycle info."
-            android:textColor="@color/textColor"
-            android:textSize="16sp"
-            android:lineSpacingExtra="4dp" />
-    </androidx.cardview.widget.CardView>
-
-    <!-- REPORT ISSUES Instruction -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/report_issues_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/scan_qr_code_card"
-        android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
-
-        <TextView
-            android:id="@+id/report_issues_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="REPORT ISSUES\nUse “Report” to share feedback or problems."
-            android:textColor="@color/textColor"
-            android:textSize="16sp"
-            android:lineSpacingExtra="4dp" />
-    </androidx.cardview.widget.CardView>
-
-    <!-- FARE MATRIX ESTIMATOR Instruction -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/fare_matrix_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/report_issues_card"
-        android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
-
-        <TextView
-            android:id="@+id/fare_matrix_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="FARE MATRIX ESTIMATOR\nChoose your location and destination for clear pricing."
-            android:textColor="@color/textColor"
-            android:textSize="16sp"
-            android:lineSpacingExtra="4dp" />
-    </androidx.cardview.widget.CardView>
+        android:layout_below="@id/admin_home_text"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Instructions:\n\n1. Manage users and operators.\n2. View reports and statistics.\n3. Access admin tools."
+        android:textColor="@color/textColor"
+        android:textSize="16sp" />
 
     <!-- Report Button -->
     <Button
-        android:id="@+id/report_button"
-        android:layout_width="200dp"
-        android:layout_height="55dp"
-        android:layout_below="@id/fare_matrix_card"
+        android:id="@+id/admin_report_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/instructions"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="#4682B4"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_background"
         android:padding="12dp"
-        android:text="Report"
+        android:text="View Reports"
         android:textColor="@color/white" />
 
     <!-- Floating Action Button for QR Code -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_qr_code"
+        android:id="@+id/admin_fab_qr_code"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_alignParentBottom="true"
@@ -117,12 +64,12 @@
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:background="@color/primary_blue"
+        android:background="@color/colorPrimary"
         android:padding="8dp"
         android:gravity="center">
 
         <Button
-            android:id="@+id/home_button"
+            android:id="@+id/admin_home_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -135,12 +82,12 @@
             android:tint="@color/white" />
 
         <Button
-            android:id="@+id/map_button"
+            android:id="@+id/admin_map_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_map_light"
+            android:drawableTop="@drawable/ic_report_light"
             android:contentDescription="Map"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
@@ -148,12 +95,12 @@
             android:tint="@color/white" />
 
         <Button
-            android:id="@+id/history_button"
+            android:id="@+id/admin_history_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_history_light"
+            android:drawableTop="@drawable/ic_notif_light"
             android:contentDescription="History"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
@@ -161,7 +108,7 @@
             android:tint="@color/white" />
 
         <Button
-            android:id="@+id/account_button"
+            android:id="@+id/admin_account_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

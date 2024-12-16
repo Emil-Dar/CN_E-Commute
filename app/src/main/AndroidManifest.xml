@@ -75,6 +75,9 @@
         <activity
             android:name=".DriverHomeActivity"
             android:exported="true" />
+        <activity
+            android:name=".AdminHomeActivity"
+            android:exported="true" />
 
         <!-- Report Activity -->
         <activity
@@ -91,13 +94,6 @@
         <activity
             android:name=".DriverAccountActivity"
             android:exported="true" />
-
-
-        <activity android:name=".MapActivity" android:exported="true" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDeMJ4DFDXex6wnusKOMcBwjULAt4LXufY" />
-
 
     </application>
 </manifest>

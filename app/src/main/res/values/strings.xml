@@ -45,7 +45,6 @@
 
     <!-- Input Placeholder -->
     <string name="enter_violation_details">Enter violation details</string>
-    <string name="enter_a_description_or_additional_details">Enter a description or additional details</string>
 
     <string name="remove_photo">Remove Photo</string>
     <string name="image_preview">Image Preview</string>
@@ -66,35 +65,4 @@
     <string name="username_field">Username field</string>
     <string name="show_password">Show Password</string>
     <string name="provide_your_login_details_to_proceed">Provide your login details to proceed</string>
-
-    <!--- Navigation Drawer -->
-    <string name="nav_home">Home</string>
-    <string name="nav_calculator">Fare Calculator</string>
-    <string name="nav_history">History</string>
-    <string name="nav_account">Account</string>
-
-    <!--- Home Activity -->
-    <string name="home_title">CAM COMMUTE GURU</string>
-    <string name="scan_qr_code">Tap to scan and get tricycle info.</string>
-    <string name="tap_to_scan">Use “Report” to share feedback or problems.</string>
-    <string name="report_issues">Report Issues</string>
-    <string name="share_your_feedback">Share your feedback or problems.</string>
-    <string name="fare_calculator">Enter you location and destination for clear pricing.</string>"
-
-    <string name="fab_scan_qr_code">Open QR Code Scanner</string>
-    <string name="app_logo_desc">app_logo_desc</string>
-    <string name="commuter">COMMUTER</string>
-    <string name="commuter_desc">commuter_desc</string>
-    <string name="driver">DRIVER</string>
-    <string name="driver_desc">driver_desc</string>
-    <string name="operator">OPERATOR</string>
-    <string name="operator_desc">operator_desc</string>
-    <string name="admin">ADMIN</string>
-    <string name="admin_desc">admin_desc</string>
-    <string name="commuter_icon_desc">commuter_icon_desc</string>
-    <string name="driver_icon_desc">driver_icon_desc</string>
-    <string name="operator_icon_desc">operator_icon_desc</string>
-    <string name="admin_icon_desc">admin_icon_desc</string>
-
-
 </resources>
