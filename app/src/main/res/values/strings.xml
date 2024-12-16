@@ -92,4 +92,11 @@
     <string name="map">Map</string>
     <string name="home">Home</string>
     <string name="open_google_maps">Open Google Maps</string>
+    <string name="app_logo_desc">app_logo_desc</string>
+    <string name="commuter_icon_desc">commuter_icon_desc</string>
+    <string name="driver_icon_desc">driver_icon_desc</string>
+    <string name="operator_icon_desc">operator_icon_desc</string>
+    <string name="operator">OPERATOR</string>
+    <string name="driver">DRIVER</string>
+    <string name="commuter">COMMUTER</string>
 </resources>
