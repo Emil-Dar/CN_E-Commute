@@ -50,28 +50,6 @@
     <string name="image_preview">Image Preview</string>
     <string name="remove_image">Remove Image</string>
 
-    <!--Fare Calculator-->
-    <string name="fare_calculator_header">FARE CALCULATOR</string>
-    <string name="commuter_no_1">COMMUTER NO. 1</string>
-    <string name="commuter_no_2">COMMUTER NO. 2</string>
-    <string name="commuter_no_3">COMMUTER NO. 3</string>
-    <string name="commuter_no_4">COMMUTER NO. 4</string>
-
-    <string name="location_icon">Location Icon</string>
-    <string name="destination_icon">Destination Icon</string>
-    <string name="starting_location">Starting Location</string>
-    <string name="your_destination">Your Destination</string>
-
-    <string name="start">START</string>
-    <string name="stop">STOP</string>
-
-    <string name="total_fare">TOTAL FARE:</string>
-    <string name="fare_amount">₱000.00</string>
-    <string name="fare_error">Please set both locations</string>
-
-    <string name="taripa">TARIPA</string>
-    <string name="taripa_desc">First two (2) kilometers\nPhp 15.00 – 6 years old and above\nPhp 7.00 - 3-5 years old\nPhp 2.00 - for every succeeding kilometer\n\nChild/ren 0-3 years old FREE OF CHARGE, provided they are sitting on the lap of their guardian.\n\n20% DISCOUNT FOR SENIOR CITIZENS, PERSONS WITH DISABILITIES and STUDENTS\nPhp 12.00 - 6 years old and above\nPhp 1.60 - for every succeeding kilometer</string>
-
 
     <!-- Sign up -->
     <string name="create_account">CREATE ACCOUNT</string>
@@ -87,9 +65,35 @@
     <string name="username_field">Username field</string>
     <string name="show_password">Show Password</string>
     <string name="provide_your_login_details_to_proceed">Provide your login details to proceed</string>
-    <string name="account">Account</string>
-    <string name="history">History</string>
-    <string name="map">Map</string>
-    <string name="home">Home</string>
-    <string name="open_google_maps">Open Google Maps</string>
+
+    <!--- Navigation Drawer -->
+    <string name="nav_home">Home</string>
+    <string name="nav_calculator">Fare Calculator</string>
+    <string name="nav_history">History</string>
+    <string name="nav_account">Account</string>
+
+    <!--- Home Activity -->
+    <string name="home_title">CAM COMMUTE GURU</string>
+    <string name="scan_qr_code">Tap to scan and get tricycle info.</string>
+    <string name="tap_to_scan">Use “Report” to share feedback or problems.</string>
+    <string name="report_issues">Report Issues</string>
+    <string name="share_your_feedback">Share your feedback or problems.</string>
+    <string name="fare_calculator">Enter you location and destination for clear pricing.</string>"
+
+    <string name="fab_scan_qr_code">Open QR Code Scanner</string>
+    <string name="app_logo_desc">app_logo_desc</string>
+    <string name="commuter">COMMUTER</string>
+    <string name="commuter_desc">commuter_desc</string>
+    <string name="driver">DRIVER</string>
+    <string name="driver_desc">driver_desc</string>
+    <string name="operator">OPERATOR</string>
+    <string name="operator_desc">operator_desc</string>
+    <string name="admin">ADMIN</string>
+    <string name="admin_desc">admin_desc</string>
+    <string name="commuter_icon_desc">commuter_icon_desc</string>
+    <string name="driver_icon_desc">driver_icon_desc</string>
+    <string name="operator_icon_desc">operator_icon_desc</string>
+    <string name="admin_icon_desc">admin_icon_desc</string>
+
+
 </resources>
