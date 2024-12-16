@@ -46,10 +46,6 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        mapButton.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, FareCalculatorActivity.class);
-            startActivity(intent);
-        });
 
     }
 
