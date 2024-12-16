@@ -5,29 +5,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
-    tools:context=".DriverAccountActivity">
+    tools:context=".AdminHomeActivity">
 
+    <!-- Header Text -->
     <TextView
-        android:id="@+id/account_text"
+        android:id="@+id/admin_home_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Account"
+        android:text="Welcome to Admin Home"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:textSize="18sp"
-        android:textStyle="bold"
         android:textColor="@color/textColor" />
 
-    <!-- Floating Action Button for Driver Map -->
+    <!-- Instructions Section -->
+    <TextView
+        android:id="@+id/instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/admin_home_text"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Instructions:\n\n1. Manage users and operators.\n2. View reports and statistics.\n3. Access admin tools."
+        android:textColor="@color/textColor"
+        android:textSize="16sp" />
+
+    <!-- Report Button -->
+    <Button
+        android:id="@+id/admin_report_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/instructions"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_background"
+        android:padding="12dp"
+        android:text="View Reports"
+        android:textColor="@color/white" />
+
+    <!-- Floating Action Button for QR Code -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_qr_code"
+        android:id="@+id/admin_fab_qr_code"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
-        android:src="@drawable/driver_map"
-        android:contentDescription="Driver Map"
+        android:src="@drawable/ic_qr_code"
+        android:contentDescription="QR Code Scanner"
         android:tint="@color/white"
         app:backgroundTint="@color/colorAccent" />
 
@@ -42,12 +69,12 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/home_button"
+            android:id="@+id/admin_home_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_home_light"
+            android:drawableTop="@drawable/ic_home_dark"
             android:contentDescription="Home"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
@@ -55,38 +82,38 @@
             android:tint="@color/white" />
 
         <Button
-            android:id="@+id/map_button"
+            android:id="@+id/admin_map_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_wallet_light"
-            android:contentDescription="Wallet"
+            android:drawableTop="@drawable/ic_report_light"
+            android:contentDescription="Map"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
             android:text=""
             android:tint="@color/white" />
 
         <Button
-            android:id="@+id/history_button"
+            android:id="@+id/admin_history_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_notif_light"
-            android:contentDescription="Notification"
+            android:contentDescription="History"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
             android:text=""
             android:tint="@color/white" />
 
         <Button
-            android:id="@+id/account_button"
+            android:id="@+id/admin_account_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_account_dark"
+            android:drawableTop="@drawable/ic_account_light"
             android:contentDescription="Account"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
