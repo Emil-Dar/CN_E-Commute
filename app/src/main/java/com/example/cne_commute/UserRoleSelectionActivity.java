@@ -18,7 +18,6 @@ public class UserRoleSelectionActivity extends AppCompatActivity {
         Button commuterButton = findViewById(R.id.commuter_button);
         Button driverButton = findViewById(R.id.driver_button);
         Button operatorButton = findViewById(R.id.operator_button);
-        Button adminButton = findViewById(R.id.admin_button);
 
         // Retrieve user type from intent
         userType = getIntent().getIntExtra("user_type", -1);
@@ -48,6 +47,5 @@ public class UserRoleSelectionActivity extends AppCompatActivity {
         commuterButton.setOnClickListener(roleButtonClickListener);
         driverButton.setOnClickListener(roleButtonClickListener);
         operatorButton.setOnClickListener(roleButtonClickListener);
-        adminButton.setOnClickListener(roleButtonClickListener);
     }
 }

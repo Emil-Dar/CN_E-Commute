@@ -80,9 +80,6 @@
         <activity
             android:name=".DriverHomeActivity"
             android:exported="true" />
-        <activity
-            android:name=".AdminHomeActivity"
-            android:exported="true" />
 
         <!-- Report Activity -->
         <activity
