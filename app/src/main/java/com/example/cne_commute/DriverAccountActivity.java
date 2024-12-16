@@ -36,6 +36,7 @@ public class DriverAccountActivity extends AppCompatActivity {
         mapButton.setOnClickListener(v -> navigateToActivity(WalletActivity.class));
         historyButton.setOnClickListener(v -> navigateToActivity(DriverNotificationActivity.class));
         accountButton.setOnClickListener(v -> navigateToActivity(DriverAccountActivity.class));
+        fabDriverMap.setOnClickListener(v -> navigateToActivity(MapActivity.class));
 
         // Example data population
         driverName.setText("John Doe");
@@ -48,7 +49,6 @@ public class DriverAccountActivity extends AppCompatActivity {
         Intent intent = new Intent(DriverAccountActivity.this, targetActivity);
         startActivity(intent);
     }
-
 
     private void showToast(String message) {
         Toast.makeText(DriverAccountActivity.this, message, Toast.LENGTH_SHORT).show();

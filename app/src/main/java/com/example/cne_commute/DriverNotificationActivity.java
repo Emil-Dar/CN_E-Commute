@@ -35,6 +35,7 @@ public class DriverNotificationActivity extends AppCompatActivity {
         mapButton.setOnClickListener(v -> navigateToActivity(WalletActivity.class));
         historyButton.setOnClickListener(v -> navigateToActivity(DriverNotificationActivity.class));
         accountButton.setOnClickListener(v -> navigateToActivity(DriverAccountActivity.class));
+        fabDriverMap.setOnClickListener(v -> navigateToActivity(MapActivity.class));
 
         setupNotificationRecyclerView();
 
@@ -56,7 +57,6 @@ public class DriverNotificationActivity extends AppCompatActivity {
         Intent intent = new Intent(DriverNotificationActivity.this, targetActivity);
         startActivity(intent);
     }
-
 
     private void showToast(String message) {
         Toast.makeText(DriverNotificationActivity.this, message, Toast.LENGTH_SHORT).show();

@@ -81,6 +81,15 @@
     <string name="fare_calculator">Enter you location and destination for clear pricing.</string>"
 
     <string name="fab_scan_qr_code">Open QR Code Scanner</string>
+    <string name="app_logo_desc">app_logo_desc</string>
+    <string name="commuter">commuter</string>
+    <string name="commuter_desc">commuter_desc</string>
+    <string name="driver">driver</string>
+    <string name="driver_desc">driver_desc</string>
+    <string name="operator">operator</string>
+    <string name="operator_desc">operator_desc</string>
+    <string name="admin">admin</string>
+    <string name="admin_desc">admin_desc</string>
 
 
 </resources>

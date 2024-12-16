@@ -18,7 +18,7 @@ public class WalletActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wallet);
 
         fabDriverMap = findViewById(R.id.fab_qr_code);
-        fabDriverMap.setOnClickListener(v -> showToast("Driver Map Button Clicked"));
+        fabDriverMap.setOnClickListener(v -> navigateTo(MapActivity.class));
 
         homeButton = findViewById(R.id.home_button);
         mapButton = findViewById(R.id.map_button);
