@@ -65,4 +65,22 @@
     <string name="username_field">Username field</string>
     <string name="show_password">Show Password</string>
     <string name="provide_your_login_details_to_proceed">Provide your login details to proceed</string>
+
+    <!--- Navigation Drawer -->
+    <string name="nav_home">Home</string>
+    <string name="nav_calculator">Fare Calculator</string>
+    <string name="nav_history">History</string>
+    <string name="nav_account">Account</string>
+
+    <!--- Home Activity -->
+    <string name="home_title">CAM COMMUTE GURU</string>
+    <string name="scan_qr_code">Tap to scan and get tricycle info.</string>
+    <string name="tap_to_scan">Use “Report” to share feedback or problems.</string>
+    <string name="report_issues">Report Issues</string>
+    <string name="share_your_feedback">Share your feedback or problems.</string>
+    <string name="fare_calculator">Enter you location and destination for clear pricing.</string>"
+
+    <string name="fab_scan_qr_code">Open QR Code Scanner</string>
+
+
 </resources>
