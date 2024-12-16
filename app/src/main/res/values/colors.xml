@@ -22,6 +22,10 @@
 
     <color name="red">#8B0000</color> <!-- Dark red -->
     <color name="colorAccentDarker">#FF5722</color>
+    <color name="high_contrast_white">#FFFFFF</color>
+    <color name="high_contrast_black">#000000</color>
+
+    <color name="dark_gray_hint">#808080</color>
 
 
 
