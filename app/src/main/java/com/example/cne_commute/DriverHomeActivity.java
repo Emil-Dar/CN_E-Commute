@@ -1,7 +1,6 @@
 package com.example.cne_commute;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -28,8 +27,7 @@ public class DriverHomeActivity extends AppCompatActivity {
         mapButton.setOnClickListener(v -> navigateToActivity(WalletActivity.class));
         historyButton.setOnClickListener(v -> navigateToActivity(DriverNotificationActivity.class));
         accountButton.setOnClickListener(v -> navigateToActivity(DriverAccountActivity.class));
-        fabQRCode.setOnClickListener(v -> showToast("Driver Map Button Clicked"));
-
+        fabQRCode.setOnClickListener(v -> navigateToActivity(MapActivity.class));
     }
 
     private void navigateToActivity(Class<?> targetActivity) {
