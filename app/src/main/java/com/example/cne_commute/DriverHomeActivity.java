@@ -27,7 +27,6 @@ public class DriverHomeActivity extends AppCompatActivity {
         mapButton.setOnClickListener(v -> navigateToActivity(WalletActivity.class));
         historyButton.setOnClickListener(v -> navigateToActivity(DriverNotificationActivity.class));
         accountButton.setOnClickListener(v -> navigateToActivity(DriverAccountActivity.class));
-        fabQRCode.setOnClickListener(v -> navigateToActivity(MapActivity.class));
     }
 
     private void navigateToActivity(Class<?> targetActivity) {

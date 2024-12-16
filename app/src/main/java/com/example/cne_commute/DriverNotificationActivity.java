@@ -29,13 +29,11 @@ public class DriverNotificationActivity extends AppCompatActivity {
         historyButton = findViewById(R.id.history_button);
         accountButton = findViewById(R.id.account_button);
         fabDriverMap = findViewById(R.id.fab_qr_code);
-        notificationRecyclerView = findViewById(R.id.notification_recycler_view);
 
         homeButton.setOnClickListener(v -> navigateToActivity(DriverHomeActivity.class));
         mapButton.setOnClickListener(v -> navigateToActivity(WalletActivity.class));
         historyButton.setOnClickListener(v -> navigateToActivity(DriverNotificationActivity.class));
         accountButton.setOnClickListener(v -> navigateToActivity(DriverAccountActivity.class));
-        fabDriverMap.setOnClickListener(v -> navigateToActivity(MapActivity.class));
 
         setupNotificationRecyclerView();
 

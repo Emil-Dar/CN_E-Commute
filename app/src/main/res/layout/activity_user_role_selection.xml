@@ -21,67 +21,91 @@
         android:layout_gravity="center_horizontal" />
 
     <!-- Commuter Button -->
-    <Button
+    <LinearLayout
         android:id="@+id/commuter_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="@string/commuter"
-        android:textSize="18sp"
+        android:orientation="horizontal"
+        android:gravity="center"
         android:background="@drawable/button_background"
-        android:textColor="@android:color/white"
-        android:drawableStart="@drawable/ic_commuter"
-        android:drawablePadding="12dp"
-        android:padding="12dp"
         android:layout_marginBottom="16dp"
-        android:elevation="4dp"
-        android:contentDescription="@string/commuter_desc" />
+        android:paddingHorizontal="16dp"
+        android:elevation="4dp">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_commuter"
+            android:contentDescription="@string/commuter_icon_desc" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/commuter"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
 
     <!-- Driver Button -->
-    <Button
+    <LinearLayout
         android:id="@+id/driver_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="@string/driver"
-        android:textSize="18sp"
+        android:orientation="horizontal"
+        android:gravity="center"
         android:background="@drawable/button_background"
-        android:textColor="@android:color/white"
-        android:drawableStart="@drawable/ic_driver"
-        android:drawablePadding="12dp"
-        android:padding="12dp"
         android:layout_marginBottom="16dp"
-        android:elevation="4dp"
-        android:contentDescription="@string/driver_desc" />
+        android:paddingHorizontal="16dp"
+        android:elevation="4dp">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_driver"
+            android:contentDescription="@string/driver_icon_desc" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/driver"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
 
     <!-- Operator Button -->
-    <Button
+    <LinearLayout
         android:id="@+id/operator_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="@string/operator"
-        android:textSize="18sp"
+        android:orientation="horizontal"
+        android:gravity="center"
         android:background="@drawable/button_background"
-        android:textColor="@android:color/white"
-        android:drawableStart="@drawable/ic_operator"
-        android:drawablePadding="12dp"
-        android:padding="12dp"
         android:layout_marginBottom="16dp"
-        android:elevation="4dp"
-        android:contentDescription="@string/operator_desc" />
+        android:paddingHorizontal="16dp"
+        android:elevation="4dp">
 
-    <!-- Admin Button -->
-    <Button
-        android:id="@+id/admin_button"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="@string/admin"
-        android:textSize="18sp"
-        android:background="@drawable/button_background"
-        android:textColor="@android:color/white"
-        android:drawableStart="@drawable/ic_admin"
-        android:drawablePadding="12dp"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"
-        android:elevation="4dp"
-        android:contentDescription="@string/admin_desc" />
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_operator"
+            android:contentDescription="@string/operator_icon_desc" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/operator"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
+    
 
 </LinearLayout>

@@ -21,10 +21,6 @@ public class DriverAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_account);
 
-        profilePicture = findViewById(R.id.profile_picture);
-        driverName = findViewById(R.id.driver_name);
-        driverLicense = findViewById(R.id.driver_license);
-        driverEmail = findViewById(R.id.driver_email);
 
         homeButton = findViewById(R.id.home_button);
         mapButton = findViewById(R.id.map_button);
@@ -36,7 +32,6 @@ public class DriverAccountActivity extends AppCompatActivity {
         mapButton.setOnClickListener(v -> navigateToActivity(WalletActivity.class));
         historyButton.setOnClickListener(v -> navigateToActivity(DriverNotificationActivity.class));
         accountButton.setOnClickListener(v -> navigateToActivity(DriverAccountActivity.class));
-        fabDriverMap.setOnClickListener(v -> navigateToActivity(MapActivity.class));
 
         // Example data population
         driverName.setText("John Doe");
