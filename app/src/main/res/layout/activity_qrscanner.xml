@@ -2,9 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/backgroundColor">
+    android:background="@color/backgroundColor"
+    android:padding="16dp">
 
+    <!-- Blue Header Section -->
+    <View
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#3778C2" />
 
     <!-- Title -->
     <TextView
@@ -12,47 +18,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="QR SCANNER"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="#333333"
+        android:textColor="#FFFFFF"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp" />
-
-    <!-- QR Code Frame with Camera -->
-    <FrameLayout
-        android:id="@+id/qr_frame"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/qr_title"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/qr_frame_border"/>
+        android:layout_marginTop="24dp"
+        android:layout_alignTop="@id/header" />
 
     <!-- Prompt Text -->
     <TextView
         android:id="@+id/prompt_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Place a barcode inside the viewfinder rectangle to scan it"
+        android:text="Center the QR Code in the frame"
         android:textSize="16sp"
-        android:textColor="#333333"
-        android:layout_below="@id/qr_frame"
+        android:textColor="#444444"
+        android:layout_below="@id/header"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="24dp" />
 
-    <!-- Scan Button -->
+    <!-- QR Code Frame -->
+    <FrameLayout
+        android:id="@+id/qr_frame"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/prompt_text"
+        android:layout_marginTop="16dp"
+        android:background="#000000" />
+
+    <!-- Scan QR Code Button -->
     <Button
         android:id="@+id/scan_qr_button"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Start Scanning"
-        android:backgroundTint="#3778C2"
-        android:textColor="#FFFFFF"
-        android:layout_below="@id/prompt_text"
+        android:text="Scan QR Code"
+        android:textColor="#333333"
+        android:backgroundTint="#5894D8"
+        android:textAllCaps="false"
+        android:layout_below="@id/qr_frame"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
+        android:elevation="4dp"
         android:padding="12dp" />
 
 </RelativeLayout>
