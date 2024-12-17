@@ -99,4 +99,11 @@
     <string name="operator">OPERATOR</string>
     <string name="driver">DRIVER</string>
     <string name="commuter">COMMUTER</string>
+
+    <!--- Home Description -->
+    <string name="home_description">Welcome to CN E-Com</string>
+    <string name="scan_qr_code">Scan the QR Code and get tricycle info.</string>
+    <string name="scan_qr_code_desc">Scan QR Code</string>
+    <string name="fare_matrix">Tap to estimate your ride fare efficiently.</string>
+    <string name="report_issues">Use the report button to share feedback and complains.</string>
 </resources>
