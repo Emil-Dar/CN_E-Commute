@@ -74,9 +74,9 @@ public class ReportActivity extends AppCompatActivity {
                 Uri selectedImageUri = result.getData().getData();
                 if (selectedImageUri != null) {
                     imagePreview.setImageURI(selectedImageUri);
+                    imagePreview.setTag(selectedImageUri);  // Store the URI in tag
                     removePhotoButton.setVisibility(View.VISIBLE);
                     showToast("Selected Image: " + selectedImageUri);
-
                 }
             }
         });
@@ -98,7 +98,6 @@ public class ReportActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void openFileChooser() {
@@ -135,20 +134,27 @@ public class ReportActivity extends AppCompatActivity {
         String operationalViolations = extractInputFromSection(operationalOptions);
         String trafficRuleViolations = extractInputFromSection(trafficRulesOptions);
         String driverConductViolations = extractInputFromSection(driverConductOptions);
+        Uri imageUri = (imagePreview.getDrawable() != null) ? (Uri) imagePreview.getTag() : null;
 
-        if (isAllEmpty(speedingViolations, passengerSafetyViolations, operationalViolations, trafficRuleViolations, driverConductViolations)) {
+        if (isAllEmpty(speedingViolations, passengerSafetyViolations, operationalViolations, trafficRuleViolations, driverConductViolations) && imageUri == null) {
             new AlertDialog.Builder(this)
                     .setTitle("Incomplete Report")
-                    .setMessage("Please select or input at least one violation before submitting.")
+                    .setMessage("Please select or input at least one violation or add an image before submitting.")
                     .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                     .show();
             return;
         }
 
-        String reportMessage = String.format("Submitted violations:\nSpeeding: %s\nOperational: %s\nTraffic Rules: %s\nPassenger Safety: %s\nDriver Conduct: %s",
-                speedingViolations, operationalViolations, trafficRuleViolations, passengerSafetyViolations, driverConductViolations);
-
-        showToast(reportMessage);
+        Intent intent = new Intent(this, HistoryActivity.class);
+        intent.putExtra("speedingViolations", speedingViolations);
+        intent.putExtra("passengerSafetyViolations", passengerSafetyViolations);
+        intent.putExtra("operationalViolations", operationalViolations);
+        intent.putExtra("trafficRuleViolations", trafficRuleViolations);
+        intent.putExtra("driverConductViolations", driverConductViolations);
+        if (imageUri != null) {
+            intent.putExtra("imageUri", imageUri.toString());
+        }
+        startActivity(intent);
     }
 
     private boolean isAllEmpty(String... inputs) {

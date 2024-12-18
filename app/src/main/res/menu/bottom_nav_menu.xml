@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_light"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/nav_calculator"
+        android:icon="@drawable/ic_map_light"
+        android:title="Fare Calculator" />
+
+    <item
+        android:id="@+id/nav_history"
+        android:icon="@drawable/ic_history_light"
+        android:title="History" />
+
+    <item
+        android:id="@+id/nav_account"
+        android:icon="@drawable/ic_account_light"
+        android:title="Account" />
+</menu>
