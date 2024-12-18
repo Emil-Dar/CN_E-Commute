@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,49 +18,44 @@ import com.google.firebase.auth.FirebaseUser;
 public class SignInActivity extends AppCompatActivity {
 
     private static final String TAG = "SignInActivity";
-    private FirebaseAuth mAuth;
     private EditText emailEditText, passwordEditText;
-    private Button signInButton;
-    private TextView signupLink; // Declare signupLink
-    private ImageView passwordEyeIcon; // Declare passwordEyeIcon
-    private boolean isPasswordVisible = false; // Declare isPasswordVisible
+    private ImageView passwordEyeIcon;
+    private boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
-        signInButton = findViewById(R.id.sign_in_button);
-        signupLink = findViewById(R.id.signin_link); // Initialize signupLink
-        passwordEyeIcon = findViewById(R.id.password_eye_icon); // Initialize passwordEyeIcon
+        Button signInButton = findViewById(R.id.sign_in_button);
+        TextView signupLink = findViewById(R.id.signin_link); // Local variable
+        passwordEyeIcon = findViewById(R.id.password_eye_icon);
 
-        signInButton.setOnClickListener(v -> signInUser());
+        signInButton.setOnClickListener(v -> signInUser(mAuth));
 
-        // Handle Sign Up link click
         signupLink.setOnClickListener(v -> {
             Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
             startActivity(intent);
-            finish(); // Close SignInActivity after navigating
+            finish();
         });
 
-        // Toggle password visibility
         passwordEyeIcon.setOnClickListener(v -> {
             isPasswordVisible = !isPasswordVisible;
             if (isPasswordVisible) {
                 passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                passwordEyeIcon.setImageResource(R.drawable.ic_eye_on); // Replace with the visible icon
+                passwordEyeIcon.setImageResource(R.drawable.ic_eye_on);
             } else {
                 passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                passwordEyeIcon.setImageResource(R.drawable.ic_eye_off); // Replace with the hidden icon
+                passwordEyeIcon.setImageResource(R.drawable.ic_eye_off);
             }
-            passwordEditText.setSelection(passwordEditText.getText().length()); // Move cursor to the end
+            passwordEditText.setSelection(passwordEditText.getText().length());
         });
     }
 
-    private void signInUser() {
+    private void signInUser(FirebaseAuth mAuth) {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
@@ -89,8 +83,9 @@ public class SignInActivity extends AppCompatActivity {
                             finish();
                         }
                     } else {
-                        Log.e(TAG, "Authentication Failed: " + task.getException().getMessage());
-                        Toast.makeText(SignInActivity.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        String errorMessage = (task.getException() != null) ? task.getException().getMessage() : "Unknown error";
+                        Log.e(TAG, "Authentication Failed: " + errorMessage);
+                        Toast.makeText(SignInActivity.this, "Authentication Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -30,6 +30,7 @@
 
         <!-- Scan QR Code -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/card_scan_qr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
@@ -50,6 +51,7 @@
 
         <!-- Fare Calculator -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/card_fare_calculator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
@@ -70,6 +72,7 @@
 
         <!-- Report Issues -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/card_report_issues"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardElevation="4dp"
@@ -95,7 +98,7 @@
         android:layout_height="55dp"
         android:layout_below="@id/card_container"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="210dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/primary_blue"
         android:text="@string/report"
         android:textColor="@color/white"
@@ -109,7 +112,7 @@
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="100dp"
         app:backgroundTint="@color/primary_blue"
         android:src="@drawable/ic_qr_code"
         android:tint="@color/white"
@@ -127,4 +130,5 @@
         app:itemTextColor="@color/black"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled" />
+
 </RelativeLayout>

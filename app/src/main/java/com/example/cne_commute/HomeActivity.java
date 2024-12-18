@@ -2,11 +2,14 @@ package com.example.cne_commute;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeActivity extends AppCompatActivity {
@@ -30,6 +33,31 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Initialize Bottom Navigation
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                // Navigate to HomeActivity
+                startActivity(new Intent(HomeActivity.this, HomeActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_calculator) {
+                // Navigate to FareCalculatorActivity
+                startActivity(new Intent(HomeActivity.this, FareCalculatorActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_history) {
+                // Navigate to HistoryActivity
+                startActivity(new Intent(HomeActivity.this, HistoryActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_account) {
+                // Navigate to AccountActivity
+                startActivity(new Intent(HomeActivity.this, AccountActivity.class));
+                return true;
+            } else {
+                return false;
+            }
+        });
+
         // Show toast for card actions
         setupCardActions();
     }
@@ -37,15 +65,18 @@ public class HomeActivity extends AppCompatActivity {
     // Helper method for CardView click listeners
     private void setupCardActions() {
         // "Scan QR Code" Card
-        findViewById(R.id.card_container).setOnClickListener(v ->
+        findViewById(R.id.card_scan_qr).setOnClickListener(v ->
                 showToast("Scan QR Code Clicked"));
 
         // "Fare Calculator" Card
-        findViewById(R.id.card_container).setOnClickListener(v ->
-                showToast("Fare Calculator Clicked"));
+        findViewById(R.id.card_fare_calculator).setOnClickListener(v -> {
+            // Navigate to FareCalculatorActivity
+            Intent intent = new Intent(HomeActivity.this, FareCalculatorActivity.class);
+            startActivity(intent);
+        });
 
         // "Report Issues" Card
-        findViewById(R.id.card_container).setOnClickListener(v ->
+        findViewById(R.id.card_report_issues).setOnClickListener(v ->
                 showToast("Report Issues Clicked"));
     }
 

@@ -1,18 +1,15 @@
 package com.example.cne_commute;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.location.Priority;
-import com.google.android.gms.tasks.CancellationTokenSource;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,11 +18,16 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FareCalculatorActivity extends AppCompatActivity {
 
@@ -33,12 +35,13 @@ public class FareCalculatorActivity extends AppCompatActivity {
     private static final double FARE_PER_KM = 10.0; // Fare per kilometer
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
 
-    private EditText startingLocation, destinationLocation;
-    private TextView totalFareText;
+    private TextView startingLocation, destinationLocation, totalFareText;
     private Button startButton, stopButton;
 
     private Location startLocation, destinationLocationObj;
     private FusedLocationProviderClient fusedLocationClient;
+
+    private static final Logger logger = Logger.getLogger(FareCalculatorActivity.class.getName());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,31 @@ public class FareCalculatorActivity extends AppCompatActivity {
 
         // Set listeners for the buttons
         setListeners();
+
+        // Initialize Bottom Navigation
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_calculator) {
+                // Navigate to FareCalculatorActivity
+                startActivity(new Intent(FareCalculatorActivity.this, FareCalculatorActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_home) {
+                // Navigate to FareCalculatorActivity HomeActivity
+                startActivity(new Intent(FareCalculatorActivity.this, HomeActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_history) {
+                // Navigate to HistoryActivity
+                startActivity(new Intent(FareCalculatorActivity.this, HistoryActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_account) {
+                // Navigate to AccountActivity
+                startActivity(new Intent(FareCalculatorActivity.this, AccountActivity.class));
+                return true;
+            } else {
+                return false;
+            }
+        });
     }
 
     private void initializeUI() {
@@ -84,31 +112,24 @@ public class FareCalculatorActivity extends AppCompatActivity {
 
     private void setListeners() {
         startButton.setOnClickListener(v -> setStartingLocation());
-
         stopButton.setOnClickListener(v -> setDestinationLocationAndCalculateFare());
     }
 
     private void setStartingLocation() {
         getCurrentLocation(location -> {
             startLocation = location;
-            String address = getAddressFromLocation(location);
-            if (address != null) {
-                startingLocation.setText(address);
-            } else {
-                startingLocation.setText(getCoordinatesString(location));
-            }
+            // Use a ternary operator to handle null addresses
+            String address = (getAddressFromLocation(location) != null) ? getAddressFromLocation(location) : getCoordinatesString(location);
+            startingLocation.setText(address);
         });
     }
 
     private void setDestinationLocationAndCalculateFare() {
         getCurrentLocation(location -> {
             destinationLocationObj = location;
-            String address = getAddressFromLocation(location);
-            if (address != null) {
-                destinationLocation.setText(address);
-            } else {
-                destinationLocation.setText(getCoordinatesString(location));
-            }
+            // Use a ternary operator to handle null addresses
+            String address = (getAddressFromLocation(location) != null) ? getAddressFromLocation(location) : getCoordinatesString(location);
+            destinationLocation.setText(address);
             calculateFare();
         });
     }
@@ -133,13 +154,6 @@ public class FareCalculatorActivity extends AppCompatActivity {
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationTokenSource.getToken())
@@ -151,11 +165,10 @@ public class FareCalculatorActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> {
+                    logger.log(Level.SEVERE, "Failed to fetch location", e);
                     Toast.makeText(this, "Failed to fetch location: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
-
-
 
     private String getAddressFromLocation(Location location) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -165,7 +178,7 @@ public class FareCalculatorActivity extends AppCompatActivity {
                 return addresses.get(0).getAddressLine(0);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to retrieve address", e);
             Toast.makeText(this, "Failed to retrieve address", Toast.LENGTH_SHORT).show();
         }
         return null;
@@ -195,6 +208,6 @@ public class FareCalculatorActivity extends AppCompatActivity {
         double totalFare = BASE_FARE + (distanceInKm * FARE_PER_KM);
 
         // Display the fare
-        totalFareText.setText(String.format(Locale.getDefault(), "\u20B1 %.2f", totalFare));
+        totalFareText.setText(String.format(Locale.getDefault(), "₱ %.2f", totalFare));
     }
 }

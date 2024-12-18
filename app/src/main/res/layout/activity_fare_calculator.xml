@@ -24,11 +24,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/fare_calculator_header"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
                 android:paddingBottom="16dp"
-                android:textColor="@color/textColor"/>
+                android:textColor="#000000" />
 
         <!-- Commuter No. 1 -->
         <LinearLayout
@@ -48,58 +48,36 @@
                 android:textColor="@color/textColor"/>
 
             <!-- Starting Location -->
-            <LinearLayout
+            <TextView
+                android:id="@+id/startingLocation1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/textbox_bg"
+                android:padding="12dp"
+                android:hint="@string/starting_location"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                app:drawableStartCompat="@drawable/ic_location"
+                android:drawablePadding="8dp" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_location"
-                    android:contentDescription="@string/location_icon"
-                    android:layout_gravity="center_vertical" />
-
-                <EditText
-                    android:id="@+id/startingLocation1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:autofillHints="Starting Location"
-                    android:background="@drawable/textbox_bg"
-                    android:padding="12dp"
-                    android:hint="@string/starting_location"
-                    android:textSize="18sp"
-                    android:textColor="@color/textColor"/>
-            </LinearLayout>
 
             <!-- Destination -->
-            <LinearLayout
+            <TextView
+                android:id="@+id/chosenDestination1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/textbox_bg"
+                android:padding="12dp"
+                android:hint="@string/your_destination"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                app:drawableStartCompat="@drawable/ic_location"
+                android:drawablePadding="8dp" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_location"
-                    android:contentDescription="@string/location_icon"
-                    android:layout_gravity="center_vertical" />
-
-                <EditText
-                    android:id="@+id/chosenDestination1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:autofillHints=""
-                    android:background="@drawable/textbox_bg"
-                    android:padding="12dp"
-                    android:hint="@string/your_destination"
-                    android:textSize="18sp"
-                    android:textColor="@color/textColor" />
-            </LinearLayout>
 
             <!--Fare Buttons-->
             <LinearLayout
@@ -115,9 +93,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/start"
+                    android:text="@string/start_button_1"
                     android:background="@color/green"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:maxWidth="100dp"
+                    android:contentDescription="@string/start_button_1"/>
 
                 <View
                     android:layout_width="8dp"
@@ -128,11 +108,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/stop"
+                    android:text="@string/stop_button_1"
                     android:background="@color/red"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:maxWidth="100dp"
+                    android:contentDescription="@string/stop_button_1"/>
 
             </LinearLayout>
+
 
             <!-- Total Fare -->
             <TextView
@@ -143,7 +126,7 @@
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
                 android:layout_gravity="center"
-                android:textColor="@color/textColor" />
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/totalFare1"
@@ -177,56 +160,35 @@
                     android:textColor="@color/textColor"/>
 
                 <!-- Starting Location -->
-                <LinearLayout
+                <TextView
+                    android:id="@+id/startingLocation2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/textColor">
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/textbox_bg"
+                    android:padding="12dp"
+                    android:hint="@string/starting_location"
+                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    app:drawableStartCompat="@drawable/ic_location"
+                    android:drawablePadding="8dp" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_location"
-                        android:contentDescription="@string/location_icon"
-                        android:layout_gravity="center_vertical" />
-
-                    <TextView
-                        android:id="@+id/startingLocation2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/textbox_bg"
-                        android:padding="12dp"
-                        android:hint="@string/starting_location"
-                        android:textSize="18sp" />
-                </LinearLayout>
 
                 <!-- Your Destination -->
-                <LinearLayout
+                <TextView
+                    android:id="@+id/chosenDestination2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/textColor">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_location"
-                        android:contentDescription="@string/location_icon"
-                        android:layout_gravity="center_vertical" />
-
-                    <TextView
-                        android:id="@+id/chosenDestination2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/textbox_bg"
-                        android:padding="12dp"
-                        android:hint="@string/your_destination"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/textbox_bg"
+                    android:padding="12dp"
+                    android:hint="@string/your_destination"
+                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    app:drawableStartCompat="@drawable/ic_location"
+                    android:drawablePadding="8dp" />
 
                 <!--Fare Buttons-->
                 <LinearLayout
@@ -242,9 +204,11 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/start"
+                        android:text="@string/start_button_2"
                         android:background="@color/green"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#FFFFFF"
+                        android:maxWidth="100dp"
+                        android:contentDescription="@string/start_button_2" />
 
                     <View
                         android:layout_width="8dp"
@@ -255,9 +219,11 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/stop"
+                        android:text="@string/stop_button_2"
                         android:background="@color/red"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#FFFFFF"
+                        android:maxWidth="100dp"
+                        android:contentDescription="@string/stop_button_2"/>
 
                 </LinearLayout>
 
@@ -305,56 +271,37 @@
                     android:textColor="@color/textColor"/>
 
                 <!-- Starting Location -->
-                <LinearLayout
+                <!-- Starting Location -->
+                <TextView
+                    android:id="@+id/startingLocation3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/textColor">
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/textbox_bg"
+                    android:padding="12dp"
+                    android:hint="@string/starting_location"
+                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    app:drawableStartCompat="@drawable/ic_location"
+                    android:drawablePadding="8dp" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_location"
-                        android:contentDescription="@string/location_icon"
-                        android:layout_gravity="center_vertical" />
-
-                    <TextView
-                        android:id="@+id/startingLocation3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/textbox_bg"
-                        android:padding="12dp"
-                        android:hint="@string/starting_location"
-                        android:textSize="18sp" />
-                </LinearLayout>
 
                 <!-- Your Destination -->
-                <LinearLayout
+                <TextView
+                    android:id="@+id/chosenDestination3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/textColor">
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/textbox_bg"
+                    android:padding="12dp"
+                    android:hint="@string/your_destination"
+                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    app:drawableStartCompat="@drawable/ic_location"
+                    android:drawablePadding="8dp" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_location"
-                        android:contentDescription="@string/location_icon"
-                        android:layout_gravity="center_vertical" />
-
-                    <TextView
-                        android:id="@+id/chosenDestination3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/textbox_bg"
-                        android:padding="12dp"
-                        android:hint="@string/your_destination"
-                        android:textSize="18sp" />
-                </LinearLayout>
 
 
                 <LinearLayout
@@ -370,9 +317,11 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/start"
+                        android:text="@string/start_button_3"
                         android:background="@color/green"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#FFFFFF"
+                        android:maxWidth="100dp"
+                        android:contentDescription="@string/start_button_3"/>
 
                     <View
                         android:layout_width="8dp"
@@ -383,9 +332,11 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/stop"
+                        android:text="@string/stop_button_3"
                         android:background="@color/red"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#FFFFFF"
+                        android:maxWidth="100dp"
+                        android:contentDescription="@string/stop_button_3"/>
 
                 </LinearLayout>
 
@@ -432,57 +383,35 @@
                     android:textStyle="bold" />
 
                 <!-- Starting Location -->
-                <LinearLayout
+                <TextView
+                    android:id="@+id/startingLocation4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/textColor">
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/textbox_bg"
+                    android:padding="12dp"
+                    android:hint="@string/starting_location"
+                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    app:drawableStartCompat="@drawable/ic_location"
+                    android:drawablePadding="8dp" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_location"
-                        android:contentDescription="@string/location_icon"
-                        android:layout_gravity="center_vertical" />
-
-                    <TextView
-                        android:id="@+id/startingLocation4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/textbox_bg"
-                        android:padding="12dp"
-                        android:hint="@string/starting_location"
-                        android:textSize="18sp"
-                        android:textColor="@color/textColor"/>
-                </LinearLayout>
 
                 <!-- Your Destination -->
-                <LinearLayout
+                <TextView
+                    android:id="@+id/chosenDestination4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/textColor">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_location"
-                        android:contentDescription="@string/location_icon"
-                        android:layout_gravity="center_vertical" />
-
-                    <TextView
-                        android:id="@+id/chosenDestination4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/textbox_bg"
-                        android:padding="12dp"
-                        android:hint="@string/your_destination"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/textbox_bg"
+                    android:padding="12dp"
+                    android:hint="@string/your_destination"
+                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    app:drawableStartCompat="@drawable/ic_location"
+                    android:drawablePadding="8dp" />
 
                 <!--Fare Buttons-->
                 <LinearLayout
@@ -499,8 +428,10 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@color/green"
-                        android:text="@string/start"
-                        android:textColor="#ECEFF1" />
+                        android:text="@string/start_button_4"
+                        android:textColor="#ECEFF1"
+                        android:maxWidth="100dp"
+                        android:contentDescription="@string/start_button_4" />
 
                     <View
                         android:layout_width="8dp"
@@ -512,8 +443,10 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@color/red"
-                        android:text="@string/stop"
-                        android:textColor="#64B5F6" />
+                        android:text="@string/stop_button_4"
+                        android:textColor="#64B5F6"
+                        android:maxWidth="100dp"
+                        android:contentDescription="@string/stop_button_4"/>
 
                 </LinearLayout>
 
@@ -538,37 +471,37 @@
                     android:padding="8dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="4dp"
-                    android:textColor="@color/textColor"/>
+                    android:textColor="#000000"/>
 
             </LinearLayout>
 
-            <!--TARIPA-->
+            <!--FARE MATRIX-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/taripa_background"
+                android:background="@drawable/fare_matrix_background"
                 android:padding="16dp"
                 android:layout_marginTop="16dp"
-                android:textColor="@color/textColor">
+                android:textColor="#000000">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/taripa"
+                    android:text="@string/fare_matrix"
                     android:layout_gravity="center"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp"
-                    android:textColor="@color/textColor"/>
+                    android:textColor="#000000"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/taripa_desc"
+                    android:text="@string/fare_matrix_description"
                     android:textSize="16sp"
                     android:padding="8dp"
-                    android:textColor="@color/textColor"/>
+                    android:textColor="#000000"/>
 
             </LinearLayout>
 
@@ -580,54 +513,26 @@
         android:id="@+id/bottomNavBar"
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="@color/colorPrimary"
+
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
-            android:id="@+id/home_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
+        <!-- Bottom Navigation -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_home_dark"
-            android:contentDescription="@string/home"
-            android:text=""
-            android:tint="@color/white" />
+            android:background="@color/primary_blue"
+            app:itemIconTint="@color/black"
+            app:itemTextColor="@color/black"
+            app:menu="@menu/bottom_nav_menu"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <Button
-            android:id="@+id/map_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_map_light"
-            android:contentDescription="@string/map"
-            android:text=""
-            android:tint="@color/white" />
 
-        <Button
-            android:id="@+id/history_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_history_light"
-            android:contentDescription="@string/history"
-            android:text=""
-            android:tint="@color/white" />
-
-        <Button
-            android:id="@+id/account_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_account_light"
-            android:contentDescription="@string/account"
-            android:text=""
-            android:tint="@color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
