@@ -145,32 +145,36 @@ public class SignUpActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-                            // Save user details in Firestore
-                            Map<String, Object> userData = new HashMap<>();
-                            userData.put("username", username);
-                            userData.put("email", email);
-                            userData.put("userType", "Commuter");
+                            // Directly navigate to the next screen
+                            Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                            intent.putExtra("username", username); // Pass data if needed
+                            startActivity(intent);
+                            finishAffinity(); // Close SignUpActivity
 
-                            db.collection("users").document(user.getUid()).set(userData)
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(SignUpActivity.this, "User Registered.", Toast.LENGTH_SHORT).show();
-                                        // Clear fields after successful registration
-                                        usernameEditText.setText("");
-                                        emailEditText.setText("");
-                                        passwordEditText.setText("");
-                                        confirmPasswordEditText.setText("");
-                                        // Send notification
-                                        sendNotification();
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Log.e(TAG, "Registration Failed: " + e.getMessage());
-                                        Toast.makeText(SignUpActivity.this, "Registration Failed.", Toast.LENGTH_SHORT).show();
-                                    });
+                            // Save user details in Firestore in the background
+                            saveUserDataToFirestore(user.getUid(), username, email);
+
+                            // Send notification
+                            sendNotification();
                         }
                     } else {
                         Log.e(TAG, "Authentication Failed: " + task.getException().getMessage());
                         Toast.makeText(SignUpActivity.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
+                });
+    }
+    private void saveUserDataToFirestore(@NonNull String uid, @NonNull String username, @NonNull String email) {
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("username", username);
+        userData.put("email", email);
+        userData.put("userType", "Commuter");
+
+        db.collection("users").document(uid).set(userData)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "User data saved successfully"))
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error saving user data: " + e.getMessage());
+                    // NEW: Show user-friendly error message
+                    Toast.makeText(SignUpActivity.this, "Failed to save user data. Please try again later.", Toast.LENGTH_SHORT).show();
                 });
     }
 

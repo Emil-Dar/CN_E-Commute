@@ -1,25 +1,38 @@
 package com.example.cne_commute;
 
 public class ScannedQrCode {
-    private String date;
-    private String time;
-    private String transactionNumber;
+    private String operatorName;
+    private String age;
+    private String homeAddress;
+    private String trPlateNumber;
+    private String contactNo;
 
-    public ScannedQrCode(String date, String time, String transactionNumber) {
-        this.date = date;
-        this.time = time;
-        this.transactionNumber = transactionNumber;
+    public ScannedQrCode(String operatorName, String age, String homeAddress, String trPlateNumber, String contactNo) {
+        this.operatorName = operatorName;
+        this.age = age;
+        this.homeAddress = homeAddress;
+        this.trPlateNumber = trPlateNumber;
+        this.contactNo = contactNo;
     }
 
-    public String getDate() {
-        return date;
+    // Getters
+    public String getOperatorName() {
+        return operatorName;
     }
 
-    public String getTime() {
-        return time;
+    public String getAge() {
+        return age;
     }
 
-    public String getTransactionNumber() {
-        return transactionNumber;
+    public String getHomeAddress() {
+        return homeAddress;
+    }
+
+    public String getTrPlateNumber() {
+        return trPlateNumber;
+    }
+
+    public String getContactNo() {
+        return contactNo;
     }
 }

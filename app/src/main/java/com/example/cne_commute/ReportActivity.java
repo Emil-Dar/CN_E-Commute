@@ -6,13 +6,17 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.CheckBox;
+
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,7 +26,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import android.widget.ImageButton;
+import androidx.core.content.FileProvider;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ReportActivity extends AppCompatActivity {
 
@@ -30,16 +39,18 @@ public class ReportActivity extends AppCompatActivity {
     private ImageButton removePhotoButton;
     private LinearLayout speedingOptions, operationalOptions, trafficRulesOptions, passengerSafetyViolationsOptions, driverConductOptions;
 
-    // Activity Result Launchers
+    private Uri photoUri;
+
     private ActivityResultLauncher<Intent> pickImageLauncher;
     private ActivityResultLauncher<Intent> takePhotoLauncher;
+
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
-        // Initialize views
         imagePreview = findViewById(R.id.image_preview);
         removePhotoButton = findViewById(R.id.remove_image_button);
         speedingOptions = findViewById(R.id.speeding_violations_options);
@@ -52,10 +63,8 @@ public class ReportActivity extends AppCompatActivity {
         Button openCameraButton = findViewById(R.id.open_camera_button);
         Button submitButton = findViewById(R.id.submit_button);
 
-        // Set up result launchers
         setupActivityResultLaunchers();
 
-        // Set click listeners
         selectFileButton.setOnClickListener(v -> openFileChooser());
         openCameraButton.setOnClickListener(v -> checkCameraPermissionAndOpen());
         submitButton.setOnClickListener(v -> confirmAndSubmitReport());
@@ -74,7 +83,7 @@ public class ReportActivity extends AppCompatActivity {
                 Uri selectedImageUri = result.getData().getData();
                 if (selectedImageUri != null) {
                     imagePreview.setImageURI(selectedImageUri);
-                    imagePreview.setTag(selectedImageUri);  // Store the URI in tag
+                    imagePreview.setTag(selectedImageUri);
                     removePhotoButton.setVisibility(View.VISIBLE);
                     showToast("Selected Image: " + selectedImageUri);
                 }
@@ -82,20 +91,15 @@ public class ReportActivity extends AppCompatActivity {
         });
 
         takePhotoLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                // Check if getExtras() is null to avoid NullPointerException
-                if (result.getData().getExtras() != null) {
-                    Bitmap capturedImage = (Bitmap) result.getData().getExtras().get("data");
-                    if (capturedImage != null) {
-                        imagePreview.setImageBitmap(capturedImage);
-                        removePhotoButton.setVisibility(View.VISIBLE);
-                        showToast("Photo captured successfully!");
-                    } else {
-                        showToast("Failed to capture image.");
-                    }
-                } else {
-                    showToast("No data found in the captured image.");
+            if (result.getResultCode() == RESULT_OK) {
+                if (photoUri != null) {
+                    imagePreview.setImageURI(photoUri);
+                    imagePreview.setTag(photoUri);
+                    removePhotoButton.setVisibility(View.VISIBLE);
+                    showToast("Photo captured successfully!");
                 }
+            } else {
+                showToast("Failed to capture image.");
             }
         });
     }
@@ -110,13 +114,30 @@ public class ReportActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             openCamera();
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         }
     }
 
     private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePhotoLauncher.launch(intent);
+        try {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                photoUri = FileProvider.getUriForFile(this, "com.example.cne_commute.fileprovider", photoFile);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                takePhotoLauncher.launch(intent);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showToast("Error creating image file.");
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "CNCommute_" + timeStamp;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
 
     private void confirmAndSubmitReport() {
@@ -145,6 +166,7 @@ public class ReportActivity extends AppCompatActivity {
             return;
         }
 
+
         Intent intent = new Intent(this, HistoryActivity.class);
         intent.putExtra("speedingViolations", speedingViolations);
         intent.putExtra("passengerSafetyViolations", passengerSafetyViolations);
@@ -169,13 +191,36 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private String extractInputFromSection(LinearLayout section) {
+        StringBuilder result = new StringBuilder();
+
+        // Get all checked checkboxes with tag "violation_option"
+        for (int i = 0; i < section.getChildCount(); i++) {
+            View child = section.getChildAt(i);
+            if (child instanceof CheckBox && ((CheckBox) child).isChecked()) {
+                result.append(((CheckBox) child).getText().toString()).append(", ");
+            }
+        }
+
+        // Include the EditText with tag "other_input"
         EditText editText = section.findViewWithTag("other_input");
-        return (editText != null && !editText.getText().toString().trim().isEmpty()) ? editText.getText().toString().trim() : "None";
+        if (editText != null && !editText.getText().toString().trim().isEmpty()) {
+            result.append(editText.getText().toString().trim());
+        }
+
+        // Remove trailing comma and space
+        String finalResult = result.toString().trim();
+        if (finalResult.endsWith(",")) {
+            finalResult = finalResult.substring(0, finalResult.length() - 1);
+        }
+
+        return finalResult.isEmpty() ? "None" : finalResult;
     }
+
 
     private void clearImagePreview() {
         imagePreview.setImageURI(null);
         imagePreview.setImageBitmap(null);
+        imagePreview.setTag(null);
         removePhotoButton.setVisibility(View.GONE);
         showToast("Image removed.");
     }
@@ -193,9 +238,8 @@ public class ReportActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);  // Call the parent class method
-
-        if (requestCode == 0) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openCamera();
             } else {
@@ -203,5 +247,4 @@ public class ReportActivity extends AppCompatActivity {
             }
         }
     }
-
 }

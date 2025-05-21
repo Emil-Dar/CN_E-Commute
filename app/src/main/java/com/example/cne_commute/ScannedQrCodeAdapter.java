@@ -21,16 +21,18 @@ public class ScannedQrCodeAdapter extends RecyclerView.Adapter<ScannedQrCodeAdap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_scanned_qr_code, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_scanned_qr_code_card, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ScannedQrCode qrCode = qrCodeList.get(position);
-        holder.dateTextView.setText(qrCode.getDate());
-        holder.timeTextView.setText(qrCode.getTime());
-        holder.transactionNumberTextView.setText(qrCode.getTransactionNumber());
+        holder.operatorNameTextView.setText(qrCode.getOperatorName());
+        holder.ageTextView.setText(qrCode.getAge());
+        holder.homeAddressTextView.setText(qrCode.getHomeAddress());
+        holder.trPlateNumberTextView.setText(qrCode.getTrPlateNumber());
+        holder.contactNoTextView.setText(qrCode.getContactNo());
     }
 
     @Override
@@ -39,13 +41,15 @@ public class ScannedQrCodeAdapter extends RecyclerView.Adapter<ScannedQrCodeAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView dateTextView, timeTextView, transactionNumberTextView;
+        public TextView operatorNameTextView, ageTextView, homeAddressTextView, trPlateNumberTextView, contactNoTextView;
 
         public ViewHolder(View view) {
             super(view);
-            dateTextView = view.findViewById(R.id.date_text_view);
-            timeTextView = view.findViewById(R.id.time_text_view);
-            transactionNumberTextView = view.findViewById(R.id.transaction_number_text_view);
+            operatorNameTextView = view.findViewById(R.id.operator_name_text_view);
+            ageTextView = view.findViewById(R.id.age_text_view);
+            homeAddressTextView = view.findViewById(R.id.home_address_text_view);
+            trPlateNumberTextView = view.findViewById(R.id.tr_plate_number_text_view);
+            contactNoTextView = view.findViewById(R.id.contact_no_text_view);
         }
     }
 }
