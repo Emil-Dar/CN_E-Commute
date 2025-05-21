@@ -120,5 +120,13 @@
     <string name="report_history">Report History</string>
     <string name="scanned_qr_codes">Scanned QR Codes</string>
 
+    <string name="toolbar_title_scanned_qr_codes">Scanned QR Codes</string>
+    <string name="total_km">TOTAL KM:</string>
+
+    <!--- Account -->
+    <string name="account_text">Account</string>
+    <string name="driver_name">Driver Name: Krizza</string>
+    <string name="profile_picture">Profile Picture</string>"
+
 
 </resources>

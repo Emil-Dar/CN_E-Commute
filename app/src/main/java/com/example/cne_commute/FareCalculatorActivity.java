@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -35,61 +36,29 @@ public class FareCalculatorActivity extends AppCompatActivity {
     private static final double FARE_PER_KM = 10.0; // Fare per kilometer
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
 
-    private TextView startingLocation, destinationLocation, totalFareText;
-    private Button startButton, stopButton;
-
-    private Location startLocation, destinationLocationObj;
     private FusedLocationProviderClient fusedLocationClient;
-
     private static final Logger logger = Logger.getLogger(FareCalculatorActivity.class.getName());
+
+    // HashMaps to track state for each commuter
+    private final HashMap<Integer, Location> startLocations = new HashMap<>();
+    private final HashMap<Integer, Location> destinationLocations = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fare_calculator);
 
-        // Initialize UI components and location client
-        initializeUI();
+        // Initialize location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Request location permissions if not already granted
         requestLocationPermission();
 
-        // Set listeners for the buttons
-        setListeners();
+        // Set listeners for each commuter
+        setListenersForCommuters();
 
         // Initialize Bottom Navigation
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.nav_calculator) {
-                // Navigate to FareCalculatorActivity
-                startActivity(new Intent(FareCalculatorActivity.this, FareCalculatorActivity.class));
-                return true;
-            } else if (itemId == R.id.nav_home) {
-                // Navigate to FareCalculatorActivity HomeActivity
-                startActivity(new Intent(FareCalculatorActivity.this, HomeActivity.class));
-                return true;
-            } else if (itemId == R.id.nav_history) {
-                // Navigate to HistoryActivity
-                startActivity(new Intent(FareCalculatorActivity.this, HistoryActivity.class));
-                return true;
-            } else if (itemId == R.id.nav_account) {
-                // Navigate to AccountActivity
-                startActivity(new Intent(FareCalculatorActivity.this, AccountActivity.class));
-                return true;
-            } else {
-                return false;
-            }
-        });
-    }
-
-    private void initializeUI() {
-        startingLocation = findViewById(R.id.startingLocation1);
-        destinationLocation = findViewById(R.id.chosenDestination1);
-        totalFareText = findViewById(R.id.totalFare1);
-        startButton = findViewById(R.id.startButton1);
-        stopButton = findViewById(R.id.stopButton1);
+        initializeBottomNavigation();
     }
 
     private void requestLocationPermission() {
@@ -110,29 +79,95 @@ public class FareCalculatorActivity extends AppCompatActivity {
         }
     }
 
-    private void setListeners() {
-        startButton.setOnClickListener(v -> setStartingLocation());
-        stopButton.setOnClickListener(v -> setDestinationLocationAndCalculateFare());
+    private void setListenersForCommuters() {
+        for (int i = 1; i <= 4; i++) {
+            int commuterId = i;
+
+            Button startButton = findViewById(getResources().getIdentifier("startButton" + commuterId, "id", getPackageName()));
+            Button stopButton = findViewById(getResources().getIdentifier("stopButton" + commuterId, "id", getPackageName()));
+
+            // Start button resets the state for the commuter and sets the starting location
+            startButton.setOnClickListener(v -> resetCommuterState(commuterId));
+
+            // Stop button records the destination and calculates the fare
+            stopButton.setOnClickListener(v -> setDestinationLocationAndCalculateFare(commuterId));
+        }
     }
 
-    private void setStartingLocation() {
+    private void resetCommuterState(int commuterId) {
+        // Reset the starting location and destination for the commuter
+        startLocations.put(commuterId, null);
+        destinationLocations.put(commuterId, null);
+
+        // Clear the UI elements (text views)
+        TextView startingLocationText = findViewById(getResources().getIdentifier("startingLocation" + commuterId, "id", getPackageName()));
+        TextView destinationLocationText = findViewById(getResources().getIdentifier("chosenDestination" + commuterId, "id", getPackageName()));
+        TextView totalKmText = findViewById(getResources().getIdentifier("totalkm" + commuterId, "id", getPackageName()));
+        TextView totalFareText = findViewById(getResources().getIdentifier("totalFare" + commuterId, "id", getPackageName()));
+
+        // Set default text instead of clearing them
+        startingLocationText.setText("");
+        destinationLocationText.setText("");
+
+        // Set default values for Total KM and Total Fare so the layout doesn't shrink
+        totalKmText.setText("0.00 km");
+        totalFareText.setText("₱ 0.00");
+
+        // Set the starting location for the commuter
         getCurrentLocation(location -> {
-            startLocation = location;
-            // Use a ternary operator to handle null addresses
+            startLocations.put(commuterId, location);
+
             String address = (getAddressFromLocation(location) != null) ? getAddressFromLocation(location) : getCoordinatesString(location);
-            startingLocation.setText(address);
+            startingLocationText.setText(address);
         });
     }
 
-    private void setDestinationLocationAndCalculateFare() {
+    private void setDestinationLocationAndCalculateFare(int commuterId) {
         getCurrentLocation(location -> {
-            destinationLocationObj = location;
-            // Use a ternary operator to handle null addresses
+            destinationLocations.put(commuterId, location);
+
             String address = (getAddressFromLocation(location) != null) ? getAddressFromLocation(location) : getCoordinatesString(location);
-            destinationLocation.setText(address);
-            calculateFare();
+            TextView destinationLocationText = findViewById(getResources().getIdentifier("chosenDestination" + commuterId, "id", getPackageName()));
+            destinationLocationText.setText(address);
+
+            // Calculate the fare once the destination is set
+            calculateFare(commuterId);
         });
     }
+
+    private void calculateFare(int commuterId) {
+        Location startLocation = startLocations.get(commuterId);
+        Location destinationLocation = destinationLocations.get(commuterId);
+
+        if (startLocation == null || destinationLocation == null) {
+            TextView totalFareText = findViewById(getResources().getIdentifier("totalFare" + commuterId, "id", getPackageName()));
+            totalFareText.setText("₱ 0.00");  // Keep the text instead of leaving it empty
+            return;
+        }
+
+        float[] results = new float[1];
+        Location.distanceBetween(
+                startLocation.getLatitude(), startLocation.getLongitude(),
+                destinationLocation.getLatitude(), destinationLocation.getLongitude(),
+                results);
+
+        float distanceInKm = results[0] / 1000;
+
+        double totalFare;
+        if (distanceInKm <= 2) {
+            totalFare = 15.0;
+        } else {
+            int additionalKmRanges = (int) Math.ceil(distanceInKm - 2);
+            totalFare = 15.0 + (additionalKmRanges * 2.0);
+        }
+
+        TextView totalKmText = findViewById(getResources().getIdentifier("totalkm" + commuterId, "id", getPackageName()));
+        TextView totalFareText = findViewById(getResources().getIdentifier("totalFare" + commuterId, "id", getPackageName()));
+
+        totalKmText.setText(String.format(Locale.getDefault(), "%.2f km", distanceInKm));
+        totalFareText.setText(String.format(Locale.getDefault(), "₱ %.2f", totalFare));
+    }
+
 
     private void getCurrentLocation(OnSuccessListener<Location> callback) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -150,7 +185,6 @@ public class FareCalculatorActivity extends AppCompatActivity {
     }
 
     private void requestFreshLocation(OnSuccessListener<Location> callback) {
-        // Create a CancellationTokenSource to handle potential cancellations
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -188,26 +222,27 @@ public class FareCalculatorActivity extends AppCompatActivity {
         return String.format(Locale.getDefault(), "%.4f, %.4f", location.getLatitude(), location.getLongitude());
     }
 
-    private void calculateFare() {
-        if (startLocation == null || destinationLocationObj == null) {
-            totalFareText.setText(getString(R.string.fare_error));
-            return;
-        }
 
-        // Compute the distance in meters
-        float[] results = new float[1];
-        Location.distanceBetween(
-                startLocation.getLatitude(), startLocation.getLongitude(),
-                destinationLocationObj.getLatitude(), destinationLocationObj.getLongitude(),
-                results);
 
-        // Convert distance to kilometers
-        float distanceInKm = results[0] / 1000;
-
-        // Calculate the total fare
-        double totalFare = BASE_FARE + (distanceInKm * FARE_PER_KM);
-
-        // Display the fare
-        totalFareText.setText(String.format(Locale.getDefault(), "₱ %.2f", totalFare));
+    private void initializeBottomNavigation() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_calculator) {
+                startActivity(new Intent(FareCalculatorActivity.this, FareCalculatorActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_home) {
+                startActivity(new Intent(FareCalculatorActivity.this, HomeActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_history) {
+                startActivity(new Intent(FareCalculatorActivity.this, HistoryActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_account) {
+                startActivity(new Intent(FareCalculatorActivity.this, AccountActivity.class));
+                return true;
+            } else {
+                return false;
+            }
+        });
     }
 }

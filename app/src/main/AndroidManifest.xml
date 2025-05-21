@@ -5,12 +5,9 @@
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-    <!-- No need for WRITE_EXTERNAL_STORAGE if targeting Android 11+ -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- Declare App Requirements -->
@@ -35,12 +32,22 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.CNECommute"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        tools:replace="android:icon">
+
+        <!-- FileProvider for capturing image with camera -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.cne_commute.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <!-- QR Scanner Activity -->
-        <activity
-            android:name=".QRScannerActivity"
-            android:exported="false" />
+        <activity android:name=".QRScannerActivity" />
 
         <!-- Splash Screen Activity -->
         <activity
@@ -53,64 +60,36 @@
         </activity>
 
         <!-- User Role Selection Activity -->
-        <activity
-            android:name=".UserRoleSelectionActivity"
-            android:exported="true" />
+        <activity android:name=".UserRoleSelectionActivity" android:exported="true" />
 
         <!-- Driver Activities -->
-        <activity
-            android:name=".DriverSignInActivity"
-            android:exported="true" />
-        <activity
-            android:name=".DriverSignUpActivity"
-            android:exported="true" />
+        <activity android:name=".DriverSignInActivity" android:exported="true" />
+        <activity android:name=".DriverSignUpActivity" android:exported="true" />
 
         <!-- User Activities -->
-        <activity
-            android:name=".SignInActivity"
-            android:exported="true" />
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="true" />
+        <activity android:name=".SignInActivity" android:exported="true" />
+        <activity android:name=".SignUpActivity" android:exported="true" />
 
         <!-- Home Activities -->
-        <activity
-            android:name=".HomeActivity"
-            android:exported="true" />
-        <activity
-            android:name=".DriverHomeActivity"
-            android:exported="true" />
+        <activity android:name=".HomeActivity" android:exported="true" />
+        <activity android:name=".DriverHomeActivity" android:exported="true" />
 
         <!-- Report Activity -->
-        <activity
-            android:name=".ReportActivity"
-            android:exported="true" />
+        <activity android:name=".ReportActivity" android:exported="true" />
 
         <!-- New Driver Activities -->
-        <activity
-            android:name=".WalletActivity"
-            android:exported="true" />
-        <activity
-            android:name=".DriverNotificationActivity"
-            android:exported="true" />
-        <activity
-            android:name=".DriverAccountActivity"
-            android:exported="true" />
+        <activity android:name=".WalletActivity" android:exported="true" />
+        <activity android:name=".DriverNotificationActivity" android:exported="true" />
+        <activity android:name=".DriverAccountActivity" android:exported="true" />
 
         <!-- Fare Calculator Activity -->
-        <activity
-            android:name=".FareCalculatorActivity"
-            android:exported="true"/>
+        <activity android:name=".FareCalculatorActivity" android:exported="true" />
 
         <!-- History Activity -->
-        <activity
-            android:name=".HistoryActivity"
-            android:exported="true"/>
+        <activity android:name=".HistoryActivity" android:exported="true" />
 
         <!-- Account Activity -->
-        <activity
-            android:name=".AccountActivity"
-            android:exported="true"/>
+        <activity android:name=".AccountActivity" android:exported="true" />
 
     </application>
 </manifest>

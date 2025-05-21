@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.cne_commute"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -64,6 +64,8 @@ dependencies {
 
     // ZXing QR Code scanning
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    implementation("androidx.cardview:cardview:1.0.0")
 
     // Testing libraries
     testImplementation("junit:junit:4.13.2")
