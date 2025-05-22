@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Internal storage (app-specific) -->
-    <files-path name="internal_files" path="." />
 
-    <!-- External storage (e.g. Pictures/ directory) -->
-    <external-path name="external_files" path="." />
+    <!-- App's internal files directory -->
+    <files-path
+        name="internal_files"
+        path="." />
+
+    <!-- App's external files directory (e.g. getExternalFilesDir()) -->
+    <external-files-path
+        name="external_files"
+        path="." />
+
+    <!-- Public external storage - typically used for camera images -->
+    <external-path
+        name="external_public"
+        path="." />
+
+    <!-- External storage Pictures folder (commonly used for images) -->
+    <external-files-path
+        name="images"
+        path="Pictures" />
+
 </paths>

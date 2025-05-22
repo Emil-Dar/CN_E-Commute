@@ -3,20 +3,18 @@ package com.example.cne_commute;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import android.widget.CheckBox;
-
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -38,7 +36,6 @@ public class ReportActivity extends AppCompatActivity {
     private ImageView imagePreview;
     private ImageButton removePhotoButton;
     private LinearLayout speedingOptions, operationalOptions, trafficRulesOptions, passengerSafetyViolationsOptions, driverConductOptions;
-
     private Uri photoUri;
 
     private ActivityResultLauncher<Intent> pickImageLauncher;
@@ -78,30 +75,30 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void setupActivityResultLaunchers() {
-        pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                Uri selectedImageUri = result.getData().getData();
-                if (selectedImageUri != null) {
-                    imagePreview.setImageURI(selectedImageUri);
-                    imagePreview.setTag(selectedImageUri);
-                    removePhotoButton.setVisibility(View.VISIBLE);
-                    showToast("Selected Image: " + selectedImageUri);
-                }
-            }
-        });
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            imagePreview.setImageURI(selectedImageUri);
+                            imagePreview.setTag(selectedImageUri);
+                            removePhotoButton.setVisibility(View.VISIBLE);
+                            showToast("Selected Image: " + selectedImageUri);
+                        }
+                    }
+                });
 
-        takePhotoLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK) {
-                if (photoUri != null) {
-                    imagePreview.setImageURI(photoUri);
-                    imagePreview.setTag(photoUri);
-                    removePhotoButton.setVisibility(View.VISIBLE);
-                    showToast("Photo captured successfully!");
-                }
-            } else {
-                showToast("Failed to capture image.");
-            }
-        });
+        takePhotoLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == RESULT_OK && photoUri != null) {
+                        imagePreview.setImageURI(photoUri);
+                        imagePreview.setTag(photoUri);
+                        removePhotoButton.setVisibility(View.VISIBLE);
+                        showToast("Photo captured successfully!");
+                    } else {
+                        showToast("Failed to capture image.");
+                    }
+                });
     }
 
     private void openFileChooser() {
@@ -111,10 +108,12 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void checkCameraPermissionAndOpen() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
             openCamera();
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(
+                    this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         }
     }
 
@@ -122,7 +121,8 @@ public class ReportActivity extends AppCompatActivity {
         try {
             File photoFile = createImageFile();
             if (photoFile != null) {
-                photoUri = FileProvider.getUriForFile(this, "com.example.cne_commute.fileprovider", photoFile);
+                photoUri = FileProvider.getUriForFile(
+                        this, "com.example.cne_commute.fileprovider", photoFile);
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 takePhotoLauncher.launch(intent);
@@ -141,7 +141,7 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void confirmAndSubmitReport() {
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this, R.style.AlertDialogTheme)
                 .setTitle("Confirm Submission")
                 .setMessage("Are you sure you want to submit this report?")
                 .setPositiveButton("Yes", (dialog, which) -> submitReport())
@@ -150,14 +150,14 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void submitReport() {
-        String speedingViolations = extractInputFromSection(speedingOptions);
-        String passengerSafetyViolations = extractInputFromSection(passengerSafetyViolationsOptions);
-        String operationalViolations = extractInputFromSection(operationalOptions);
-        String trafficRuleViolations = extractInputFromSection(trafficRulesOptions);
-        String driverConductViolations = extractInputFromSection(driverConductOptions);
+        String speeding = extractInputFromSection(speedingOptions);
+        String passenger = extractInputFromSection(passengerSafetyViolationsOptions);
+        String operational = extractInputFromSection(operationalOptions);
+        String traffic = extractInputFromSection(trafficRulesOptions);
+        String conduct = extractInputFromSection(driverConductOptions);
         Uri imageUri = (imagePreview.getDrawable() != null) ? (Uri) imagePreview.getTag() : null;
 
-        if (isAllEmpty(speedingViolations, passengerSafetyViolations, operationalViolations, trafficRuleViolations, driverConductViolations) && imageUri == null) {
+        if (isAllEmpty(speeding, passenger, operational, traffic, conduct) && imageUri == null) {
             new AlertDialog.Builder(this)
                     .setTitle("Incomplete Report")
                     .setMessage("Please select or input at least one violation or add an image before submitting.")
@@ -166,13 +166,12 @@ public class ReportActivity extends AppCompatActivity {
             return;
         }
 
-
         Intent intent = new Intent(this, HistoryActivity.class);
-        intent.putExtra("speedingViolations", speedingViolations);
-        intent.putExtra("passengerSafetyViolations", passengerSafetyViolations);
-        intent.putExtra("operationalViolations", operationalViolations);
-        intent.putExtra("trafficRuleViolations", trafficRuleViolations);
-        intent.putExtra("driverConductViolations", driverConductViolations);
+        intent.putExtra("speedingViolations", speeding);
+        intent.putExtra("passengerSafetyViolations", passenger);
+        intent.putExtra("operationalViolations", operational);
+        intent.putExtra("trafficRuleViolations", traffic);
+        intent.putExtra("driverConductViolations", conduct);
         if (imageUri != null) {
             intent.putExtra("imageUri", imageUri.toString());
         }
@@ -193,7 +192,6 @@ public class ReportActivity extends AppCompatActivity {
     private String extractInputFromSection(LinearLayout section) {
         StringBuilder result = new StringBuilder();
 
-        // Get all checked checkboxes with tag "violation_option"
         for (int i = 0; i < section.getChildCount(); i++) {
             View child = section.getChildAt(i);
             if (child instanceof CheckBox && ((CheckBox) child).isChecked()) {
@@ -201,13 +199,14 @@ public class ReportActivity extends AppCompatActivity {
             }
         }
 
-        // Include the EditText with tag "other_input"
-        EditText editText = section.findViewWithTag("other_input");
-        if (editText != null && !editText.getText().toString().trim().isEmpty()) {
-            result.append(editText.getText().toString().trim());
+        EditText otherInput = section.findViewWithTag("other_input");
+        if (otherInput != null) {
+            String text = otherInput.getText().toString().trim();
+            if (!text.isEmpty()) {
+                result.append(text);
+            }
         }
 
-        // Remove trailing comma and space
         String finalResult = result.toString().trim();
         if (finalResult.endsWith(",")) {
             finalResult = finalResult.substring(0, finalResult.length() - 1);
@@ -215,7 +214,6 @@ public class ReportActivity extends AppCompatActivity {
 
         return finalResult.isEmpty() ? "None" : finalResult;
     }
-
 
     private void clearImagePreview() {
         imagePreview.setImageURI(null);
@@ -237,7 +235,8 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
