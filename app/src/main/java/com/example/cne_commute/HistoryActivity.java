@@ -105,9 +105,28 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void showReportHistoryFragment() {
-        String description = reportPreferences.getString("description", "");
-        String violation = reportPreferences.getString("violation", "");
-        String imagePath = reportPreferences.getString("imagePath", "");
+        // Check if intent has extras from ReportActivity
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        String description, violation, imagePath;
+
+        if (extras != null &&
+                extras.containsKey("description") &&
+                extras.containsKey("violation") &&
+                extras.containsKey("imagePath")) {
+
+            description = extras.getString("description", "");
+            violation = extras.getString("violation", "");
+            imagePath = extras.getString("imagePath", "");
+            Log.d("HistoryActivity", "Loaded data from Intent extras");
+
+        } else {
+            // Fallback to SharedPreferences
+            description = reportPreferences.getString("description", "");
+            violation = reportPreferences.getString("violation", "");
+            imagePath = reportPreferences.getString("imagePath", "");
+            Log.d("HistoryActivity", "Loaded data from SharedPreferences");
+        }
 
         ReportHistoryFragment fragment = new ReportHistoryFragment();
         Bundle bundle = new Bundle();

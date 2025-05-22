@@ -7,17 +7,32 @@
     android:background="@color/backgroundColor">
 
     <!-- Title -->
+
     <TextView
         android:id="@+id/home_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="16dp"
+        android:importantForAccessibility="yes"
         android:text="@string/home_description"
-        android:textSize="20sp"
-        android:textStyle="bold"
         android:textColor="@color/black"
-        android:importantForAccessibility="yes" />
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/fab_qr_code"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fillViewport="true">
+
+
 
     <!-- Card Container -->
     <LinearLayout
@@ -52,7 +67,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_qr_code"
-                    android:tint="@color/primary_blue"
+                    app:tint="@color/primary_blue"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
@@ -112,7 +127,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_calcu"
-                    android:tint="@color/primary_blue"
+                    app:tint="@color/primary_blue"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
@@ -172,7 +187,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_repo"
-                    android:tint="@color/primary_blue"
+                    app:tint="@color/primary_blue"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
@@ -208,31 +223,20 @@
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
+    </ScrollView>
 
-    <!-- Report Button -->
-    <Button
-        android:id="@+id/report_button"
-        android:layout_width="200dp"
-        android:layout_height="55dp"
-        android:layout_below="@id/card_container"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/primary_blue"
-        android:text="@string/report"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:importantForAccessibility="yes" />
 
     <!-- Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_qr_code"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="120dp"
         app:backgroundTint="@color/primary_blue"
         android:src="@drawable/ic_qr_code"
+        app:maxImageSize="44dp"
         android:tint="@color/white"
         android:contentDescription="@string/scan_qr_code_desc"
         android:importantForAccessibility="yes" />

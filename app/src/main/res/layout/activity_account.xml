@@ -4,20 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
-    tools:context=".DriverAccountActivity">
+    tools:context=".AccountActivity">
 
     <TextView
         android:id="@+id/account_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/account_text"
+        android:text="Account Information"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/textColor" />
 
-    <!-- Profile Picture -->
     <ImageView
         android:id="@+id/profile_picture"
         android:layout_width="120dp"
@@ -30,7 +29,6 @@
         android:padding="4dp"
         android:scaleType="centerCrop" />
 
-    <!-- Account Information -->
     <LinearLayout
         android:id="@+id/account_info"
         android:layout_width="match_parent"
@@ -40,8 +38,9 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Commuter Name -->
         <TextView
-            android:id="@+id/driver_name"
+            android:id="@+id/commuter_name_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Commuter Name: Krizza"
@@ -49,45 +48,65 @@
             android:textStyle="bold"
             android:textColor="@color/textColor" />
 
+        <EditText
+            android:id="@+id/commuter_name_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Commuter Name"
+            android:textSize="18sp"
+            android:textColor="@color/textColor"
+            android:textColorHint="#CCCCCC"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="4dp"
+            android:visibility="gone" />
+
+        <!-- Email Address -->
         <TextView
-            android:id="@+id/driver_license"
+            android:id="@+id/email_address_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Email Address: krizzaheart.esperas@gmail.com"
             android:textSize="16sp"
             android:textColor="@color/textColor"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="-30dp"/>
+            android:layout_marginTop="8dp" />
 
         <EditText
-            android:id="@+id/contact_number"
+            android:id="@+id/email_address_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:hint="Contact Number"
+            android:inputType="textEmailAddress"
+            android:hint="Enter Email Address"
+            android:textSize="16sp"
+            android:textColor="@color/textColor"
+            android:textColorHint="#CCCCCC"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="4dp"
+            android:visibility="gone" />
+
+        <!-- Contact Number -->
+        <TextView
+            android:id="@+id/contact_number_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contact Number: 09917809416"
+            android:textSize="16sp"
+            android:textColor="@color/textColor"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/contact_number_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="phone"
-            android:textSize="16sp"
+            android:hint="Enter Contact Number"
             android:textColor="@color/textColor"
             android:textColorHint="#CCCCCC"
             android:background="@drawable/edit_text_background"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="-60dp"/>
-
-        <EditText
-            android:id="@+id/short_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Short Description"
-            android:inputType="textMultiLine"
-            android:lines="3"
-            android:textSize="16sp"
-            android:textColor="@color/textColor"
-            android:textColorHint="#CCCCCC"
-            android:background="@drawable/edit_text_background"
-            android:layout_marginTop="80dp" />
+            android:layout_marginTop="4dp"
+            android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Buttons for Editing and Saving -->
+    <!-- Buttons -->
     <LinearLayout
         android:id="@+id/button_layout"
         android:layout_width="match_parent"
@@ -117,7 +136,6 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -128,5 +146,4 @@
         app:itemTextColor="@color/black"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled" />
-
 </RelativeLayout>

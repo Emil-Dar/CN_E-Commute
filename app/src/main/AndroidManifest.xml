@@ -84,6 +84,8 @@
         <activity android:name=".HistoryActivity" android:exported="true" />
         <activity android:name=".AccountActivity" android:exported="true" />
 
+
+
         <!-- Reporting -->
         <activity android:name=".ReportActivity" android:exported="true" />
 
