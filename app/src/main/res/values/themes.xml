@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme -->
-    <style name="Theme.CNECommute" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+    <!-- Base application theme using Material Design with NoActionBar -->
+    <style name="Theme.CNECommute" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary branding color -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
@@ -11,13 +12,40 @@
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
 
-        <!-- Custom button style to avoid theme override -->
-        <item name="android:buttonStyle">@style/CustomButtonCNECommute</item>
+        <!-- App-wide Material button style -->
+        <item name="materialButtonStyle">@style/CustomButtonCNECommute</item>
+
+        <!-- Customize status bar and navigation bar colors if needed -->
+        <item name="android:statusBarColor">@color/colorPrimaryVariant</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
     </style>
 
-    <!-- Define the custom button style -->
-    <style name="CustomButtonCNECommute" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/button_background</item>
+    <!-- Custom Material Button Style -->
+    <style name="CustomButtonCNECommute" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
         <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="elevation">4dp</item>
+        <item name="android:padding">12dp</item>
     </style>
+
+    <!-- Custom Dialog Button Style -->
+    <style name="DialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">#000000</item> <!-- Black button text -->
+    </style>
+
+    <!-- Custom AlertDialog Theme -->
+    <style name="CustomAlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:textColorPrimary">#000000</item> <!-- Black body text -->
+        <item name="android:buttonBarPositiveButtonStyle">@style/DialogButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DialogButtonStyle</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:textColorPrimary">#000000</item> <!-- Black body text -->
+        <item name="android:buttonBarPositiveButtonStyle">@style/DialogButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DialogButtonStyle</item>
+    </style>
+
+
 </resources>

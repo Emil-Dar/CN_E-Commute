@@ -10,10 +10,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Declare App Requirements -->
+    <!-- Features -->
     <uses-feature android:name="android.hardware.camera" android:required="true" />
 
-    <!-- Queries for Android 11+ -->
+    <!-- Queries (Android 11+) -->
     <queries>
         <intent>
             <action android:name="android.intent.action.GET_CONTENT" />
@@ -35,7 +35,7 @@
         tools:targetApi="31"
         tools:replace="android:icon">
 
-        <!-- FileProvider for capturing image with camera -->
+        <!-- FileProvider for Camera Image Capture -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.cne_commute.fileprovider"
@@ -46,10 +46,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- QR Scanner Activity -->
-        <activity android:name=".QRScannerActivity" />
-
-        <!-- Splash Screen Activity -->
+        <!-- Launcher Activity -->
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true">
@@ -59,37 +56,46 @@
             </intent-filter>
         </activity>
 
-        <!-- User Role Selection Activity -->
+        <!-- QR Scanner -->
+        <activity android:name=".QRScannerActivity" />
+
+        <!-- User Selection -->
         <activity android:name=".UserRoleSelectionActivity" android:exported="true" />
 
-        <!-- Driver Activities -->
-        <activity android:name=".DriverSignInActivity" android:exported="true" />
-        <activity android:name=".DriverSignUpActivity" android:exported="true" />
-
-        <!-- User Activities -->
+        <!-- User Authentication -->
         <activity android:name=".SignInActivity" android:exported="true" />
         <activity android:name=".SignUpActivity" android:exported="true" />
 
-        <!-- Home Activities -->
+        <!-- Driver Authentication -->
+        <activity android:name=".DriverSignInActivity" android:exported="true" />
+        <activity android:name=".DriverSignUpActivity" android:exported="true" />
+
+        <!-- User and Driver Home -->
         <activity android:name=".HomeActivity" android:exported="true" />
         <activity android:name=".DriverHomeActivity" android:exported="true" />
 
-        <!-- Report Activity -->
-        <activity android:name=".ReportActivity" android:exported="true" />
-
-        <!-- New Driver Activities -->
+        <!-- Driver Features -->
         <activity android:name=".WalletActivity" android:exported="true" />
         <activity android:name=".DriverNotificationActivity" android:exported="true" />
         <activity android:name=".DriverAccountActivity" android:exported="true" />
 
-        <!-- Fare Calculator Activity -->
+        <!-- User Features -->
         <activity android:name=".FareCalculatorActivity" android:exported="true" />
-
-        <!-- History Activity -->
         <activity android:name=".HistoryActivity" android:exported="true" />
-
-        <!-- Account Activity -->
         <activity android:name=".AccountActivity" android:exported="true" />
+
+        <!-- Reporting -->
+        <activity android:name=".ReportActivity" android:exported="true" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.cne_commute.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
 
     </application>
 </manifest>
