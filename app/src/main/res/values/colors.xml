@@ -21,6 +21,9 @@
     <color name="colorSecondaryDark">#4177A3</color> <!-- Darker background for better contrast -->
     <color name="foregroundColor">#FFFFFF</color> <!-- White for high contrast -->
 
+    <color name="background_light">#F5F5F5</color> <!-- Light gray, subtle and modern -->
+    <color name="accentColor">#2196F3</color> <!-- You can change this hex code -->
+
 
 
 

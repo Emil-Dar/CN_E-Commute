@@ -3,20 +3,31 @@ package com.example.cne_commute;
 import java.util.Objects;
 
 public class ScannedQrCode {
-    private String id; // Unique ID for each QR code entry
-    private String operatorName;
-    private String age;
-    private String homeAddress;
-    private String trPlateNumber;
-    private String contactNo;
+    private String id;
+    private String franchiseId;
+    private String driverName;
+    private String driverContactNo;
+    private String vehiclePlate;
+    private String route;
+    private String scanTimestamp; // 🕒 Real-time timestamp passed at scan time
 
-    public ScannedQrCode(String id, String operatorName, String age, String homeAddress, String trPlateNumber, String contactNo) {
+
+    // Full constructor with timestamp
+    public ScannedQrCode(String id, String franchiseId, String driverName, String driverContactNo,
+                         String vehiclePlate, String route, String scanTimestamp) {
         this.id = id;
-        this.operatorName = operatorName;
-        this.age = age;
-        this.homeAddress = homeAddress;
-        this.trPlateNumber = trPlateNumber;
-        this.contactNo = contactNo;
+        this.franchiseId = franchiseId;
+        this.driverName = driverName;
+        this.driverContactNo = driverContactNo;
+        this.vehiclePlate = vehiclePlate;
+        this.route = route;
+        this.scanTimestamp = scanTimestamp;
+    }
+
+    // Minimal constructor with timestamp
+    public ScannedQrCode(String id, String franchiseId, String driverName, String driverContactNo,
+                         String scanTimestamp) {
+        this(id, franchiseId, driverName, driverContactNo, "", "", scanTimestamp);
     }
 
     // Getters
@@ -24,27 +35,31 @@ public class ScannedQrCode {
         return id;
     }
 
-    public String getOperatorName() {
-        return operatorName;
+    public String getFranchiseId() {
+        return franchiseId;
     }
 
-    public String getAge() {
-        return age;
+    public String getDriverName() {
+        return driverName;
     }
 
-    public String getHomeAddress() {
-        return homeAddress;
+    public String getDriverContactNo() {
+        return driverContactNo;
     }
 
-    public String getTrPlateNumber() {
-        return trPlateNumber;
+    public String getVehiclePlate() {
+        return vehiclePlate;
     }
 
-    public String getContactNo() {
-        return contactNo;
+    public String getRoute() {
+        return route;
     }
 
-    // Optional but recommended: equals() and hashCode() for object comparison by ID
+    public String getScanTimestamp() {
+        return scanTimestamp;
+    }
+
+    // Object comparison by ID
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -56,5 +71,15 @@ public class ScannedQrCode {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "ScannedQrCode{" +
+                "driverName='" + driverName + '\'' +
+                ", driverContactNo='" + driverContactNo + '\'' +
+                ", franchiseId='" + franchiseId + '\'' +
+                ", scanTimestamp='" + scanTimestamp + '\'' +
+                '}';
     }
 }

@@ -31,60 +31,129 @@
                 android:paddingBottom="16dp"
                 android:textColor="#000000" />
 
-            <!-- Commuter No. 1 -->
+            <!-- COMMUTER -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@drawable/commuter_background"
+                android:orientation="vertical"
                 android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/commuter_no_1"
+                    android:text="@string/commuter"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:layout_gravity="center"
                     android:textStyle="bold"
-                    android:textColor="@color/textColor" />
+                    android:layout_gravity="center" />
+
+                <!-- User Age Group -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="YOUR AGE GROUP"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp" />
+
+                <Spinner
+                    android:id="@+id/user_age_spinner"
+                    android:layout_width="345dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/textbox_bg"
+                    android:padding="15dp"
+                    android:spinnerMode="dropdown" />
+
+                <!-- Discount for Main User -->
+                <CheckBox
+                    android:id="@+id/user_discount_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apply Discount for You (Senior / PWD / Student)"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Companion Age Group -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="COMPANION AGE GROUP"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp" />
+
+                <Spinner
+                    android:id="@+id/companion_age_spinner"
+                    android:layout_width="345dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/textbox_bg"
+                    android:padding="15dp"
+                    android:spinnerMode="dropdown" />
+
+                <!-- Discount for Companion -->
+                <CheckBox
+                    android:id="@+id/companion_discount_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apply Discount for Companion (Senior / PWD / Student)"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="CALCULATE"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <!-- Starting Location -->
                 <TextView
                     android:id="@+id/startingLocation1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_width="330dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/textbox_bg"
-                    android:padding="12dp"
+                    android:drawablePadding="8dp"
                     android:hint="@string/starting_location"
-                    android:textSize="18sp"
+                    android:padding="12dp"
                     android:textColor="#000000"
-                    app:drawableStartCompat="@drawable/ic_location"
-                    android:drawablePadding="8dp" />
+                    android:textSize="18sp"
+                    app:drawableStartCompat="@drawable/ic_location" />
 
                 <!-- Destination -->
                 <TextView
                     android:id="@+id/chosenDestination1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_width="330dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/textbox_bg"
-                    android:padding="12dp"
+                    android:drawablePadding="8dp"
                     android:hint="@string/your_destination"
-                    android:textSize="18sp"
+                    android:padding="12dp"
                     android:textColor="#000000"
-                    app:drawableStartCompat="@drawable/ic_location"
-                    android:drawablePadding="8dp" />
+                    android:textSize="18sp"
+                    app:drawableStartCompat="@drawable/ic_location" />
 
                 <!-- Fare Buttons -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
                     android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
                     android:textColor="@color/textColor">
 
                     <Button
@@ -92,11 +161,11 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/start_button_1"
-                        android:background="@color/green"
-                        android:textColor="#FFFFFF"
+                        android:backgroundTint="@color/green"
+                        android:contentDescription="@string/start_button_1"
                         android:maxWidth="100dp"
-                        android:contentDescription="@string/start_button_1" />
+                        android:text="@string/start_button_1"
+                        android:textColor="#FFFFFF" />
 
                     <View
                         android:layout_width="8dp"
@@ -107,540 +176,97 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/stop_button_1"
-                        android:background="@color/red"
-                        android:textColor="#FFFFFF"
+                        android:backgroundTint="@color/red"
+                        android:contentDescription="@string/stop_button_1"
                         android:maxWidth="100dp"
-                        android:contentDescription="@string/stop_button_1" />
+                        android:text="@string/stop_button_1"
+                        android:textColor="#FFFFFF" />
+
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:id="@+id/resetButton1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/primary_blue"
+                        android:contentDescription="Reset Button"
+                        android:maxWidth="100dp"
+                        android:text="Reset"
+                        android:textColor="#FFFFFF" />
                 </LinearLayout>
 
-                <!-- Total KM and Total Fare Section -->
+                <!-- Total KM and Total Fare -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:layout_marginTop="16dp">
+                    android:orientation="horizontal">
 
-                    <!-- Total KM -->
+                    <!-- KM -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/total_km"
+                            android:textColor="#000000"
                             android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#000000" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/totalkm1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/fare_background"
-                            android:textSize="16sp"
-                            android:text="00.00"
-                            android:padding="8dp"
                             android:layout_marginTop="4dp"
-                            android:textColor="@color/textColor" />
+                            android:background="@drawable/fare_background"
+                            android:padding="8dp"
+                            android:text="0.00"
+                            android:textColor="@color/textColor"
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                     <View
                         android:layout_width="16dp"
                         android:layout_height="match_parent" />
 
-                    <!-- Total Fare -->
+                    <!-- Fare -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/total_fare"
+                            android:textColor="#000000"
                             android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#000000" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/totalFare1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/fare_background"
-                            android:textSize="16sp"
-                            android:text="@string/fare_amount"
-                            android:padding="8dp"
                             android:layout_marginTop="4dp"
-                            android:textColor="@color/textColor" />
+                            android:background="@drawable/fare_background"
+                            android:padding="8dp"
+                            android:text="@string/fare_amount"
+                            android:textColor="@color/textColor"
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Commuter No. 2 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/commuter_background"
-                android:padding="16dp"
-                android:layout_marginTop="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/commuter_no_2"
-                    android:textSize="18sp"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/textColor" />
-
-                <!-- Starting Location -->
-                <TextView
-                    android:id="@+id/startingLocation2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/textbox_bg"
-                    android:padding="12dp"
-                    android:hint="@string/starting_location"
-                    android:textSize="18sp"
-                    android:textColor="#000000"
-                    app:drawableStartCompat="@drawable/ic_location"
-                    android:drawablePadding="8dp" />
-
-                <!-- Your Destination -->
-                <TextView
-                    android:id="@+id/chosenDestination2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/textbox_bg"
-                    android:padding="12dp"
-                    android:hint="@string/your_destination"
-                    android:textSize="18sp"
-                    android:textColor="#000000"
-                    app:drawableStartCompat="@drawable/ic_location"
-                    android:drawablePadding="8dp" />
-
-                <!-- Fare Buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/textColor">
-
-                    <Button
-                        android:id="@+id/startButton2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/start_button_2"
-                        android:background="@color/green"
-                        android:textColor="#FFFFFF"
-                        android:maxWidth="100dp"
-                        android:contentDescription="@string/start_button_2" />
-
-                    <View
-                        android:layout_width="8dp"
-                        android:layout_height="match_parent" />
-
-                    <Button
-                        android:id="@+id/stopButton2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/stop_button_2"
-                        android:background="@color/red"
-                        android:textColor="#FFFFFF"
-                        android:maxWidth="100dp"
-                        android:contentDescription="@string/stop_button_2" />
-                </LinearLayout>
-
-                <!-- Total KM and Total Fare Section -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="16dp">
-
-                    <!-- Total KM -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/total_km"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#000000" />
-
-                        <TextView
-                            android:id="@+id/totalkm2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/fare_background"
-                            android:textSize="16sp"
-                            android:text="00.00"
-                            android:padding="8dp"
-                            android:layout_marginTop="4dp"
-                            android:textColor="@color/textColor" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="16dp"
-                        android:layout_height="match_parent" />
-
-                    <!-- Total Fare -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/total_fare"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#000000" />
-
-                        <TextView
-                            android:id="@+id/totalFare2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/fare_background"
-                            android:textSize="16sp"
-                            android:text="@string/fare_amount"
-                            android:padding="8dp"
-                            android:layout_marginTop="4dp"
-                            android:textColor="@color/textColor" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-
-            <!-- Commuter No. 3 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/commuter_background"
-                android:padding="16dp"
-                android:layout_marginTop="16dp"
-                android:textColor="@color/textColor">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/commuter_no_3"
-                    android:textSize="18sp"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/textColor" />
-
-                <!-- Starting Location -->
-                <TextView
-                    android:id="@+id/startingLocation3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/textbox_bg"
-                    android:padding="12dp"
-                    android:hint="@string/starting_location"
-                    android:textSize="18sp"
-                    android:textColor="#000000"
-                    app:drawableStartCompat="@drawable/ic_location"
-                    android:drawablePadding="8dp" />
-
-                <!-- Your Destination -->
-                <TextView
-                    android:id="@+id/chosenDestination3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/textbox_bg"
-                    android:padding="12dp"
-                    android:hint="@string/your_destination"
-                    android:textSize="18sp"
-                    android:textColor="#000000"
-                    app:drawableStartCompat="@drawable/ic_location"
-                    android:drawablePadding="8dp" />
-
-                <!-- Fare Buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/textColor">
-
-                    <Button
-                        android:id="@+id/startButton3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/start_button_3"
-                        android:background="@color/green"
-                        android:textColor="#FFFFFF"
-                        android:maxWidth="100dp"
-                        android:contentDescription="@string/start_button_3" />
-
-                    <View
-                        android:layout_width="8dp"
-                        android:layout_height="match_parent" />
-
-                    <Button
-                        android:id="@+id/stopButton3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/stop_button_3"
-                        android:background="@color/red"
-                        android:textColor="#FFFFFF"
-                        android:maxWidth="100dp"
-                        android:contentDescription="@string/stop_button_3" />
-                </LinearLayout>
-
-                <!-- Total KM and Total Fare Section -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="16dp">
-
-                    <!-- Total KM -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/total_km"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#000000" />
-
-                        <TextView
-                            android:id="@+id/totalkm3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/fare_background"
-                            android:textSize="16sp"
-                            android:text="00.00"
-                            android:padding="8dp"
-                            android:layout_marginTop="4dp"
-                            android:textColor="@color/textColor" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="16dp"
-                        android:layout_height="match_parent" />
-
-                    <!-- Total Fare -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/total_fare"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#000000" />
-
-                        <TextView
-                            android:id="@+id/totalFare3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/fare_background"
-                            android:textSize="16sp"
-                            android:text="@string/fare_amount"
-                            android:padding="8dp"
-                            android:layout_marginTop="4dp"
-                            android:textColor="@color/textColor" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Commuter No. 4 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/commuter_background"
-                android:padding="16dp"
-                android:layout_marginTop="16dp"
-                android:textColor="@color/textColor">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/commuter_no_4"
-                    android:textSize="18sp"
-                    android:layout_gravity="center"
-                    android:textStyle="bold" />
-
-                <!-- Starting Location -->
-                <TextView
-                    android:id="@+id/startingLocation4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/textbox_bg"
-                    android:padding="12dp"
-                    android:hint="@string/starting_location"
-                    android:textSize="18sp"
-                    android:textColor="#000000"
-                    app:drawableStartCompat="@drawable/ic_location"
-                    android:drawablePadding="8dp" />
-
-                <!-- Your Destination -->
-                <TextView
-                    android:id="@+id/chosenDestination4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/textbox_bg"
-                    android:padding="12dp"
-                    android:hint="@string/your_destination"
-                    android:textSize="18sp"
-                    android:textColor="#000000"
-                    app:drawableStartCompat="@drawable/ic_location"
-                    android:drawablePadding="8dp" />
-
-                <!-- Fare Buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/textColor">
-
-                    <Button
-                        android:id="@+id/startButton4"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/green"
-                        android:text="@string/start_button_4"
-                        android:textColor="#ECEFF1"
-                        android:maxWidth="100dp"
-                        android:contentDescription="@string/start_button_4" />
-
-                    <View
-                        android:layout_width="8dp"
-                        android:layout_height="match_parent" />
-
-                    <Button
-                        android:id="@+id/stopButton4"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/red"
-                        android:text="@string/stop_button_4"
-                        android:textColor="#64B5F6"
-                        android:maxWidth="100dp"
-                        android:contentDescription="@string/stop_button_4" />
-                </LinearLayout>
-
-                <!-- Total KM and Total Fare Section -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="16dp">
-
-                    <!-- Total KM -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/total_km"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#000000" />
-
-                        <TextView
-                            android:id="@+id/totalkm4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/fare_background"
-                            android:textSize="16sp"
-                            android:text="00.00"
-                            android:padding="8dp"
-                            android:layout_marginTop="4dp"
-                            android:textColor="@color/textColor" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="16dp"
-                        android:layout_height="match_parent" />
-
-                    <!-- Total Fare -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/total_fare"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#000000" />
-
-                        <TextView
-                            android:id="@+id/totalFare4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/fare_background"
-                            android:textSize="16sp"
-                            android:text="@string/fare_amount"
-                            android:padding="8dp"
-                            android:layout_marginTop="4dp"
-                            android:textColor="@color/textColor" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <!--FARE MATRIX-->
+            <!-- FARE MATRIX -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -667,9 +293,7 @@
                     android:textSize="16sp"
                     android:padding="8dp"
                     android:textColor="#000000"/>
-
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 
@@ -680,11 +304,9 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Bottom Navigation -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
@@ -695,8 +317,5 @@
             app:itemTextColor="@color/black"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_nav_menu" />
-
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
-

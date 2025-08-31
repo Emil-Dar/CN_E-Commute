@@ -16,12 +16,22 @@ public class QrCodeStorageHelper {
     private static final String PREFS_NAME = "ScannedQrCodesPrefs";
     private static final String KEY_QR_LIST = "qrCodeList";
 
+    // Save a single QR code entry with duplicate check
     public static void saveQrCode(Context context, ScannedQrCode newCode) {
         List<ScannedQrCode> qrList = loadQrCodes(context);
-        qrList.add(0, newCode); // newest at top
+
+        for (ScannedQrCode existing : qrList) {
+            if (existing.getFranchiseId().equals(newCode.getFranchiseId()) &&
+                    existing.getDriverName().equalsIgnoreCase(newCode.getDriverName())) {
+                return; // Duplicate found, skip saving
+            }
+        }
+
+        qrList.add(0, newCode); // Add to top of list
         saveQrCodeList(context, qrList);
     }
 
+    // Load all saved QR code entries
     public static List<ScannedQrCode> loadQrCodes(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String json = prefs.getString(KEY_QR_LIST, null);
@@ -33,6 +43,7 @@ public class QrCodeStorageHelper {
         return new ArrayList<>();
     }
 
+    // Save the entire list of QR codes
     public static void saveQrCodeList(Context context, List<ScannedQrCode> qrList) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -42,11 +53,13 @@ public class QrCodeStorageHelper {
         editor.apply();
     }
 
+    // Clear all saved QR codes
     public static void clearQrCodeList(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().remove(KEY_QR_LIST).apply();
     }
 
+    // Delete a specific QR code by ID
     public static void deleteQrCode(Context context, String id) {
         List<ScannedQrCode> qrList = loadQrCodes(context);
         Iterator<ScannedQrCode> iterator = qrList.iterator();
@@ -62,8 +75,18 @@ public class QrCodeStorageHelper {
         saveQrCodeList(context, qrList);
     }
 
-    // Wrapper to match usage in adapter
+    // Optional: Save a full list (used by adapters or bulk updates)
     public static void saveQrCodes(Context context, List<ScannedQrCode> qrList) {
         saveQrCodeList(context, qrList);
+    }
+
+    // Optional: Retrieve a QR code by its unique ID
+    public static ScannedQrCode getQrCodeById(Context context, String id) {
+        for (ScannedQrCode code : loadQrCodes(context)) {
+            if (code.getId().equals(id)) {
+                return code;
+            }
+        }
+        return null;
     }
 }

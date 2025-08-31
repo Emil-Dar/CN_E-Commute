@@ -6,11 +6,12 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class ScannedQrCodeAdapter extends RecyclerView.Adapter<ScannedQrCodeAdap
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_scanned_qr_code_card, parent, false);
+                .inflate(R.layout.item_scanned_qr_code, parent, false);
         return new ViewHolder(view);
     }
 
@@ -34,18 +35,16 @@ public class ScannedQrCodeAdapter extends RecyclerView.Adapter<ScannedQrCodeAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ScannedQrCode qrCode = qrCodeList.get(position);
 
-        // Bind data to views
-        holder.operatorNameTextView.setText(qrCode.getOperatorName());
-        holder.ageTextView.setText(qrCode.getAge());
-        holder.homeAddressTextView.setText(qrCode.getHomeAddress());
-        holder.trPlateNumberTextView.setText(qrCode.getTrPlateNumber());
-        holder.contactNoTextView.setText(qrCode.getContactNo());
+        // Bind commuter-facing fields
+        holder.driverNameTextView.setText("Driver Name: " + qrCode.getDriverName());
+        holder.driverContactTextView.setText("Driver Contact No: " + qrCode.getDriverContactNo());
+        holder.scanDateTimeTextView.setText("Date and Time: " + qrCode.getScanTimestamp());
 
         Context context = holder.itemView.getContext();
 
-        // Delete button logic
+        // Delete logic
         holder.deleteButton.setOnClickListener(v -> {
-            new AlertDialog.Builder(context, R.style.CustomAlertDialogTheme)
+            new AlertDialog.Builder(context)
                     .setTitle("Confirm Delete")
                     .setMessage("Are you sure you want to delete this QR code entry?")
                     .setPositiveButton("Delete", (dialog, which) -> {
@@ -60,11 +59,12 @@ public class ScannedQrCodeAdapter extends RecyclerView.Adapter<ScannedQrCodeAdap
                     .show();
         });
 
-        // Report button logic - pass relevant info to ReportActivity
+        // Report logic
         holder.reportButton.setOnClickListener(v -> {
             Intent intent = new Intent(context, ReportActivity.class);
-            intent.putExtra("operator_name", qrCode.getOperatorName());
-            intent.putExtra("plate_number", qrCode.getTrPlateNumber());
+            intent.putExtra("EXTRA_DRIVER_NAME", qrCode.getDriverName());
+            intent.putExtra("EXTRA_DRIVER_CONTACT", qrCode.getDriverContactNo());
+            intent.putExtra("EXTRA_FRANCHISE_ID", qrCode.getFranchiseId());
             context.startActivity(intent);
         });
     }
@@ -75,17 +75,14 @@ public class ScannedQrCodeAdapter extends RecyclerView.Adapter<ScannedQrCodeAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView operatorNameTextView, ageTextView, homeAddressTextView,
-                trPlateNumberTextView, contactNoTextView;
-        public Button deleteButton, reportButton;
+        public TextView driverNameTextView, driverContactTextView, scanDateTimeTextView;
+        public MaterialButton deleteButton, reportButton;
 
         public ViewHolder(View view) {
             super(view);
-            operatorNameTextView = view.findViewById(R.id.operator_name_text_view);
-            ageTextView = view.findViewById(R.id.age_text_view);
-            homeAddressTextView = view.findViewById(R.id.home_address_text_view);
-            trPlateNumberTextView = view.findViewById(R.id.tr_plate_number_text_view);
-            contactNoTextView = view.findViewById(R.id.contact_no_text_view);
+            driverNameTextView = view.findViewById(R.id.driver_name_text_view);
+            driverContactTextView = view.findViewById(R.id.driver_contact_text_view);
+            scanDateTimeTextView = view.findViewById(R.id.scan_datetime_text_view);
             deleteButton = view.findViewById(R.id.button_delete);
             reportButton = view.findViewById(R.id.button_report);
         }

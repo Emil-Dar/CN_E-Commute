@@ -5,15 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -21,6 +23,7 @@ public class HistoryActivity extends AppCompatActivity {
     private FrameLayout contentFrame;
     private SharedPreferences sharedPreferences, reportPreferences;
     private BottomNavigationView bottomNavigationView;
+    private boolean isFragmentShown = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +34,12 @@ public class HistoryActivity extends AppCompatActivity {
         setupListeners();
         setupBottomNavigation();
 
-        // Load default fragment
-        showReportHistoryFragment();
+        // Set up the default ActionBar without the back arrow
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setTitle("History");
+        }
     }
 
     private void initViews() {
@@ -47,17 +54,45 @@ public class HistoryActivity extends AppCompatActivity {
     private void setupListeners() {
         reportHistoryButton.setOnClickListener(v -> {
             Log.d("HistoryActivity", "Report History Button Clicked");
-            showReportHistoryFragment();
+
+            String reportListJson = reportPreferences.getString("reportList", "[]");
+            Intent intent = new Intent(HistoryActivity.this, ReportHistoryActivity.class);
+            intent.putExtra("reportList", reportListJson);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, 0);
         });
 
         scannedQrCodesButton.setOnClickListener(v -> {
             Log.d("HistoryActivity", "Scanned QR Codes Button Clicked");
-            showScannedQrCodesFragment();
+
+            ScannedQrCodesFragment fragment = new ScannedQrCodesFragment();
+            String scannedData = sharedPreferences.getString("scannedData", "");
+            if (!scannedData.trim().isEmpty()) {
+                Bundle bundle = new Bundle();
+                bundle.putString("scannedData", scannedData);
+                fragment.setArguments(bundle);
+            }
+
+            // Show back arrow when fragment is loaded
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setTitle("Scanned QR Codes");
+            }
+
+            isFragmentShown = true;
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, 0)
+                    .replace(R.id.content_frame, fragment)
+                    .addToBackStack(null)  // Allows back arrow to pop fragment
+                    .commit();
         });
     }
 
     private void setupBottomNavigation() {
-        bottomNavigationView.setSelectedItemId(R.id.nav_history); // Highlight current tab
+        bottomNavigationView.setSelectedItemId(R.id.nav_history);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -68,7 +103,7 @@ public class HistoryActivity extends AppCompatActivity {
                 navigateTo(FareCalculatorActivity.class);
                 return true;
             } else if (itemId == R.id.nav_history) {
-                return true; // Already here
+                return true;
             } else if (itemId == R.id.nav_account) {
                 navigateTo(AccountActivity.class);
                 return true;
@@ -81,60 +116,30 @@ public class HistoryActivity extends AppCompatActivity {
         Intent intent = new Intent(HistoryActivity.this, targetActivity);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, 0);
     }
 
-    private void showFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_frame, fragment);
-        transaction.commit();
-    }
-
-    private void showScannedQrCodesFragment() {
-        String scannedData = sharedPreferences != null
-                ? sharedPreferences.getString("scannedData", null)
-                : null;
-
-        ScannedQrCodesFragment fragment = new ScannedQrCodesFragment();
-        if (scannedData != null && !scannedData.trim().isEmpty()) {
-            Bundle bundle = new Bundle();
-            bundle.putString("scannedData", scannedData);
-            fragment.setArguments(bundle);
-        }
-
-        showFragment(fragment);
-    }
-
-    private void showReportHistoryFragment() {
-        // Check if intent has extras from ReportActivity
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        String description, violation, imagePath;
-
-        if (extras != null &&
-                extras.containsKey("description") &&
-                extras.containsKey("violation") &&
-                extras.containsKey("imagePath")) {
-
-            description = extras.getString("description", "");
-            violation = extras.getString("violation", "");
-            imagePath = extras.getString("imagePath", "");
-            Log.d("HistoryActivity", "Loaded data from Intent extras");
-
+    @Override
+    public void onBackPressed() {
+        if (isFragmentShown) {
+            getSupportFragmentManager().popBackStack();
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setTitle("History");
+            }
+            isFragmentShown = false;
         } else {
-            // Fallback to SharedPreferences
-            description = reportPreferences.getString("description", "");
-            violation = reportPreferences.getString("violation", "");
-            imagePath = reportPreferences.getString("imagePath", "");
-            Log.d("HistoryActivity", "Loaded data from SharedPreferences");
+            super.onBackPressed();
         }
+    }
 
-        ReportHistoryFragment fragment = new ReportHistoryFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("description", description);
-        bundle.putString("violation", violation);
-        bundle.putString("imagePath", imagePath);
-        fragment.setArguments(bundle);
-
-        showFragment(fragment);
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home && isFragmentShown) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
