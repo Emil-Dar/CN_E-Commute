@@ -44,29 +44,11 @@ public class SplashScreenActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Delay for 3 seconds before starting the animation and showing buttons
+        // Delay for 3 seconds before showing buttons with fade-in animation
         new Handler().postDelayed(() -> {
-            Animation moveUp = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.move_up);
-            logoImageView.startAnimation(moveUp);
-            taglineTextView.startAnimation(moveUp);
-            moveUp.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                    // No action needed here
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    buttonLayout.setVisibility(View.VISIBLE); // Show the buttons after the animation ends
-                    Animation fadeIn = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.fade_in);
-                    buttonLayout.startAnimation(fadeIn);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                    // No action needed here
-                }
-            });
+            buttonLayout.setVisibility(View.VISIBLE);
+            Animation fadeIn = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.fade_in);
+            buttonLayout.startAnimation(fadeIn);
         }, 3000); // 3 seconds delay
     }
 }

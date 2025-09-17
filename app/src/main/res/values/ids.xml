@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="email" type="id"/>
-    <item name="password" type="id"/>
-    <item name="user_type_group" type="id"/>
-    <item name="commuter" type="id"/>
-    <item name="driver" type="id"/>
-    <item name="operator" type="id"/>
-    <item name="admin" type="id"/>
-    <item name="sign_up_button" type="id"/>
-    <item name="sign_in_button" type="id"/>
+    <item name="email" type="id" />
+    <item name="password" type="id" />
+    <item name="user_type_group" type="id" />
+    <item name="commuter" type="id" />
+    <item name="driver" type="id" />
+    <item name="operator" type="id" />
+    <item name="admin" type="id" />
+    <item name="sign_up_button" type="id" />
+    <item name="sign_in_button" type="id" />
+    <item name="logout_text" type="id" />
+    <item name="profile_picture" type="id" />
+    <item name="name_textview" type="id" />
+    <item name="name_edittext" type="id" />
+    <item name="email_textview" type="id" />
+    <item name="email_edittext" type="id" />
+    <item name="contact_textview" type="id" />
+    <item name="contact_edittext" type="id" />
+    <item name="edit_button" type="id" />
+    <item name="save_button" type="id" />
 </resources>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Name -->
     <string name="app_name">CN E-Commute</string>
@@ -6,44 +7,65 @@
     <string name="logo">Logo</string>
     <string name="submit">Submit</string>
     <string name="select_file">Select File</string>
-    <string name="open_camera">Open Camera &amp; Take Photo</string> <!-- Fixed the & issue -->
+    <string name="open_camera">Open Camera &amp; Take Photo</string>
     <string name="report">Report</string>
     <string name="fare_calculator">Fare Calculator</string>
 
     <string name="choose_problem">Choose the problem you want to report</string>
     <string name="upload_image_here">Upload Image Here</string>
-    <string name="report_problem">Report: %1$s</string> <!-- Example for a dynamic placeholder -->
+    <string name="report_problem">Report: %1$s</string>
 
-    <!-- Speeding Violations -->
-    <string name="speeding_violations">Speeding Violations</string>
-    <string name="over_speeding">Over-speeding</string>
-    <string name="excessive_speed_in_restricted_zones">Excessive Speed in Restricted Zones</string>
-    <string name="driving_too_fast_for_conditions">Driving Too Fast for Conditions (e.g., poor weather)</string>
-
-
-    <!-- Report Types -->
-    <string name="passenger_safety_violations_title">Passenger Safety Violations</string>
-    <string name="not_wearing_seatbelts">Not wearing seatbelts</string>
-    <string name="overloading">Overloading</string>
-    <string name="allowing_passengers_to_hang_outside_the_vehicle">Allowing passengers to hang outside the vehicle</string>
+    <!-- NEW AND UPDATED VIOLATIONS -->
+    <!-- Parking & Obstruction Violations -->
+    <string name="parking_obstruction_violations">Parking and Obstruction Violations</string>
+    <string name="corner_intersection_violation">6 Meters from any corner intersection</string>
+    <string name="crosswalk_violation">Crosswalk pedestrian lane</string>
+    <string name="double_parking_violation">Stopped/parked at the curb / double parking</string>
+    <string name="no_parking_sign_violation">At any place where official signs prohibit parking</string>
+    <string name="overtime_parking_violation">Parked more than 20 minutes</string>
+    <string name="obstruction_violation">Obstruction</string>
+    <string name="illegal_terminal_violation">Illegal Terminal</string>
 
 
-    <string name="operational_violations_title">Operational Violations</string>
-    <string name="overcharging_fares">Overcharging fares</string>
-    <string name="refusal_to_convey_passengers">Refusal to convey passengers</string>
-    <string name="operating_without_franchise">Operating without a franchise</string>
+    <!-- Traffic Movement & Road Use Violations -->
+    <string name="traffic_movement_violations">Traffic Movement and Road Use Violations</string>
+    <string name="left_turn_vinzons_jlukban">Left turn from Vinzons Avenue to J.Lukban and vice versa</string>
+    <string name="left_turn_jlukban">Left turn from J.Lukban and vice versa</string>
+    <string name="left_turn_vinzons_felipe">Left turn from Vinzons Avenue to Felipe II Street and vice versa</string>
+    <string name="u_turn_vinzons">U-turn along Vinzons Avenue</string>
+    <string name="left_turn_fpimentel_vbasit">Left turn from F. Pimentel Avenue to V. Basit Street and vice versa</string>
+    <string name="left_turn_vbasit_fpimentel">Left turn from V. Basit Street to F. Pimentel Avenue and vice versa</string>
+    <string name="out_of_line">Out of Line</string>
+    <string name="disregarding_traffic_sign">Disregarding Traffic Sign</string>
+    <string name="truck_ban">Truck Ban</string>
+    <string name="number_color_coding">Number and color coding</string>
+    <string name="loading_unloading_vinzons">Loading/unloading of passengers along Vinzons Avenue (Buses)</string>
+    <string name="right_of_way_emergency">Right of way for emergency vehicle</string>
+    <string name="jaywalking">Jaywalking</string>
 
 
-    <string name="traffic_rule_violations_title">Traffic Rule Violations</string>
+    <!-- Driver Behavior Violations -->
+    <string name="driver_behavior_violations">Driver Behavior Violations</string>
+    <string name="refuse_to_convey">Refuse to convey passengers</string>
+    <string name="abusive_driver">Abusive, arrogant, discourteous driver</string>
     <string name="reckless_driving">Reckless driving</string>
-    <string name="illegal_parking">Illegal parking</string>
-    <string name="disregarding_traffic_signs">Disregarding traffic signs</string>
+    <string name="dui_liquor">Driving under the influence of liquor</string>
+    <string name="hitching">Grabbing or hanging onto a moving vehicle</string>
 
 
-    <string name="driver_conduct_violations_title">Driver Conduct Violations</string>
-    <string name="discourteous_behavior">Discourteous behavior</string>
-    <string name="driving_under_influence">Driving under the influence</string>
-    <string name="smoking_while_driving">Smoking while driving</string>
+    <!-- Licensing & Documentation Violations -->
+    <string name="licensing_documentation_violations">Licensing and Documentation Violations</string>
+    <string name="no_drivers_license">Driving without Drivers License</string>
+    <string name="student_permit_use">Driving using Student Permit</string>
+    <string name="unregistered_franchise">Unregistered Franchise</string>
+
+
+    <!-- Attire & Fare Violations -->
+    <string name="attire_fare_violations">Attire and Fare Violations</string>
+    <string name="improper_attire">Sleeveless shirt, wearing slippers, short pants</string>
+    <string name="tricycle_fare_matrix">Tricycle fare and matrix</string>
+    <string name="no_helmet">No Helmet</string>
+
 
     <!-- Input Placeholder -->
     <string name="enter_violation_details">Enter violation details</string>
@@ -52,9 +74,9 @@
     <string name="image_preview">Image Preview</string>
     <string name="remove_image">Remove Image</string>
 
-    <!--Fare Calculator-->
+    <!-- Fare Calculator -->
     <string name="fare_calculator_header">FARE CALCULATOR</string>
-    <string name="commuter_no_1">COMMUTER NO. 1</string>
+
     <string name="commuter_no_2">COMMUTER NO. 2</string>
     <string name="commuter_no_3">COMMUTER NO. 3</string>
     <string name="commuter_no_4">COMMUTER NO. 4</string>
@@ -64,23 +86,20 @@
     <string name="starting_location">Starting Location</string>
     <string name="your_destination">Your Destination</string>
 
-
-    <string name="start_button_1">START</string>"
-    <string name="stop_button_1">STOP</string>"
-    <string name="start_button_2">START</string>"
-    <string name="stop_button_2">STOP</string>"
-    <string name="start_button_3">START</string>"
-    <string name="stop_button_3">STOP</string>"
-    <string name="start_button_4">START</string>"
-    <string name="stop_button_4">STOP</string>"
+    <string name="start_button_1">START</string>
+    <string name="stop_button_1">STOP</string>
+    <string name="start_button_2">START</string>
+    <string name="stop_button_2">STOP</string>
+    <string name="start_button_3">START</string>
+    <string name="stop_button_3">STOP</string>
+    <string name="start_button_4">START</string>
+    <string name="stop_button_4">STOP</string>
 
     <string name="total_fare">TOTAL FARE:</string>
     <string name="fare_amount">₱000.00</string>
     <string name="fare_error">Please set both locations</string>
 
-
     <string name="fare_matrix_description">First two (2) kilometers\nPhp 15.00 – 6 years old and above\nPhp 7.00 - 3-5 years old\nPhp 2.00 - for every succeeding kilometer\n\nChild/ren 0-3 years old FREE OF CHARGE, provided they are sitting on the lap of their guardian.\n\n20% DISCOUNT FOR SENIOR CITIZENS, PERSONS WITH DISABILITIES and STUDENTS\nPhp 12.00 - 6 years old and above\nPhp 1.60 - for every succeeding kilometer</string>
-
 
     <!-- Sign up -->
     <string name="create_account">CREATE ACCOUNT</string>
@@ -109,13 +128,12 @@
     <string name="driver">DRIVER</string>
     <string name="commuter">COMMUTER</string>
 
-    <!--- Home Description -->
+    <!-- Home Description -->
     <string name="home_description">Welcome to CN E-Com</string>
     <string name="scan_qr_code">Scan the QR Code and get tricycle info.</string>
     <string name="scan_qr_code_desc">Scan QR Code</string>
     <string name="fare_matrix">Tap to estimate your ride fare efficiently.</string>
-    <string name="report_issues">Use the report button to share feedback and complains.</string>
-
+    <string name="report_issues">Use the report button to share feedback and complaints.</string>
 
     <string name="report_history">Report History</string>
     <string name="scanned_qr_codes">Scanned QR Codes</string>
@@ -123,10 +141,24 @@
     <string name="toolbar_title_scanned_qr_codes">Scanned QR Codes</string>
     <string name="total_km">TOTAL KM:</string>
 
-    <!--- Account -->
+    <!-- Account -->
     <string name="account_text">Account</string>
     <string name="driver_name">Driver Name: Krizza</string>
-    <string name="profile_picture">Profile Picture</string>"
+    <string name="profile_picture">Profile Picture</string>
+
+    <string name="notifications">Notifacation</string>
+
+    <string name="driver_info_text">Driver/Operator Information</string>
+
+    <string-array name="age_group_options">
+        <item>Choose your age group</item>
+        <item>0-2</item>
+        <item>3-5</item>
+        <item>6 and above</item>
+    </string-array>
+
+    <string name="label_driver_name">Driver Name: %1$s</string>
+    <string name="label_driver_contact">Driver Contact No.: %1$s</string>
 
 
 </resources>

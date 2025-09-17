@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,9 +21,11 @@ public class AccountActivity extends AppCompatActivity {
     private static final String KEY_COMMUTER_NAME = "commuter_name";
     private static final String KEY_EMAIL_ADDRESS = "email_address";
 
-    private TextView contactNumberTextView, commuterNameTextView, emailAddressTextView;
-    private EditText contactNumberEditText, commuterNameEditText, emailAddressEditText;
+    private TextView contactTextView, nameTextView, emailTextView;
+    private EditText contactEditText, nameEditText, emailEditText;
     private Button editButton, saveButton;
+    private Switch themeSwitch;
+    private TextView logoutText;
 
     private SharedPreferences prefs;
 
@@ -30,117 +34,121 @@ public class AccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
+        // Views
         ImageView profilePicture = findViewById(R.id.profile_picture);
-        TextView accountText = findViewById(R.id.account_text);
+        nameTextView = findViewById(R.id.name_textview);
+        emailTextView = findViewById(R.id.email_textview);
+        contactTextView = findViewById(R.id.contact_textview);
 
-        // TextViews
-        commuterNameTextView = findViewById(R.id.commuter_name_textview);
-        emailAddressTextView = findViewById(R.id.email_address_textview);
-        contactNumberTextView = findViewById(R.id.contact_number_textview);
-
-        // EditTexts
-        commuterNameEditText = findViewById(R.id.commuter_name_edittext);
-        emailAddressEditText = findViewById(R.id.email_address_edittext);
-        contactNumberEditText = findViewById(R.id.contact_number_edittext);
+        nameEditText = findViewById(R.id.name_edittext);
+        emailEditText = findViewById(R.id.email_edittext);
+        contactEditText = findViewById(R.id.contact_edittext);
 
         editButton = findViewById(R.id.edit_button);
         saveButton = findViewById(R.id.save_button);
+        themeSwitch = findViewById(R.id.theme_switch);
+        logoutText = findViewById(R.id.logout_text);
 
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        // Load saved data or default
-        String savedName = prefs.getString(KEY_COMMUTER_NAME, "Krizza");
+        // Load saved data or defaults
+        String savedName = prefs.getString(KEY_COMMUTER_NAME, "Krizza Heart");
         String savedEmail = prefs.getString(KEY_EMAIL_ADDRESS, "krizzaheart.esperas@gmail.com");
         String savedContact = prefs.getString(KEY_CONTACT_NUMBER, "09917809416");
 
-        // Set text for TextViews and EditTexts
-        commuterNameTextView.setText("Commuter Name: " + savedName);
-        emailAddressTextView.setText("Email Address: " + savedEmail);
-        contactNumberTextView.setText("Contact Number: " + savedContact);
+        // Set values to views
+        nameTextView.setText(savedName);
+        emailTextView.setText(savedEmail);
+        contactTextView.setText(savedContact);
 
-        commuterNameEditText.setText(savedName);
-        emailAddressEditText.setText(savedEmail);
-        contactNumberEditText.setText(savedContact);
+        nameEditText.setText(savedName);
+        emailEditText.setText(savedEmail);
+        contactEditText.setText(savedContact);
 
-        // Show TextViews, hide EditTexts initially
-        commuterNameTextView.setVisibility(TextView.VISIBLE);
-        emailAddressTextView.setVisibility(TextView.VISIBLE);
-        contactNumberTextView.setVisibility(TextView.VISIBLE);
+        // Default to view mode
+        setEditMode(false);
 
-        commuterNameEditText.setVisibility(EditText.GONE);
-        emailAddressEditText.setVisibility(EditText.GONE);
-        contactNumberEditText.setVisibility(EditText.GONE);
+        // Edit button logic
+        editButton.setOnClickListener(v -> setEditMode(true));
 
-        // Edit button click listener
-        editButton.setOnClickListener(v -> {
-            // Hide TextViews, show EditTexts for editing
-            commuterNameTextView.setVisibility(TextView.GONE);
-            emailAddressTextView.setVisibility(TextView.GONE);
-            contactNumberTextView.setVisibility(TextView.GONE);
-
-            commuterNameEditText.setVisibility(EditText.VISIBLE);
-            emailAddressEditText.setVisibility(EditText.VISIBLE);
-            contactNumberEditText.setVisibility(EditText.VISIBLE);
-
-            // Switch buttons visibility
-            editButton.setVisibility(Button.GONE);
-            saveButton.setVisibility(Button.VISIBLE);
-        });
-
-        // Save button click listener
+        // Save button logic
         saveButton.setOnClickListener(v -> {
-            // Get input values
-            String newName = commuterNameEditText.getText().toString().trim();
-            String newEmail = emailAddressEditText.getText().toString().trim();
-            String newContact = contactNumberEditText.getText().toString().trim();
+            String newName = nameEditText.getText().toString().trim();
+            String newEmail = emailEditText.getText().toString().trim();
+            String newContact = contactEditText.getText().toString().trim();
 
-            // Save to SharedPreferences
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(KEY_COMMUTER_NAME, newName);
             editor.putString(KEY_EMAIL_ADDRESS, newEmail);
             editor.putString(KEY_CONTACT_NUMBER, newContact);
             editor.apply();
 
-            // Update TextViews
-            commuterNameTextView.setText("Commuter Name: " + newName);
-            emailAddressTextView.setText("Email Address: " + newEmail);
-            contactNumberTextView.setText("Contact Number: " + newContact);
+            nameTextView.setText(newName);
+            emailTextView.setText(newEmail);
+            contactTextView.setText(newContact);
 
-            // Show TextViews, hide EditTexts
-            commuterNameTextView.setVisibility(TextView.VISIBLE);
-            emailAddressTextView.setVisibility(TextView.VISIBLE);
-            contactNumberTextView.setVisibility(TextView.VISIBLE);
-
-            commuterNameEditText.setVisibility(EditText.GONE);
-            emailAddressEditText.setVisibility(EditText.GONE);
-            contactNumberEditText.setVisibility(EditText.GONE);
-
-            // Switch buttons visibility
-            saveButton.setVisibility(Button.GONE);
-            editButton.setVisibility(Button.VISIBLE);
+            setEditMode(false);
+            Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
         });
 
-        profilePicture.setOnClickListener(v -> {
-            // TODO: Handle profile picture update if needed
+        // Logout logic
+        logoutText.setOnClickListener(v -> {
+            Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(AccountActivity.this, LoginActivity.class));
+            finish();
         });
 
+        // Theme toggle logic
+        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                Toast.makeText(this, "Dark Mode (placeholder)", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Light Mode (placeholder)", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        setupBottomNavigation();
+    }
+
+    private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_account); // Mark account as active
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_home) {
-                startActivity(new Intent(AccountActivity.this, HomeActivity.class));
+                navigateTo(HomeActivity.class);
                 return true;
             } else if (id == R.id.nav_calculator) {
-                startActivity(new Intent(AccountActivity.this, FareCalculatorActivity.class));
+                navigateTo(FareCalculatorActivity.class);
                 return true;
             } else if (id == R.id.nav_history) {
-                startActivity(new Intent(AccountActivity.this, HistoryActivity.class));
+                navigateTo(HistoryActivity.class);
                 return true;
             } else if (id == R.id.nav_account) {
-                return true;
+                return true; // Already here
             }
             return false;
         });
-        bottomNavigationView.setSelectedItemId(R.id.nav_account);
+    }
+
+    private void navigateTo(Class<?> targetActivity) {
+        Intent intent = new Intent(this, targetActivity);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, 0); // Apply fade-in only
+    }
+
+    private void setEditMode(boolean enabled) {
+        nameTextView.setVisibility(enabled ? TextView.GONE : TextView.VISIBLE);
+        emailTextView.setVisibility(enabled ? TextView.GONE : TextView.VISIBLE);
+        contactTextView.setVisibility(enabled ? TextView.GONE : TextView.VISIBLE);
+
+        nameEditText.setVisibility(enabled ? EditText.VISIBLE : EditText.GONE);
+        emailEditText.setVisibility(enabled ? EditText.VISIBLE : EditText.GONE);
+        contactEditText.setVisibility(enabled ? EditText.VISIBLE : EditText.GONE);
+
+        editButton.setVisibility(enabled ? Button.GONE : Button.VISIBLE);
+        saveButton.setVisibility(enabled ? Button.VISIBLE : Button.GONE);
     }
 }

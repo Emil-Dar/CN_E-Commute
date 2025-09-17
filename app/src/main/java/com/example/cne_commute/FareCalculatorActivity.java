@@ -3,11 +3,17 @@ package com.example.cne_commute;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +30,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -32,116 +37,176 @@ import java.util.logging.Logger;
 
 public class FareCalculatorActivity extends AppCompatActivity {
 
-    private static final double BASE_FARE = 50.0; // Initial fare
-    private static final double FARE_PER_KM = 10.0; // Fare per kilometer
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
-
-    private FusedLocationProviderClient fusedLocationClient;
     private static final Logger logger = Logger.getLogger(FareCalculatorActivity.class.getName());
 
-    // HashMaps to track state for each commuter
-    private final HashMap<Integer, Location> startLocations = new HashMap<>();
-    private final HashMap<Integer, Location> destinationLocations = new HashMap<>();
+    private FusedLocationProviderClient fusedLocationClient;
+    private CancellationTokenSource cancellationTokenSource;
+    private Location startLocation;
+    private Location destinationLocation;
+
+    private TextView startingLocationText, destinationLocationText, totalKmText, totalFareText;
+    private Spinner userAgeSpinner, companionAgeSpinner;
+    private CheckBox userDiscountCheckbox, companionDiscountCheckbox;
+    private Button startButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fare_calculator);
 
-        // Initialize location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Request location permissions if not already granted
+        startingLocationText = findViewById(R.id.startingLocation1);
+        destinationLocationText = findViewById(R.id.chosenDestination1);
+        totalKmText = findViewById(R.id.totalkm1);
+        totalFareText = findViewById(R.id.totalFare1);
+
+        userAgeSpinner = findViewById(R.id.user_age_spinner);
+        companionAgeSpinner = findViewById(R.id.companion_age_spinner);
+
+        userDiscountCheckbox = findViewById(R.id.user_discount_checkbox);
+        companionDiscountCheckbox = findViewById(R.id.companion_discount_checkbox);
+
+        startButton = findViewById(R.id.startButton1);
+        Button stopButton = findViewById(R.id.stopButton1);
+        Button resetButton = findViewById(R.id.resetButton1);
+
+        // Custom adapter with grayed-out first item
+        ArrayAdapter<String> customAgeAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.age_group_options)) {
+
+            @Override
+            public boolean isEnabled(int position) {
+                return position != 0;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        customAgeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        userAgeSpinner.setAdapter(customAgeAdapter);
+        companionAgeSpinner.setAdapter(customAgeAdapter);
+
+        // Disable Start button initially
+        startButton.setEnabled(false);
+
+        userAgeSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                String selected = userAgeSpinner.getSelectedItem().toString();
+                startButton.setEnabled(!selected.equals("Choose your age group"));
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {
+                startButton.setEnabled(false);
+            }
+        });
+
+        // Prevent "Start" if Spinner 1 is not valid
+        startButton.setOnClickListener(v -> {
+            String selected = userAgeSpinner.getSelectedItem().toString();
+            if (selected.equals("Choose your age group")) {
+                Toast.makeText(FareCalculatorActivity.this, "Please select your age group", Toast.LENGTH_SHORT).show();
+            } else {
+                resetCommuterState();
+            }
+        });
+
+        stopButton.setOnClickListener(v -> setDestinationLocationAndCalculateFare());
+        resetButton.setOnClickListener(v -> resetFieldsOnly());
+
         requestLocationPermission();
-
-        // Set listeners for each commuter
-        setListenersForCommuters();
-
-        // Initialize Bottom Navigation
         initializeBottomNavigation();
     }
 
     private void requestLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Location permission granted", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Location permission is required to use this feature", Toast.LENGTH_SHORT).show();
-            }
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE &&
+                grantResults.length > 0 &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Location permission granted", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Location permission is required to use this feature", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void setListenersForCommuters() {
-        for (int i = 1; i <= 4; i++) {
-            int commuterId = i;
+    private void resetCommuterState() {
+        startLocation = null;
+        destinationLocation = null;
 
-            Button startButton = findViewById(getResources().getIdentifier("startButton" + commuterId, "id", getPackageName()));
-            Button stopButton = findViewById(getResources().getIdentifier("stopButton" + commuterId, "id", getPackageName()));
-
-            // Start button resets the state for the commuter and sets the starting location
-            startButton.setOnClickListener(v -> resetCommuterState(commuterId));
-
-            // Stop button records the destination and calculates the fare
-            stopButton.setOnClickListener(v -> setDestinationLocationAndCalculateFare(commuterId));
-        }
-    }
-
-    private void resetCommuterState(int commuterId) {
-        // Reset the starting location and destination for the commuter
-        startLocations.put(commuterId, null);
-        destinationLocations.put(commuterId, null);
-
-        // Clear the UI elements (text views)
-        TextView startingLocationText = findViewById(getResources().getIdentifier("startingLocation" + commuterId, "id", getPackageName()));
-        TextView destinationLocationText = findViewById(getResources().getIdentifier("chosenDestination" + commuterId, "id", getPackageName()));
-        TextView totalKmText = findViewById(getResources().getIdentifier("totalkm" + commuterId, "id", getPackageName()));
-        TextView totalFareText = findViewById(getResources().getIdentifier("totalFare" + commuterId, "id", getPackageName()));
-
-        // Set default text instead of clearing them
         startingLocationText.setText("");
         destinationLocationText.setText("");
-
-        // Set default values for Total KM and Total Fare so the layout doesn't shrink
         totalKmText.setText("0.00 km");
         totalFareText.setText("₱ 0.00");
 
-        // Set the starting location for the commuter
         getCurrentLocation(location -> {
-            startLocations.put(commuterId, location);
-
-            String address = (getAddressFromLocation(location) != null) ? getAddressFromLocation(location) : getCoordinatesString(location);
+            startLocation = location;
+            String address = getAddressFromLocation(location);
+            if (address == null) address = getCoordinatesString(location);
             startingLocationText.setText(address);
         });
     }
 
-    private void setDestinationLocationAndCalculateFare(int commuterId) {
+    private void resetFieldsOnly() {
+        startLocation = null;
+        destinationLocation = null;
+
+        startingLocationText.setText("");
+        destinationLocationText.setText("");
+        totalKmText.setText("0.00 km");
+        totalFareText.setText("₱ 0.00");
+
+        Toast.makeText(this, "Fields have been reset", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setDestinationLocationAndCalculateFare() {
         getCurrentLocation(location -> {
-            destinationLocations.put(commuterId, location);
-
-            String address = (getAddressFromLocation(location) != null) ? getAddressFromLocation(location) : getCoordinatesString(location);
-            TextView destinationLocationText = findViewById(getResources().getIdentifier("chosenDestination" + commuterId, "id", getPackageName()));
+            destinationLocation = location;
+            String address = getAddressFromLocation(location);
+            if (address == null) address = getCoordinatesString(location);
             destinationLocationText.setText(address);
-
-            // Calculate the fare once the destination is set
-            calculateFare(commuterId);
+            calculateFare();
         });
     }
 
-    private void calculateFare(int commuterId) {
-        Location startLocation = startLocations.get(commuterId);
-        Location destinationLocation = destinationLocations.get(commuterId);
-
+    private void calculateFare() {
         if (startLocation == null || destinationLocation == null) {
-            TextView totalFareText = findViewById(getResources().getIdentifier("totalFare" + commuterId, "id", getPackageName()));
-            totalFareText.setText("₱ 0.00");  // Keep the text instead of leaving it empty
+            totalFareText.setText("₱ 0.00");
+            totalKmText.setText("0.00 km");
+            return;
+        }
+
+        String userAgeGroup = userAgeSpinner.getSelectedItem().toString();
+        String companionAgeGroup = companionAgeSpinner.getSelectedItem().toString();
+
+        if (userAgeGroup.equals("Choose your age group")) {
+            Toast.makeText(this, "Please select your age group", Toast.LENGTH_SHORT).show();
+            totalFareText.setText("₱ 0.00");
             return;
         }
 
@@ -151,51 +216,69 @@ public class FareCalculatorActivity extends AppCompatActivity {
                 destinationLocation.getLatitude(), destinationLocation.getLongitude(),
                 results);
 
-        float distanceInKm = results[0] / 1000;
+        float distanceInKm = results[0] / 1000f;
+        totalKmText.setText(String.format(Locale.getDefault(), "%.2f km", distanceInKm));
 
-        double totalFare;
-        if (distanceInKm <= 2) {
-            totalFare = 15.0;
-        } else {
-            int additionalKmRanges = (int) Math.ceil(distanceInKm - 2);
-            totalFare = 15.0 + (additionalKmRanges * 2.0);
+        double fare1 = calculateIndividualFare(userAgeGroup, userDiscountCheckbox.isChecked(), distanceInKm);
+        double fare2 = 0.0;
+
+        if (!companionAgeGroup.equals("Choose your age group")) {
+            fare2 = calculateIndividualFare(companionAgeGroup, companionDiscountCheckbox.isChecked(), distanceInKm);
         }
 
-        TextView totalKmText = findViewById(getResources().getIdentifier("totalkm" + commuterId, "id", getPackageName()));
-        TextView totalFareText = findViewById(getResources().getIdentifier("totalFare" + commuterId, "id", getPackageName()));
-
-        totalKmText.setText(String.format(Locale.getDefault(), "%.2f km", distanceInKm));
+        double totalFare = fare1 + fare2;
         totalFareText.setText(String.format(Locale.getDefault(), "₱ %.2f", totalFare));
     }
 
+    private double calculateIndividualFare(String ageGroup, boolean hasDiscount, float distanceInKm) {
+        double baseFare = 0.0;
+        double perKmFare = 0.0;
 
-    private void getCurrentLocation(OnSuccessListener<Location> callback) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
-                if (location != null) {
-                    callback.onSuccess(location);
-                } else {
-                    // Request fresh location update
-                    requestFreshLocation(callback);
-                }
-            });
+        // Assign base fare and per km fare depending on age group and discount
+        switch (ageGroup) {
+            case "0-3":
+                baseFare = hasDiscount ? 12.00 : 15.00;
+                perKmFare = hasDiscount ? 1.60 : 2.00;
+                break;
+            case "3-5":
+                baseFare = hasDiscount ? 5.60 : 7.00;
+                perKmFare = hasDiscount ? 1.60 : 2.00;
+                break;
+            case "6+":
+            default:
+                baseFare = hasDiscount ? 12.00 : 15.00;
+                perKmFare = hasDiscount ? 1.60 : 2.00;
+                break;
+        }
+
+        // Fare calculation
+        if (distanceInKm <= 2.0) {
+            return baseFare;
         } else {
-            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
+            int extraKm = (int) Math.ceil(distanceInKm - 2.0);
+            return baseFare + (extraKm * perKmFare);
         }
     }
 
-    private void requestFreshLocation(OnSuccessListener<Location> callback) {
-        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+    private void getCurrentLocation(OnSuccessListener<Location> callback) {
+        cancellationTokenSource = new CancellationTokenSource();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
             return;
         }
-        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationTokenSource.getToken())
+
+        fusedLocationClient.getCurrentLocation(
+                        Priority.PRIORITY_HIGH_ACCURACY, cancellationTokenSource.getToken())
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
                         callback.onSuccess(location);
                     } else {
-                        Toast.makeText(this, "Unable to fetch location. Please try again.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Unable to fetch location", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -209,40 +292,64 @@ public class FareCalculatorActivity extends AppCompatActivity {
         try {
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (addresses != null && !addresses.isEmpty()) {
-                return addresses.get(0).getAddressLine(0);
+                Address addr = addresses.get(0);
+                String province = addr.getAdminArea();
+                String subAdmin = addr.getSubAdminArea();
+
+                if ((province != null && province.contains("Camarines Norte")) ||
+                        (subAdmin != null && subAdmin.contains("Camarines Norte"))) {
+
+                    StringBuilder address = new StringBuilder();
+                    if (addr.getFeatureName() != null) address.append(addr.getFeatureName()).append(", ");
+                    if (addr.getThoroughfare() != null) address.append(addr.getThoroughfare()).append(", ");
+                    if (addr.getSubLocality() != null) address.append(addr.getSubLocality()).append(", ");
+                    if (addr.getLocality() != null) address.append(addr.getLocality()).append(", ");
+                    if (addr.getSubAdminArea() != null) address.append(addr.getSubAdminArea());
+
+                    return address.toString().replaceAll(", $", "");
+                } else {
+                    return "Location not within Camarines Norte";
+                }
             }
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Failed to retrieve address", e);
-            Toast.makeText(this, "Failed to retrieve address", Toast.LENGTH_SHORT).show();
         }
-        return null;
+        return "Unable to determine location";
     }
 
     private String getCoordinatesString(Location location) {
         return String.format(Locale.getDefault(), "%.4f, %.4f", location.getLatitude(), location.getLongitude());
     }
 
-
-
     private void initializeBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_calculator) {
-                startActivity(new Intent(FareCalculatorActivity.this, FareCalculatorActivity.class));
                 return true;
             } else if (itemId == R.id.nav_home) {
                 startActivity(new Intent(FareCalculatorActivity.this, HomeActivity.class));
+                overridePendingTransition(R.anim.fade_in, 0);
                 return true;
             } else if (itemId == R.id.nav_history) {
                 startActivity(new Intent(FareCalculatorActivity.this, HistoryActivity.class));
+                overridePendingTransition(R.anim.fade_in, 0);
                 return true;
             } else if (itemId == R.id.nav_account) {
                 startActivity(new Intent(FareCalculatorActivity.this, AccountActivity.class));
+                overridePendingTransition(R.anim.fade_in, 0);
                 return true;
             } else {
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (cancellationTokenSource != null) {
+            cancellationTokenSource.cancel();
+        }
     }
 }
