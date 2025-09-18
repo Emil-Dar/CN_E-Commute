@@ -1,0 +1,243 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <!-- Logout Button -->
+    <TextView
+        android:id="@+id/logout_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:textColor="@color/primary_blue"
+        android:textSize="14sp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        tools:ignore="HardcodedText" />
+
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_below="@id/logout_text"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- Profile Picture -->
+            <ImageView
+                android:id="@+id/profile_picture"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_profile_placeholder"
+                android:contentDescription="Profile Picture"
+                android:layout_marginTop="16dp"
+                android:scaleType="centerCrop"
+                tools:ignore="HardcodedText" />
+
+            <!-- Name -->
+            <TextView
+                android:id="@+id/name_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Krizza Heart"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/textColor"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/name_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:hint="Enter Name"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:background="@drawable/edit_text_background"
+                android:textColor="@color/textColor"
+                tools:ignore="Autofill,HardcodedText,TextFields" />
+
+            <!-- Email -->
+            <TextView
+                android:id="@+id/email_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="krizzaheart.esperas@gmail.com"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/textColor"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/email_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:hint="Enter Email"
+                android:inputType="textEmailAddress"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:background="@drawable/edit_text_background"
+                android:textColor="@color/textColor"
+                tools:ignore="Autofill,HardcodedText" />
+
+            <!-- Contact -->
+            <TextView
+                android:id="@+id/contact_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09917809416"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/textColor"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/contact_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:hint="Enter Contact Number"
+                android:inputType="phone"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:background="@drawable/edit_text_background"
+                android:textColor="@color/textColor"
+                tools:ignore="Autofill,HardcodedText" />
+
+            <!-- Edit/Save Buttons -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+
+                <Button
+                    android:id="@+id/edit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit"
+                    android:backgroundTint="@color/primary_blue"
+                    android:textColor="@color/white"
+                    android:layout_marginEnd="8dp"
+                    tools:ignore="HardcodedText" />
+
+                <Button
+                    android:id="@+id/save_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:backgroundTint="@color/primary_blue"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <!-- Settings Options -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="24dp">
+
+                <!-- Notifications -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="12dp"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="Notifications"
+                        android:textSize="16sp"
+                        android:textColor="@color/textColor"  android:layout_height="25dp"
+                        tools:ignore="HardcodedText" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_right"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+
+                <!-- Settings -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="12dp"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="25dp"
+                        android:text="Settings"
+                        android:textSize="16sp"
+                        android:textColor="@color/textColor"
+                        tools:ignore="HardcodedText" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_right"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+
+                <!-- Theme -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="25dp"
+                        android:text="Theme"
+                        android:textSize="16sp"
+                        android:textColor="@color/textColor"
+                        tools:ignore="HardcodedText" />
+
+                    <Switch
+                        android:id="@+id/theme_switch"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:minWidth="48dp"
+                        android:minHeight="48dp"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primary_blue"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/black"
+        app:menu="@menu/operator_nav_menu"
+        app:labelVisibilityMode="labeled" />
+</RelativeLayout>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#163F74"
+    android:gravity="center"
+    android:padding="16dp">
+
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/create_account_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_in"
+        android:textSize="22sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Subtitle -->
+    <TextView
+        android:id="@+id/sign_in_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/provide_your_login_details_to_proceed"
+        android:textSize="14sp"
+        android:textColor="#A9C4E8"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_email"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="10dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#A9C4E8"
+        android:layout_marginBottom="16dp"
+        android:inputType="textEmailAddress"
+        android:autofillHints="emailAddress" />
+
+
+    <!-- Password Field with Eye Icon -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_password"
+            android:drawableStart="@drawable/ic_passwordd"
+            android:drawablePadding="10dp"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#A9C4E8"
+            android:inputType="textPassword"
+            android:autofillHints="password" />
+
+        <ImageView
+            android:id="@+id/password_eye_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_eye_off"
+            android:contentDescription="@string/show_password"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="12dp" />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/sign_in_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_in"
+        android:background="@drawable/button_background"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Sign Up Link -->
+    <TextView
+        android:id="@+id/signin_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signup_link"
+        android:textSize="14sp"
+        android:textColor="#A9C4E8"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp" />
+
+
+</LinearLayout>

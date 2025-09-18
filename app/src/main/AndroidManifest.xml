@@ -73,9 +73,14 @@
         <activity android:name=".DriverSignInActivity" android:exported="true" />
         <activity android:name=".DriverSignUpActivity" android:exported="true" />
 
-        <!-- User and Driver Home -->
+        <!-- Operator Authentication -->
+        <activity android:name=".OperatorSignInActivity" android:exported="true" />
+        <activity android:name=".OperatorSignUpActivity" android:exported="true" />
+
+        <!-- User, Driver, Operator Home -->
         <activity android:name=".HomeActivity" android:exported="true" />
         <activity android:name=".DriverHomeActivity" android:exported="true" />
+        <activity android:name=".OperatorHomeActivity" android:exported="true" />
 
         <!-- Driver Features -->
         <activity android:name=".WalletActivity" android:exported="true" />
@@ -87,12 +92,17 @@
         <activity android:name=".HistoryActivity" android:exported="true" />
         <activity android:name=".AccountActivity" android:exported="true" />
 
+        <!-- Operator Features -->
+        <activity android:name=".OperatorDriversActivity" android:exported="true" />
+        <activity android:name=".OperatorAccountActivity" android:exported="true" />
+
         <!-- Reporting -->
         <activity android:name=".ReportActivity" android:exported="true" />
         <activity android:name=".ReportHistoryActivity" android:exported="true" />
 
         <!-- Notification -->
         <activity android:name=".NotificationActivity" android:exported="true" />
+        <activity android:name=".OperatorNotificationsActivity" android:exported="true" />
 
     </application>
 </manifest>
