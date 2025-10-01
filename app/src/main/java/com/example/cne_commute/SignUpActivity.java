@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,7 +38,6 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseFirestore db;
 
     private boolean isPasswordVisible = false;
-    private boolean isConfirmPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,13 +86,14 @@ public class SignUpActivity extends AppCompatActivity {
             isPasswordVisible = !isPasswordVisible;
             if (isPasswordVisible) {
                 passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                passwordEyeIcon.setImageResource(R.drawable.ic_eye_on); // Replace with the visible icon
+                passwordEyeIcon.setImageResource(R.drawable.ic_eye_on);
             } else {
                 passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                passwordEyeIcon.setImageResource(R.drawable.ic_eye_off); // Replace with the hidden icon
+                passwordEyeIcon.setImageResource(R.drawable.ic_eye_off);
             }
-            passwordEditText.setSelection(passwordEditText.getText().length()); // Move cursor to the end
+            passwordEditText.setSelection(passwordEditText.getText().length());
         });
+
     }
 
     private void createNotificationChannel() {
@@ -114,7 +113,6 @@ public class SignUpActivity extends AppCompatActivity {
                             @NonNull EditText usernameEditText, @NonNull EditText emailEditText,
                             @NonNull EditText passwordEditText, @NonNull EditText confirmPasswordEditText) {
 
-        // Validate inputs
         if (username.isEmpty()) {
             usernameEditText.setError("Enter a valid username");
             usernameEditText.requestFocus();
@@ -139,41 +137,36 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        // Create user with Firebase Authentication
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-                            // Directly navigate to the next screen
-                            Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-                            intent.putExtra("username", username); // Pass data if needed
+                            Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
+                            intent.putExtra("username", username);
                             startActivity(intent);
-                            finishAffinity(); // Close SignUpActivity
+                            finishAffinity();
 
-                            // Save user details in Firestore in the background
                             saveUserDataToFirestore(user.getUid(), username, email);
-
-                            // Send notification
                             sendNotification();
                         }
                     } else {
-                        Log.e(TAG, "Authentication Failed: " + task.getException().getMessage());
-                        Toast.makeText(SignUpActivity.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Authentication Failed: " + (task.getException() != null ? task.getException().getMessage() : "unknown error"));
+                        Toast.makeText(SignUpActivity.this, "Authentication Failed: " + (task.getException() != null ? task.getException().getMessage() : "unknown error"), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
     private void saveUserDataToFirestore(@NonNull String uid, @NonNull String username, @NonNull String email) {
         Map<String, Object> userData = new HashMap<>();
         userData.put("username", username);
         userData.put("email", email);
-        userData.put("userType", "Commuter");
+        userData.put("userType", "commuter"); // lowercase
 
         db.collection("users").document(uid).set(userData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "User data saved successfully"))
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Error saving user data: " + e.getMessage());
-                    // NEW: Show user-friendly error message
                     Toast.makeText(SignUpActivity.this, "Failed to save user data. Please try again later.", Toast.LENGTH_SHORT).show();
                 });
     }
@@ -182,9 +175,9 @@ public class SignUpActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS")
                 == PackageManager.PERMISSION_GRANTED) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with your app's icon
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setContentTitle("Account Created")
-                    .setContentText("Your account has been successfully created.")
+                    .setContentText("your commuter account has been successfully created.")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);

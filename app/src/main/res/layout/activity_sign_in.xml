@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="#163F74"
     android:gravity="center"
-    android:padding="16dp">
+    android:padding="24dp">
 
 
     <!-- Title -->

@@ -159,6 +159,8 @@
 
     <string name="label_driver_name">Driver Name: %1$s</string>
     <string name="label_driver_contact">Driver Contact No.: %1$s</string>
+    <string name="operator_sign_in">Operator Sign In</string>
+    <string name="Operator_ID">Operator ID</string>
 
 
 </resources>

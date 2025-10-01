@@ -105,4 +105,12 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("com.google.code.gson:gson:2.10.1")
 
+    // Supabase
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.0.2") // core + postgrest
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.2") // for auth if needed
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // bcrypt library for Java/Android
+    implementation("at.favre.lib:bcrypt:0.9.0")
+
 }
