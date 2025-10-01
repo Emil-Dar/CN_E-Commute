@@ -161,6 +161,13 @@
     <string name="label_driver_contact">Driver Contact No.: %1$s</string>
     <string name="operator_sign_in">Operator Sign In</string>
     <string name="Operator_ID">Operator ID</string>
+    <string name="commuter_1">COMMUTER 1</string>
+    <string name="your_age_group">YOUR AGE GROUP</string>
+    <string name="discount_chechbox">Apply Discount (Senior / PWD / Student)</string>
+    <string name="companion_age_group">COMPANION AGE GROUP</string>
+    <string name="calculate">CALCULATE</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

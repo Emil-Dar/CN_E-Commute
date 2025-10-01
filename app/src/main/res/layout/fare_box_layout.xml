@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:padding="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    app:strokeColor="#DDDDDD"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/commuter_background">
+
+        <!-- COMMUTER TITLE -->
+        <TextView
+            android:id="@+id/titleBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="12dp"
+            android:paddingTop="10dp"
+            android:text="@string/commuter"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- AGE GROUP -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/your_age_group"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginStart="15dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerAge"
+            android:layout_width="305dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/textbox_bg"
+            android:paddingHorizontal="12dp"
+            android:spinnerMode="dropdown"
+            android:layout_gravity="center"/>
+
+        <!-- DISCOUNT -->
+
+        <!-- COMPANION AGE GROUP -->
+        <CheckBox
+            android:id="@+id/checkboxDiscount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/discount_chechbox"
+            android:textColor="@color/black"
+            android:layout_marginStart="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/companion_age_group"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginStart="15dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerCompanionAge"
+            android:layout_width="305dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/textbox_bg"
+            android:paddingHorizontal="12dp"
+            android:spinnerMode="dropdown"
+            android:layout_gravity="center"
+            />
+
+        <CheckBox
+            android:id="@+id/checkboxCompanionDiscount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/discount_chechbox"
+            android:textColor="@color/black"
+            android:layout_marginStart="15dp"/>
+
+        <!-- CALCULATE HEADER + RESET ICON -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/labelCalculate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/calculate"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"/>
+
+            <ImageButton
+                android:id="@+id/btnReset"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Reset"
+                android:src="@drawable/ic_reset"
+                app:tint="@color/primary_blue"
+                android:layout_marginRight="15dp"/>
+        </RelativeLayout>
+
+        <!-- LOCATIONS -->
+        <TextView
+            android:id="@+id/startLocation"
+            android:layout_width="305dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textbox_bg"
+            android:drawablePadding="8dp"
+            android:hint="Starting Location"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ic_location"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/endLocation"
+            android:layout_width="305dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textbox_bg"
+            android:drawablePadding="8dp"
+            android:hint="Your Destination"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ic_location"
+            android:layout_gravity="center"/>
+
+        <!-- BUTTONS: START / STOP / FOR RENT -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <Button
+                android:id="@+id/btnStart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/green"
+                android:text="START"
+                android:textColor="@android:color/white" />
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/btnStop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/red"
+                android:text="STOP"
+                android:textColor="@android:color/white" />
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/btnRent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/primary_blue"
+                android:text="FOR RENT"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <!-- AGREED AMOUNT FIELD -->
+        <EditText
+            android:id="@+id/inputRentAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textbox_bg"
+            android:hint="Enter agreed amount"
+            android:inputType="numberDecimal"
+            android:padding="10dp"
+            android:visibility="gone" />
+
+        <!-- SUMMARY (KM + FARE) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TOTAL KM"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtKm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/fare_background"
+                    android:padding="8dp"
+                    android:text="0.00"
+                    android:textColor="@color/textColor"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TOTAL FARE"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtFare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/fare_background"
+                    android:padding="8dp"
+                    android:text="₱0.00"
+                    android:textColor="@color/textColor"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- PAY BUTTON -->
+        <Button
+            android:id="@+id/btnPay"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/primary_blue"
+            android:text="PAY"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -1,96 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor"
-    tools:context=".DriverHomeActivity">
+    android:background="#F5F5F5">
 
-    <TextView
-        android:id="@+id/home_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome to Driver Dashboard"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/textColor" />
-
-    <!-- Floating Action Button for Driver Map -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_qr_code"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
-        android:src="@drawable/driver_map"
-        android:contentDescription="Driver Map"
-        android:tint="@color/white"
-        app:backgroundTint="@color/colorAccent" />
-
-    <!-- Bottom Navigation Bar with Icons -->
-    <LinearLayout
+    <!-- Top Bar -->
+    <RelativeLayout
+        android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="56dp"
+        android:background="@color/primary_blue"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/title_driver_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driver Home"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_centerVertical="true" />
+
+        <!-- Notification icon container -->
+        <FrameLayout
+            android:id="@+id/notification_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
+
+            <!-- Bell icon -->
+            <ImageView
+                android:id="@+id/btn_notifications"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_notif_light"
+                app:tint="@android:color/white"
+                android:contentDescription="Notifications" />
+
+            <!-- Badge -->
+            <TextView
+                android:id="@+id/notification_badge"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="end|top"
+                android:background="@drawable/badge_background"
+                android:gravity="center"
+                android:text="3"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                android:visibility="visible" />
+        </FrameLayout>
+    </RelativeLayout>
+
+    <!-- Fragment Container (Main Area) -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_below="@id/top_bar"
+        android:layout_above="@id/driver_bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F5F5F5" />
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/driver_bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary"
-        android:padding="8dp"
-        android:gravity="center">
+        android:background="@color/primary_blue"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/black"
+        app:menu="@menu/driver_nav_menu"
+        app:labelVisibilityMode="labeled" />
 
-        <Button
-            android:id="@+id/home_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_home_dark"
-            android:contentDescription="Home"
-            android:paddingTop="4dp"
-            android:paddingBottom="8dp"
-            android:text=""
-            android:tint="@color/white" />
-
-        <Button
-            android:id="@+id/map_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_wallet_light"
-            android:contentDescription="Wallet"
-            android:paddingTop="4dp"
-            android:paddingBottom="8dp"
-            android:text=""
-            android:tint="@color/white" />
-
-        <Button
-            android:id="@+id/history_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_notif_light"
-            android:contentDescription="Notification"
-            android:paddingTop="4dp"
-            android:paddingBottom="8dp"
-            android:text=""
-            android:tint="@color/white" />
-
-        <Button
-            android:id="@+id/account_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_account_light"
-            android:contentDescription="Account"
-            android:paddingTop="4dp"
-            android:paddingBottom="8dp"
-            android:text=""
-            android:tint="@color/white" />
-    </LinearLayout>
 </RelativeLayout>
