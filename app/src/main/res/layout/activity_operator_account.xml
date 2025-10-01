@@ -15,15 +15,14 @@
         android:textSize="14sp"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        tools:ignore="HardcodedText" />
+        android:layout_marginEnd="16dp"/>
 
     <!-- Scrollable Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation"
         android:layout_below="@id/logout_text"
+        android:layout_above="@id/bottom_navigation"
         android:padding="16dp">
 
         <LinearLayout
@@ -40,108 +39,123 @@
                 android:src="@drawable/ic_profile_placeholder"
                 android:contentDescription="Profile Picture"
                 android:layout_marginTop="16dp"
-                android:scaleType="centerCrop"
-                tools:ignore="HardcodedText" />
+                android:scaleType="centerCrop"/>
 
-            <!-- Name -->
+            <!-- Display Name -->
             <TextView
                 android:id="@+id/name_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Krizza Heart"
+                android:text="Operator Name"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="12dp"
-                android:textColor="@color/textColor"
-                tools:ignore="HardcodedText" />
+                android:textColor="@color/textColor"/>
 
+            <!-- Editable fields -->
             <EditText
-                android:id="@+id/name_edittext"
+                android:id="@+id/first_name_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:hint="Enter Name"
-                android:textSize="16sp"
+                android:hint="First Name"
                 android:visibility="gone"
                 android:background="@drawable/edit_text_background"
-                android:textColor="@color/textColor"
-                tools:ignore="Autofill,HardcodedText,TextFields" />
-
-            <!-- Email -->
-            <TextView
-                android:id="@+id/email_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="krizzaheart.esperas@gmail.com"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/textColor"
-                tools:ignore="HardcodedText" />
+                android:layout_marginTop="4dp"/>
 
             <EditText
-                android:id="@+id/email_edittext"
+                android:id="@+id/last_name_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:hint="Enter Email"
-                android:inputType="textEmailAddress"
-                android:textSize="16sp"
+                android:hint="Last Name"
                 android:visibility="gone"
                 android:background="@drawable/edit_text_background"
-                android:textColor="@color/textColor"
-                tools:ignore="Autofill,HardcodedText" />
+                android:layout_marginTop="4dp"/>
 
-            <!-- Contact -->
-            <TextView
-                android:id="@+id/contact_textview"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/suffix_edittext"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="09917809416"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/textColor"
-                tools:ignore="HardcodedText" />
+                android:hint="Suffix"
+                android:visibility="gone"
+                android:background="@drawable/edit_text_background"
+                android:layout_marginTop="4dp"/>
 
             <EditText
                 android:id="@+id/contact_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:hint="Enter Contact Number"
+                android:hint="Contact Number"
                 android:inputType="phone"
-                android:textSize="16sp"
                 android:visibility="gone"
                 android:background="@drawable/edit_text_background"
-                android:textColor="@color/textColor"
-                tools:ignore="Autofill,HardcodedText" />
+                android:layout_marginTop="4dp"/>
 
-            <!-- Edit/Save Buttons -->
+            <EditText
+                android:id="@+id/address_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Address"
+                android:visibility="gone"
+                android:background="@drawable/edit_text_background"
+                android:layout_marginTop="4dp"/>
+
+            <!-- Contact Display -->
+            <TextView
+                android:id="@+id/contact_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact Number"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/textColor"/>
+
+            <!-- Buttons: Edit/Save + Change Password -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="12dp"
+                android:gravity="center_horizontal"
+                android:weightSum="3">
 
                 <Button
                     android:id="@+id/edit_button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="Edit"
+                    android:minHeight="48dp"
+                    android:text="EDIT"
                     android:backgroundTint="@color/primary_blue"
                     android:textColor="@color/white"
                     android:layout_marginEnd="8dp"
-                    tools:ignore="HardcodedText" />
+                    android:singleLine="true"
+                    android:ellipsize="none"/>
 
                 <Button
                     android:id="@+id/save_button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="Save"
+                    android:minHeight="48dp"
+                    android:text="SAVE"
+                    android:visibility="gone"
                     android:backgroundTint="@color/primary_blue"
                     android:textColor="@color/white"
-                    android:visibility="gone"
-                    tools:ignore="HardcodedText" />
+                    android:layout_marginEnd="8dp"
+                    android:singleLine="true"
+                    android:ellipsize="none"/>
+
+                <Button
+                    android:id="@+id/change_password_button"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:text="CHANGE PASSWORD"
+                    android:backgroundTint="@color/primary_blue"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:singleLine="true"
+                    android:ellipsize="none"/>
             </LinearLayout>
+
 
             <!-- Settings Options -->
             <LinearLayout
@@ -156,22 +170,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingVertical="12dp"
-                    tools:ignore="UseCompoundDrawables">
+                    android:paddingVertical="12dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:text="Notifications"
                         android:textSize="16sp"
-                        android:textColor="@color/textColor"  android:layout_height="25dp"
-                        tools:ignore="HardcodedText" />
+                        android:textColor="@color/textColor"/>
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_right"
-                        tools:ignore="ContentDescription" />
+                        android:src="@drawable/ic_arrow_right"/>
                 </LinearLayout>
 
                 <!-- Settings -->
@@ -180,23 +192,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingVertical="12dp"
-                    tools:ignore="UseCompoundDrawables">
+                    android:paddingVertical="12dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="25dp"
+                        android:layout_height="wrap_content"
                         android:text="Settings"
                         android:textSize="16sp"
-                        android:textColor="@color/textColor"
-                        tools:ignore="HardcodedText" />
+                        android:textColor="@color/textColor"/>
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_right"
-                        tools:ignore="ContentDescription" />
+                        android:src="@drawable/ic_arrow_right"/>
                 </LinearLayout>
 
                 <!-- Theme -->
@@ -210,20 +219,15 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="25dp"
+                        android:layout_height="wrap_content"
                         android:text="Theme"
                         android:textSize="16sp"
-                        android:textColor="@color/textColor"
-                        tools:ignore="HardcodedText" />
+                        android:textColor="@color/textColor"/>
 
                     <Switch
                         android:id="@+id/theme_switch"
                         android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:minWidth="48dp"
-                        android:minHeight="48dp"
-                        tools:ignore="UseSwitchCompatOrMaterialXml" />
-
+                        android:layout_height="48dp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -239,5 +243,5 @@
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/black"
         app:menu="@menu/operator_nav_menu"
-        app:labelVisibilityMode="labeled" />
+        app:labelVisibilityMode="labeled"/>
 </RelativeLayout>

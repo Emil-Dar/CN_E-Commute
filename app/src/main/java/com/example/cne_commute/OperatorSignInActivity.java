@@ -6,138 +6,105 @@ import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.List;
+
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OperatorSignInActivity extends AppCompatActivity {
 
-    private EditText emailEditText, passwordEditText;
-    private Button signInButton;
+    private EditText operatorIdInput, passwordInput;
     private ImageView passwordEyeIcon;
+    private Button signInButton;
     private boolean isPasswordVisible = false;
 
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
+    private SupabaseService supabaseService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operator_sign_in);
 
-        emailEditText = findViewById(R.id.email);
-        passwordEditText = findViewById(R.id.password);
-        signInButton = findViewById(R.id.sign_in_button);
-        TextView signupLink = findViewById(R.id.signin_link);
+        operatorIdInput = findViewById(R.id.operatorIdInput);
+        passwordInput = findViewById(R.id.passwordInput);
         passwordEyeIcon = findViewById(R.id.password_eye_icon);
+        signInButton = findViewById(R.id.signInButton);
 
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        supabaseService = SupabaseApiClient.getRetrofitInstance().create(SupabaseService.class);
 
-        // sign in
-        signInButton.setOnClickListener(v -> signInOperator());
+        passwordEyeIcon.setOnClickListener(v -> togglePasswordVisibility());
 
-        // go to signup (don’t finish, allow back navigation)
-        signupLink.setOnClickListener(v -> {
-            Intent intent = new Intent(OperatorSignInActivity.this, OperatorSignUpActivity.class);
-            startActivity(intent);
-        });
+        signInButton.setOnClickListener(v -> {
+            String operatorId = operatorIdInput.getText().toString().trim();
+            String password = passwordInput.getText().toString();
 
-        // toggle password visibility
-        passwordEyeIcon.setOnClickListener(v -> {
-            isPasswordVisible = !isPasswordVisible;
-            if (isPasswordVisible) {
-                passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                passwordEyeIcon.setImageResource(R.drawable.ic_eye_on);
+            if (operatorId.isEmpty()) {
+                Toast.makeText(this, "Please enter Operator ID", Toast.LENGTH_SHORT).show();
+            } else if (password.isEmpty()) {
+                Toast.makeText(this, "Please enter Password", Toast.LENGTH_SHORT).show();
             } else {
-                passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                passwordEyeIcon.setImageResource(R.drawable.ic_eye_off);
+                loginOperator(operatorId, password);
             }
-            passwordEditText.setSelection(passwordEditText.getText().length());
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if (mAuth.getCurrentUser() != null) {
-            String uid = mAuth.getCurrentUser().getUid();
-
-            db.collection("users").document(uid).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            String role = documentSnapshot.getString("userType");
-                            if ("Operator".equalsIgnoreCase(role)) {
-                                // already signed in as operator → go home
-                                Intent intent = new Intent(OperatorSignInActivity.this, OperatorHomeActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                // logged in but not operator → sign out
-                                mAuth.signOut();
-                            }
-                        }
-                    });
+    private void togglePasswordVisibility() {
+        if (isPasswordVisible) {
+            passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            passwordEyeIcon.setImageResource(R.drawable.ic_eye_off);
+        } else {
+            passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            passwordEyeIcon.setImageResource(R.drawable.ic_eye_on);
         }
+        passwordInput.setSelection(passwordInput.getText().length());
+        isPasswordVisible = !isPasswordVisible;
     }
 
-    private void signInOperator() {
-        String email = emailEditText.getText().toString().trim();
-        String password = passwordEditText.getText().toString().trim();
+    private void loginOperator(String operatorId, String password) {
+        String apiKey = BuildConfig.SUPABASE_API_KEY;
+        String authHeader = "Bearer " + apiKey;
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        String filter = "eq." + operatorId; // matches @Query("operator_id")
 
-        signInButton.setEnabled(false);
+        supabaseService.getOperatorById(apiKey, authHeader, filter)
+                .enqueue(new Callback<List<Operator>>() {
+                    @Override
+                    public void onResponse(Call<List<Operator>> call, Response<List<Operator>> response) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                            Operator operator = response.body().get(0);
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener(authResult -> {
-                    if (mAuth.getCurrentUser() == null) {
-                        Toast.makeText(this, "Session error. Try again.", Toast.LENGTH_SHORT).show();
-                        signInButton.setEnabled(true);
-                        return;
+                            boolean isVerified = false;
+
+                            // strict password enforcement
+                            if (operator.getPassword() != null && !operator.getPassword().isEmpty()) {
+                                isVerified = BCrypt.verifyer()
+                                        .verify(password.toCharArray(), operator.getPassword())
+                                        .verified;
+                            }
+
+                            if (isVerified) {
+                                Intent intent = new Intent(OperatorSignInActivity.this, OperatorHomeActivity.class);
+                                intent.putExtra("operatorId", operatorId);
+                                finish();
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(OperatorSignInActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(OperatorSignInActivity.this, "Operator not found", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
-                    String uid = mAuth.getCurrentUser().getUid();
-
-                    db.collection("users").document(uid).get()
-                            .addOnSuccessListener(documentSnapshot -> {
-                                if (documentSnapshot.exists()) {
-                                    String role = documentSnapshot.getString("userType");
-                                    if ("operator".equalsIgnoreCase(role)) {
-                                        Intent intent = new Intent(OperatorSignInActivity.this, OperatorHomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                        finish();
-                                    } else {
-                                        mAuth.signOut();
-                                        Toast.makeText(this, "Access denied: Not an operator", Toast.LENGTH_SHORT).show();
-                                        signInButton.setEnabled(true);
-                                    }
-                                } else {
-                                    mAuth.signOut();
-                                    Toast.makeText(this, "No operator record found", Toast.LENGTH_SHORT).show();
-                                    signInButton.setEnabled(true);
-                                }
-                            })
-                            .addOnFailureListener(e -> {
-                                mAuth.signOut();
-                                Toast.makeText(this, "Error accessing user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                signInButton.setEnabled(true);
-                            });
-
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Authentication failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    signInButton.setEnabled(true);
+                    @Override
+                    public void onFailure(Call<List<Operator>> call, Throwable t) {
+                        Toast.makeText(OperatorSignInActivity.this, "Login failed: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 });
     }
 }

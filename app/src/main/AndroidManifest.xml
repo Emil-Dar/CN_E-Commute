@@ -93,8 +93,10 @@
         <activity android:name=".AccountActivity" android:exported="true" />
 
         <!-- Operator Features -->
-        <activity android:name=".OperatorDriversActivity" android:exported="true" />
+        <activity android:name=".OperatorFranchiseActivity" android:exported="true" />
         <activity android:name=".OperatorAccountActivity" android:exported="true" />
+        <activity android:name=".FranchiseDetailsActivity" />
+
 
         <!-- Reporting -->
         <activity android:name=".ReportActivity" android:exported="true" />
@@ -102,7 +104,7 @@
 
         <!-- Notification -->
         <activity android:name=".NotificationActivity" android:exported="true" />
-        <activity android:name=".OperatorNotificationsActivity" android:exported="true" />
+        <activity android:name=".OperatorNotificationActivity" android:exported="true" />
 
     </application>
 </manifest>
