@@ -162,5 +162,7 @@
     <string name="operator_sign_in">Operator Sign In</string>
     <string name="Operator_ID">Operator ID</string>
 
+    <string name="details_text"><u>Details</u></string>
+
 
 </resources>
