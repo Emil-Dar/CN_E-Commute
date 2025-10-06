@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- your original ScrollView -->
+    <ScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:background="@color/light_gray">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/driverHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Driver Information"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:paddingBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/firstNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="First Name: --"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/middleNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Middle Name: --"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/lastNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Last Name: --"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/suffixText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Suffix: --"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/addressText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address: --"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/contactNumText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contact Number: --"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/licenseNumText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="License Number: --"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/licenseExpirationText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="License Expiration: --"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/licenseRestrictionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="License Restriction: --"
+                android:paddingBottom="16dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- loading spinner on top -->
+    <ProgressBar
+        android:id="@+id/loadingSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+</FrameLayout>
