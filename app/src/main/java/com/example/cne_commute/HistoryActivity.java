@@ -15,11 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
-
 public class HistoryActivity extends AppCompatActivity {
 
-    private Button reportHistoryButton, scannedQrCodesButton;
+    private Button reportHistoryButton, scannedQrCodesButton, archivedQrCodesButton;
     private FrameLayout contentFrame;
     private SharedPreferences sharedPreferences, reportPreferences;
     private BottomNavigationView bottomNavigationView;
@@ -34,7 +32,6 @@ public class HistoryActivity extends AppCompatActivity {
         setupListeners();
         setupBottomNavigation();
 
-        // Set up the default ActionBar without the back arrow
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
@@ -45,6 +42,7 @@ public class HistoryActivity extends AppCompatActivity {
     private void initViews() {
         reportHistoryButton = findViewById(R.id.report_history_button);
         scannedQrCodesButton = findViewById(R.id.scanned_qr_codes_button);
+        archivedQrCodesButton = findViewById(R.id.archived_qr_codes_button); //  NEW BUTTON
         contentFrame = findViewById(R.id.content_frame);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         sharedPreferences = getSharedPreferences("ScannedQrCodes", Context.MODE_PRIVATE);
@@ -73,7 +71,6 @@ public class HistoryActivity extends AppCompatActivity {
                 fragment.setArguments(bundle);
             }
 
-            // Show back arrow when fragment is loaded
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
@@ -86,8 +83,16 @@ public class HistoryActivity extends AppCompatActivity {
                     .beginTransaction()
                     .setCustomAnimations(R.anim.fade_in, 0)
                     .replace(R.id.content_frame, fragment)
-                    .addToBackStack(null)  // Allows back arrow to pop fragment
+                    .addToBackStack(null)
                     .commit();
+        });
+
+        archivedQrCodesButton.setOnClickListener(v -> {
+            Log.d("HistoryActivity", "Archived QR Codes Button Clicked");
+
+            Intent intent = new Intent(HistoryActivity.this, ArchivedQrCodesActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, 0);
         });
     }
 

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     android:orientation="vertical">
 
     <!-- Toolbar -->
@@ -10,8 +11,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@color/backgroundColor"
+        android:titleTextColor="@android:color/white"
+
         app:title="Report Violation" />
 
     <!-- Scrollable content -->
@@ -32,9 +34,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tricycle Driver Information"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
+                android:layout_marginTop="-6dp"
                 android:layout_marginBottom="12dp" />
 
             <!-- QR Info -->
@@ -47,40 +50,58 @@
                 android:layout_marginBottom="16dp">
 
                 <TextView
+                    android:id="@+id/driver_id_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Driver ID: Loading..."
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginBottom="6dp"
+                    android:contentDescription="Driver ID" />
+
+                <TextView
                     android:id="@+id/driver_name_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Driver Name: Loading..."
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="@android:color/black"
                     android:layout_marginBottom="6dp"
                     android:contentDescription="Driver Name" />
 
+
                 <TextView
-                    android:id="@+id/driver_contact_text_view"
+                    android:id="@+id/franchise_id_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Driver Contact No.: Loading..."
-                    android:textSize="14sp"
+                    android:text="Franchise ID: Loading..."
+                    android:textSize="16sp"
                     android:textColor="@android:color/black"
                     android:layout_marginBottom="6dp"
-                    android:contentDescription="Driver Contact Number" />
+                    android:contentDescription="Franchise ID" />
+
+                <TextView
+                    android:id="@+id/operator_id_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Operator ID: Loading..."
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginBottom="6dp"
+                    android:contentDescription="Operator ID" />
+
+                <TextView
+                    android:id="@+id/toda_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TODA: Loading..."
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginBottom="6dp"
+                    android:contentDescription="TODA" />
 
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:hint="Type the Driver's Franchise ID"
-                android:layout_marginBottom="16dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/franchise_id_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
 
 
             <!-- Driver Info Text (used by showDriverInfo method) -->
@@ -99,23 +120,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Your Information"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginTop="-7dp"
+                android:layout_marginBottom="7dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:hint="Your Full Name"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="5dp"
+                app:boxBackgroundColor="@android:color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/commuter_name_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName|textCapWords"/>
+                    android:inputType="textPersonName|textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -123,14 +146,16 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:hint="Your Contact Number"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                app:boxBackgroundColor="@android:color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/commuter_contact_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"/>
+                    android:inputType="phone" />
             </com.google.android.material.textfield.TextInputLayout>
+
 
             <!-- VIOLATION REPORTING SECTION -->
             <TextView
@@ -138,10 +163,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/choose_problem"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginTop="-10dp"
+                android:layout_marginBottom="11dp" />
 
             <!-- Parking & Obstruction Violations -->
             <TextView
@@ -149,7 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Parking and Obstruction Violations"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"
@@ -233,19 +259,7 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp" />
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_violation_details"
-                    android:textSize="14sp"
-                    android:padding="8dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="4dp"
-                    android:autofillHints="name"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:lines="1"
-                    android:scrollbars="vertical"
-                    android:tag="other_input"/>
+                <!--1-->
 
             </LinearLayout>
 
@@ -255,7 +269,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/traffic_movement_violations"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"
@@ -393,19 +407,7 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp" />
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_violation_details"
-                    android:textSize="14sp"
-                    android:padding="8dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="4dp"
-                    android:autofillHints="name"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:lines="1"
-                    android:scrollbars="vertical"
-                    android:tag="other_input"/>
+                <!--2-->
 
             </LinearLayout>
 
@@ -415,7 +417,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/driver_behavior_violations"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"
@@ -481,19 +483,7 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp" />
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_violation_details"
-                    android:textSize="14sp"
-                    android:padding="8dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="4dp"
-                    android:autofillHints="name"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:lines="1"
-                    android:scrollbars="vertical"
-                    android:tag="other_input"/>
+                <!--3-->
 
             </LinearLayout>
 
@@ -503,7 +493,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/licensing_documentation_violations"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"
@@ -551,19 +541,7 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp" />
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_violation_details"
-                    android:textSize="14sp"
-                    android:padding="8dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="4dp"
-                    android:autofillHints="name"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:lines="1"
-                    android:scrollbars="vertical"
-                    android:tag="other_input"/>
+                <!--4-->
 
             </LinearLayout>
 
@@ -573,7 +551,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/attire_fare_violations"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"
@@ -621,19 +599,7 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp" />
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_violation_details"
-                    android:textSize="14sp"
-                    android:padding="8dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="4dp"
-                    android:autofillHints="name"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:lines="1"
-                    android:scrollbars="vertical"
-                    android:tag="other_input"/>
+                <!--5-->
 
             </LinearLayout>
 
@@ -685,19 +651,26 @@
                     android:visibility="gone" />
             </FrameLayout>
 
-            <!-- Image Description Field -->
-            <EditText
-                android:id="@+id/image_description"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter image description"
-                android:inputType="textCapSentences|textMultiLine"
-                android:minLines="2"
-                android:maxLines="4"
-                android:padding="12dp"
-                android:background="@android:color/darker_gray"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Additional description"
                 android:layout_marginBottom="16dp"
-                android:textSize="14sp" />
+                app:boxBackgroundColor="@android:color/white">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/image_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:minLines="2"
+                    android:maxLines="4"
+                    android:textSize="14sp"
+                    android:padding="12dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
 
             <!-- Camera Button -->
             <Button

@@ -1,10 +1,12 @@
 package com.example.cne_commute;
 
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import com.example.cne_commute.BuildConfig;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
@@ -12,7 +14,15 @@ public class RetrofitClient {
 
     public static Retrofit getClient() {
         if (retrofit == null) {
+            // Logging interceptor for debugging
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
             OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(15, TimeUnit.SECONDS)
+                    .readTimeout(15, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .addInterceptor(logging)
                     .addInterceptor(chain -> {
                         Request original = chain.request();
                         Request request = original.newBuilder()
@@ -26,7 +36,7 @@ public class RetrofitClient {
                     .build();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://rtwrbkrroilftdhggxjc.supabase.co") // ← Replace with your actual Supabase REST URL
+                    .baseUrl("https://rtwrbkrroilftdhggxjc.supabase.co/rest/v1/") // Supabase REST endpoint
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();

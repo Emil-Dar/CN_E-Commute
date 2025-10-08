@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    tools:context=".ReportDetailsActivity">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:titleTextColor="@android:color/white"
+        app:title="Report Details"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Timestamp -->
+            <TextView
+                android:id="@+id/timestamp_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reported on: Sep 21, 2025 at 10:23 PM"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Driver Info -->
+            <TextView
+                android:id="@+id/description_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Driver ID: N/A\nDriver Name: N/A\nFranchise ID: N/A\nOperator Name: N/A\nTODA: N/A"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Violations -->
+            <TextView
+                android:id="@+id/violation_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Violations"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Status -->
+            <TextView
+                android:id="@+id/status_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status: Pending"
+                android:textStyle="italic"
+                android:textSize="16sp"
+                android:textColor="@color/orange"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Remarks -->
+            <TextView
+                android:id="@+id/remarks_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remarks: Awaiting review"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Image -->
+            <ImageView
+                android:id="@+id/report_image"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:background="@color/light_gray"
+                android:layout_marginBottom="16dp" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -90,9 +90,18 @@
         <!-- Reporting -->
         <activity android:name=".ReportActivity" android:exported="true" />
         <activity android:name=".ReportHistoryActivity" android:exported="true" />
+        <activity android:name=".ReportDetailsActivity" android:exported="true" />
 
         <!-- Notification -->
         <activity android:name=".NotificationActivity" android:exported="true" />
+
+        <!-- Archive -->
+        <activity android:name=".ArchivedQrCodesActivity" android:exported="true" />
+
+
+
+
+
 
     </application>
 </manifest>

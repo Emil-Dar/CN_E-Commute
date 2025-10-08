@@ -130,9 +130,9 @@
 
     <!-- Home Description -->
     <string name="home_description">Welcome to CN E-Com</string>
-    <string name="scan_qr_code">Scan the QR Code and get tricycle info.</string>
+    <string name="scan_qr_code">First scan the QR Code and get tricycle info.</string>
     <string name="scan_qr_code_desc">Scan QR Code</string>
-    <string name="fare_matrix">Tap to estimate your ride fare efficiently.</string>
+    <string name="fare_matrix">Use fare calculator to estimate your ride fare efficiently.</string>
     <string name="report_issues">Use the report button to share feedback and complaints.</string>
 
     <string name="report_history">Report History</string>
@@ -159,6 +159,13 @@
 
     <string name="label_driver_name">Driver Name: %1$s</string>
     <string name="label_driver_contact">Driver Contact No.: %1$s</string>
+
+    <string-array name="sort_options">
+        <item>Sort by Date</item>
+        <item>Sort by Driver Name</item>
+    </string-array>
+
+    <string name="archived_qr_codes">Archived QR Codes</string>
 
 
 </resources>
