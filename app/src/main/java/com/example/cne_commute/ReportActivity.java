@@ -1,7 +1,5 @@
 package com.example.cne_commute;
 
-
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,8 +31,6 @@ import androidx.core.content.FileProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,20 +68,37 @@ import com.example.cne_commute.BuildConfig;
 
 import com.google.gson.Gson;
 
+import android.content.SharedPreferences;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.ArrayList;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import androidx.appcompat.app.AlertDialog;
+import android.view.LayoutInflater;
 
 
 public class ReportActivity extends AppCompatActivity {
 
     // These constants are used to pass data from the QR code adapter to this activity.
-    public static final String EXTRA_DRIVER_ID = "driverId";
-    public static final String EXTRA_OPERATOR_NAME = "EXTRA_OPERATOR_NAME";
+
+
+
     public static final String EXTRA_PLATE_NUMBER = "EXTRA_PLATE_NUMBER";
-    public static final String EXTRA_CONTACT_NO = "EXTRA_CONTACT_NO";
+    public static final String EXTRA_DRIVER_ID = "EXTRA_DRIVER_ID";
+    public static final String EXTRA_OPERATOR_NAME = "EXTRA_OPERATOR_NAME";
+
+
+    public static final String EXTRA_FRANCHISE_ID = "EXTRA_FRANCHISE_ID";
+    public static final String EXTRA_OPERATOR_ID = "EXTRA_OPERATOR_ID";
+    public static final String EXTRA_TODA = "EXTRA_TODA";
 
     public static final String EXTRA_DRIVER_NAME = "EXTRA_DRIVER_NAME";
-    public static final String EXTRA_DRIVER_CONTACT = "EXTRA_DRIVER_CONTACT";
 
 
 
@@ -123,17 +136,19 @@ public class ReportActivity extends AppCompatActivity {
     private String driverId;
     private String operatorName;
     private String plateNumber;
-    private String contactNo;
 
+
+    private String franchiseId;
+    private String operatorId;
+    private String toda;
 
 
     private EditText franchiseIdEditText;
 
     private String driverName;
-    private String driverContact;
+
 
     private TextView driverNameTextView;
-    private TextView driverContactTextView;
 
 
     private SupabaseService supabaseService;
@@ -142,59 +157,53 @@ public class ReportActivity extends AppCompatActivity {
     private Retrofit retrofit;
 
 
-
-
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        driverName = getIntent().getStringExtra("EXTRA_DRIVER_NAME");
-        driverContact = getIntent().getStringExtra("EXTRA_DRIVER_CONTACT");
-
-
-
         setContentView(R.layout.activity_report);
 
-        // Confirm activity launch
-        Toast.makeText(this, "ReportActivity launched", Toast.LENGTH_SHORT).show();
+        //  Retrieve scanned QR data from intent and assign to class-level fields
+        driverId = getIntent().getStringExtra(EXTRA_DRIVER_ID);
+        driverName = getIntent().getStringExtra(EXTRA_DRIVER_NAME);
+        franchiseId = getIntent().getStringExtra(EXTRA_FRANCHISE_ID);
+        operatorName = getIntent().getStringExtra(EXTRA_OPERATOR_NAME);
+        toda = getIntent().getStringExtra(EXTRA_TODA);
 
-        // Link XML views for scanned driver details
-        TextView driverNameTextView = findViewById(R.id.driver_name_text_view);
-        TextView driverContactTextView = findViewById(R.id.driver_contact_text_view);
-
-        // Retrieve and display operator data from Intent
-        retrieveAndDisplayOperatorData();
-
-        // Initialize other UI elements (e.g., franchise ID, image picker, etc.)
+        //  Initialize all UI elements and display scanned data
         initViews();
 
-        // Set up activity result launchers (camera/gallery)
+        //  Optional: Log scanned data for debugging
+        Log.d("ReportActivity", "Scanned QR Data — Driver ID: " + driverId +
+                ", Driver Name: " + driverName +
+                ", Franchise ID: " + franchiseId +
+                ", Operator Name: " + operatorName +
+                ", TODA: " + toda);
+
+        //  Set up activity result launchers (camera/gallery)
         setupActivityResultLaunchers();
 
-        // Initialize violation headers (TextViews)
+        //  Initialize violation headers
         TextView parkingObstructionHeader = findViewById(R.id.parking_obstruction_violations);
         TextView trafficMovementHeader = findViewById(R.id.traffic_movement_violations);
         TextView driverBehaviorHeader = findViewById(R.id.driver_behavior_violations);
         TextView licensingDocumentationHeader = findViewById(R.id.licensing_documentation_violations);
         TextView attireFareHeader = findViewById(R.id.attire_fare_violations);
 
-// Initialize violation groups (LinearLayouts)
+        //  Initialize violation groups
         LinearLayout parkingObstructionViolations = findViewById(R.id.parking_obstruction_violations_options);
         LinearLayout trafficMovementViolations = findViewById(R.id.traffic_movement_violations_options);
         LinearLayout driverBehaviorViolations = findViewById(R.id.driver_behavior_violations_options);
         LinearLayout licensingDocumentationViolations = findViewById(R.id.licensing_documentation_violations_options);
         LinearLayout attireFareViolations = findViewById(R.id.attire_fare_violations_options);
 
-// Set up click listeners and toggle logic
+        //  Set up toggle logic
         setupToggle(parkingObstructionHeader, parkingObstructionViolations);
         setupToggle(trafficMovementHeader, trafficMovementViolations);
         setupToggle(driverBehaviorHeader, driverBehaviorViolations);
         setupToggle(licensingDocumentationHeader, licensingDocumentationViolations);
         setupToggle(attireFareHeader, attireFareViolations);
 
-
-        // Initialize Supabase Retrofit client with auth interceptor
+        //  Initialize Supabase Retrofit client
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request original = chain.request();
@@ -215,17 +224,20 @@ public class ReportActivity extends AppCompatActivity {
         setupSupabaseClient();
         supabaseService = retrofit.create(SupabaseService.class);
 
+        //  Set up image and submission logic
         setupImageButtonListeners();
         setupSubmitButtonListener();
 
+        //  Display full driver info block
         showDriverInfo();
-
     }
+
+
+
 
 
     private void setupSupabaseClient() {
         String supabaseKey = BuildConfig.SUPABASE_API_KEY;
-
 
 
         // Logging interceptor for debugging
@@ -264,41 +276,19 @@ public class ReportActivity extends AppCompatActivity {
     }
 
 
-
     private void retrieveAndDisplayOperatorData() {
-        // Retrieve intent extras with fallback
-        String name = getSafeExtra("EXTRA_DRIVER_NAME", "Unknown");
-        String contact = getSafeExtra("EXTRA_DRIVER_CONTACT", "Unknown");
-        String franchiseId = getSafeExtra("EXTRA_FRANCHISE_ID", "");
-
-        // Display driver name
-        TextView driverNameTextView = findViewById(R.id.driver_name_text_view);
-        if (driverNameTextView != null) {
-            driverNameTextView.setText(getString(R.string.label_driver_name) + ": " + driverName);
-        }
-
-        // Display driver contact
-        TextView driverContactTextView = findViewById(R.id.driver_contact_text_view);
-        if (driverContactTextView != null) {
-            driverContactTextView.setText(getString(R.string.label_driver_contact, contact));
-        }
-
-        // Display franchise ID in input field
-        if (franchiseIdEditText != null) {
-            franchiseIdEditText.setText(franchiseId);
-        }
-
-        // Log for debugging
-        Log.d("ReportActivity", "Driver: " + name + ", Contact: " + contact + ", Franchise ID: " + franchiseId);
+        // Log scanned data for debugging
+        Log.d("ReportActivity", "Driver ID: " + driverId + ", Name: " + driverName +
+                ", Franchise ID: " + franchiseId +
+                ", Operator Name: " + operatorName + ", TODA: " + toda);
     }
+
+
 
     private String getSafeExtra(String key, String fallback) {
         String value = getIntent().getStringExtra(key);
         return (value != null && !value.trim().isEmpty()) ? value : fallback;
     }
-
-
-
 
 
     private void initViews() {
@@ -314,48 +304,65 @@ public class ReportActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener(v -> onBackPressed());
         }
 
-
         // Commuter details input
         commuterNameEditText = findViewById(R.id.commuter_name_edit_text);
-        if (commuterNameEditText != null) {
-            ;
-        }
-
         commuterContactEditText = findViewById(R.id.commuter_contact_edit_text);
-        if (commuterContactEditText != null) {
-            ;
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String name = currentUser.getDisplayName();
+            String phone = currentUser.getPhoneNumber();
+
+            if (name != null && commuterNameEditText != null) {
+                commuterNameEditText.setText(name);
+                commuterNameEditText.setEnabled(false);
+            }
+
+            if (phone != null && commuterContactEditText != null) {
+                commuterContactEditText.setText(phone);
+                commuterContactEditText.setEnabled(false);
+            }
         }
 
-        // Franchise ID input
-        franchiseIdEditText = findViewById(R.id.franchise_id_edit_text);
-        if (franchiseIdEditText != null) {
-            ;
-        }
+        // Bind QR fields for display
+        TextView driverIdTextView = findViewById(R.id.driver_id_text_view);
+        TextView driverNameTextView = findViewById(R.id.driver_name_text_view);
+        TextView franchiseIdTextView = findViewById(R.id.franchise_id_text_view);
+        TextView operatorIdTextView = findViewById(R.id.operator_id_text_view);
+        TextView todaTextView = findViewById(R.id.toda_text_view);
 
+        //  Display scanned QR data
+        driverIdTextView.setText("Driver ID: " + (driverId != null ? driverId : "Unknown"));
+        driverNameTextView.setText("Driver Name: " + (driverName != null ? driverName : "Unknown"));
+        franchiseIdTextView.setText("Franchise ID: " + (franchiseId != null ? franchiseId : "Unknown"));
+        operatorIdTextView.setText("Operator Name: " + (operatorName != null ? operatorName : "Unknown"));
+        todaTextView.setText("TODA: " + (toda != null ? toda : "Unknown"));
+
+        // Violation groups
         parkingObstructionOptions = findViewById(R.id.parking_obstruction_violations_options);
         trafficMovementOptions = findViewById(R.id.traffic_movement_violations_options);
         driverBehaviorOptions = findViewById(R.id.driver_behavior_violations_options);
         licensingDocumentationOptions = findViewById(R.id.licensing_documentation_violations_options);
         attireFareOptions = findViewById(R.id.attire_fare_violations_options);
 
+        // Image handling
         imagePreview = findViewById(R.id.image_preview);
         removePhotoButton = findViewById(R.id.remove_image_button);
         imageDescriptionInput = findViewById(R.id.image_description);
 
         // Buttons
-        selectFileButton = findViewById(R.id.select_file_button); // must be a class-level field
+        selectFileButton = findViewById(R.id.select_file_button);
         openCameraButton = findViewById(R.id.open_camera_button);
-
         submitButton = findViewById(R.id.submit_button);
-
 
         // Driver info display
         driverInfoText = findViewById(R.id.driver_info_text);
         if (driverInfoText != null) {
             driverInfoText.setContentDescription("Driver information display");
         }
-
     }
+
+
 
     private void setupImageButtonListeners() {
         setupClickListener(selectFileButton, this::openFileChooser);
@@ -371,10 +378,16 @@ public class ReportActivity extends AppCompatActivity {
 
     private void setupSubmitButtonListener() {
         if (submitButton != null) {
-            submitButton.setOnClickListener(v -> confirmAndSubmitReport());
+            submitButton.setOnClickListener(v -> {
+                if (driverId == null || driverName == null || franchiseId == null) {
+                    Toast.makeText(this, "Missing driver info. Please rescan.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                showReportSummaryDialog(); //  Show preview before submitting
+            });
         }
     }
-
 
 
 
@@ -415,23 +428,28 @@ public class ReportActivity extends AppCompatActivity {
 
     private void showDriverInfo() {
         if (driverInfoText != null) {
-            // Apply fallback values for safety
-            String name = (driverName != null && !driverName.trim().isEmpty()) ? driverName : "Unknown";
-            String contact = (driverContact != null && !driverContact.trim().isEmpty()) ? driverContact : "Unknown";
+            // Apply fallback values using helper
+            String id = safeText(driverId);
+            String name = safeText(driverName);
+            String franchise = safeText(franchiseId);
+            String operatorNameValue = safeText(operatorName);
+            String todaValue = safeText(toda);
 
-            // Format using string resource (recommended for localization)
-            String info = String.format("Driver Name: %s\nDriver Contact No.: %s", name, contact);
+            // Format display block
+            String info = String.format(
+                    "Driver ID: %s\nDriver Name: %s\nFranchise ID: %s\nOperator Name: %s\nTODA: %s",
+                    id, name, franchise, operatorNameValue, todaValue
+            );
+
             driverInfoText.setText(info);
-
-            // Accessibility: Add content description for screen readers
             driverInfoText.setContentDescription("Driver information displayed: " + info);
-
-            // Optional: Add line spacing or styling for readability
             driverInfoText.setLineSpacing(1.2f, 1.2f);
         }
     }
 
-
+    private String safeText(String value) {
+        return (value != null && !value.trim().isEmpty()) ? value : "Unknown";
+    }
 
     private void setupActivityResultLaunchers() {
         pickImageLauncher = registerForActivityResult(
@@ -478,7 +496,6 @@ public class ReportActivity extends AppCompatActivity {
         String mimeType = resolver.getType(uri);
         return mimeType != null && mimeType.startsWith("image/");
     }
-
 
 
     private void openFileChooser() {
@@ -543,23 +560,21 @@ public class ReportActivity extends AppCompatActivity {
     private void submitReport() {
         String commuterName = commuterNameEditText != null ? commuterNameEditText.getText().toString().trim() : "";
         String commuterContact = commuterContactEditText != null ? commuterContactEditText.getText().toString().trim() : "";
-        String franchiseId = franchiseIdEditText != null ? franchiseIdEditText.getText().toString().trim() : "";
 
-        if (commuterName.isEmpty() || commuterName.matches(".*\\d.*")) {
+        // Detect if fields were auto-filled and disabled
+        boolean isAutoFilledName = commuterNameEditText != null && !commuterNameEditText.isEnabled();
+        boolean isAutoFilledContact = commuterContactEditText != null && !commuterContactEditText.isEnabled();
+
+        // Validate only if fields are editable
+        if (!isAutoFilledName && (commuterName.isEmpty() || commuterName.matches(".*\\d.*"))) {
             commuterNameEditText.setError("Please enter a valid name.");
             showToast("Name is required and must not contain numbers.");
             return;
         }
 
-        if (commuterContact.isEmpty() || !commuterContact.matches("^09\\d{9}$")) {
+        if (!isAutoFilledContact && (commuterContact.isEmpty() || !commuterContact.matches("^09\\d{9}$"))) {
             commuterContactEditText.setError("Invalid Philippine mobile number.");
             showToast("Please enter a valid contact number.");
-            return;
-        }
-
-        if (franchiseId.isEmpty() || !franchiseId.matches("^\\d{4}$")) {
-            franchiseIdEditText.setError("Franchise ID must be a 4-digit number.");
-            showToast("Please enter a valid Franchise ID.");
             return;
         }
 
@@ -576,15 +591,19 @@ public class ReportActivity extends AppCompatActivity {
             return;
         }
 
-        String userId = "Anonymous"; // Replace with actual user ID if available
+        String userId = FirebaseAuth.getInstance().getCurrentUser() != null
+                ? FirebaseAuth.getInstance().getCurrentUser().getUid()
+                : "Anonymous";
+
         String timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault()).format(new Date());
 
         Report report = new Report(
                 userId,
                 driverId,
                 driverName,
-                driverContact,
                 franchiseId,
+                operatorName, //  updated
+                toda,
                 commuterName,
                 commuterContact,
                 parking,
@@ -593,8 +612,10 @@ public class ReportActivity extends AppCompatActivity {
                 licensing,
                 attire,
                 imgDesc,
-                null, // imageUrl will be set after upload
-                timestamp
+                null,       // imageUrl will be set after upload
+                timestamp,
+                "Pending",  // default status
+                null        // remarks (can be null at submission)
         );
 
         if (uri != null) {
@@ -604,6 +625,28 @@ public class ReportActivity extends AppCompatActivity {
         }
     }
 
+
+    private void showReportSummaryDialog() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_report_confirmation, null);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        Button cancelButton = dialogView.findViewById(R.id.button_cancel);
+        Button submitButton = dialogView.findViewById(R.id.button_submit);
+
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+        submitButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            submitReport();
+        });
+
+        dialog.show();
+    }
+
+
+
+
     private void submitToSupabase(Report report) {
         supabaseService.submitReport(report.toMap()).enqueue(new Callback<Void>() {
             @Override
@@ -611,7 +654,13 @@ public class ReportActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     showToast("Report submitted successfully!");
                     Log.d("ReportActivity", "Report submitted: " + new Gson().toJson(report));
-                    finish(); // or reset form
+
+                    if ("Anonymous".equals(report.getUserId())) {
+                        saveReportToHistory(report);
+                    }
+
+                    startActivity(new Intent(ReportActivity.this, ReportHistoryActivity.class));
+                    finish();
                 } else {
                     showToast("Failed to submit report. Code: " + response.code());
                     Log.e("ReportActivity", "Submit failed: " + response.errorBody());
@@ -625,9 +674,6 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 
 
 
@@ -651,12 +697,15 @@ public class ReportActivity extends AppCompatActivity {
                         String imageUrl = "https://rtwrbkrroilftdhggxjc.supabase.co/storage/v1/s3/uploads_debug_0/" + filename;
                         report.setImageUrl(imageUrl);
 
+                        Log.d(TAG, "Image URL: " + imageUrl);
+                        Log.d(TAG, "Report data: " + new Gson().toJson(report));
 
                         runOnUiThread(() -> submitToSupabase(report));
                     } else {
                         Log.e(TAG, "Upload failed with code: " + response.code());
                         runOnUiThread(() -> {
                             showToast("Upload failed. Submitting without image.");
+                            Log.d(TAG, "Report data (no image): " + new Gson().toJson(report));
                             submitToSupabase(report);
                         });
                     }
@@ -666,11 +715,13 @@ public class ReportActivity extends AppCompatActivity {
                 public void onFailure(okhttp3.Call call, IOException e) {
                     Log.e(TAG, "Upload error: " + e.getMessage(), e);
                     runOnUiThread(() -> {
-                        showToast("Upload error: " + e.getMessage());
+                        showToast("Upload error. Submitting without image.");
+                        Log.d(TAG, "Report data (upload failed): " + new Gson().toJson(report));
                         submitToSupabase(report);
                     });
                 }
             });
+
 
         } catch (IOException e) {
             Log.e(TAG, "Failed to read image: " + e.getMessage(), e);
@@ -692,38 +743,62 @@ public class ReportActivity extends AppCompatActivity {
         return buffer.toByteArray();
     }
 
-    private void submitToSupabase(String reportId, Map<String, Object> data) {
+    private void submitToSupabase(final String reportId, final Map<String, Object> data) {
         if (supabaseService == null) {
             showToast("Supabase client not initialized.");
             return;
         }
 
+        // ✅ Retrieve and log Firebase UID
+        String userId = FirebaseAuth.getInstance().getCurrentUser() != null
+                ? FirebaseAuth.getInstance().getCurrentUser().getUid()
+                : "null";
+
+        Log.d("SubmitReport", "Firebase UID: [" + userId + "]");
+
+        //  Inject UID into the data map
+        data.put("user_id", userId);
+
+        //  Log the full data map before submission
+        Log.d("SubmitReport", "Final data map: " + new Gson().toJson(data));
+
         Call<Void> call = supabaseService.submitReport(data);
         call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "✅ Report submitted successfully to backend.");
+                    showToast("Report submitted successfully!");
+                    finish(); // or redirect to ReportHistoryActivity
                 } else {
-                    String errorBody = "Unknown error";
-                    try {
-                        if (response.errorBody() != null) {
-                            errorBody = response.errorBody().string();
-                        }
-                    } catch (IOException e) {
-                        Log.e(TAG, "Failed to parse error body: " + e.getMessage());
-                    }
-                    Log.e(TAG, "❌ Failed to submit to backend. Code: " + response.code() + ", Error: " + errorBody);
+                    showToast("Failed to submit report. Code: " + response.code());
+                    Log.e("SubmitReport", "Error body: " + response.errorBody());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Log.e(TAG, "❌ API call to backend failed: " + t.getMessage(), t);
+            public void onFailure(Call<Void> call, Throwable t) {
+                showToast("Error submitting report.");
+                Log.e("ReportActivity", "Submit error", t);
             }
         });
-
     }
+
+    private void saveReportToHistory(Report report) {
+        SharedPreferences prefs = getSharedPreferences("report_history", MODE_PRIVATE);
+        String existing = prefs.getString("reports", "[]");
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Report>>() {}.getType();
+        List<Report> reportList = gson.fromJson(existing, type);
+
+        reportList.add(report); // Add the new report
+
+        String updated = gson.toJson(reportList);
+        prefs.edit().putString("reports", updated).apply();
+
+        Log.d(TAG, " Report saved to local history.");
+    }
+
 
 
 
@@ -749,16 +824,22 @@ public class ReportActivity extends AppCompatActivity {
     private void sendReportToBackend(Map<String, Object> data) {
         Log.d(TAG, "Preparing to send report to backend...");
 
-        // Send to backend via Retrofit
-        SupabaseService apiService = retrofit.create(SupabaseService.class); // Use your configured Retrofit instance
+        SupabaseService apiService = retrofit.create(SupabaseService.class);
 
-        Call<Void> call = apiService.submitReport(data); // Directly pass the map
+        Call<Void> reportCall = apiService.submitReport(data);
 
-        call.enqueue(new Callback<Void>() {
+        reportCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "✅ Report submitted successfully to backend.");
+                    Log.d(TAG, " Report submitted successfully to backend.");
+                    Log.d(TAG, " Submitted report: " + new Gson().toJson(data));
+
+                    if ("Anonymous".equals(data.get("user_id"))) {
+                        Report report = Report.fromMap("local", data); // helper method to reconstruct Report
+                        saveReportToHistory(report);
+                    }
+
                 } else {
                     String errorBody = "Unknown error";
                     try {
@@ -768,16 +849,18 @@ public class ReportActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         Log.e(TAG, "Failed to parse error body: " + e.getMessage());
                     }
-                    Log.e(TAG, "❌ Failed to submit to backend. Code: " + response.code() + ", Error: " + errorBody);
+                    Log.e(TAG, " Failed to submit to backend. Code: " + response.code() + ", Error: " + errorBody);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Log.e(TAG, "❌ API call to backend failed: " + t.getMessage(), t);
+                Log.e(TAG, " API call to backend failed: " + t.getMessage(), t);
             }
         });
     }
+
+
 
 
 

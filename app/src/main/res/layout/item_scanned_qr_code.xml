@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,30 +15,31 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Header -->
+        <!-- Header with timestamp and action icon -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
 
             <TextView
+                android:id="@+id/scan_timestamp_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Scanned QR Code"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/scan_datetime_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="Dec 25, 2024 10:30 AM"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textColor="@android:color/darker_gray" />
+
+            <ImageView
+                android:id="@+id/icon_action"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_archive_box"
+                android:layout_marginStart="12dp"
+                android:contentDescription="Archive or Restore"
+                app:tint="@color/colorPrimary" />
         </LinearLayout>
 
         <!-- QR Info -->
@@ -47,36 +49,86 @@
             android:orientation="vertical"
             android:background="@drawable/rounded_background_light"
             android:padding="12dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="12dp">
 
-            <TextView
-                android:id="@+id/driver_name_text_view"
+            <TextView android:id="@+id/driver_id_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Driver ID: Loading..."
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="6dp" />
+
+            <TextView android:id="@+id/driver_name_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Driver Name: Loading..."
                 android:textSize="14sp"
                 android:textColor="@android:color/black"
-                android:layout_marginBottom="6dp"
-                android:contentDescription="Driver Name" />
+                android:layout_marginBottom="6dp" />
 
-            <TextView
-                android:id="@+id/driver_contact_text_view"
+            <TextView android:id="@+id/franchise_id_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Driver Contact No.: Loading..."
+                android:text="Franchise ID: Loading..."
                 android:textSize="14sp"
                 android:textColor="@android:color/black"
-                android:layout_marginBottom="6dp"
-                android:contentDescription="Driver Contact Number" />
+                android:layout_marginBottom="6dp" />
 
+            <TextView android:id="@+id/operator_id_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Operator Name: Loading..."
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="6dp" />
+
+            <TextView android:id="@+id/toda_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TODA: Loading..."
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="6dp" />
         </LinearLayout>
 
-        <!-- Divider -->
-        <View
+        <!-- Scan Summary -->
+        <LinearLayout
+            android:id="@+id/scan_summary_container"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:backgroundTint="@color/medium_gray"
-            android:layout_marginBottom="12dp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
+
+            <ImageView
+                android:id="@+id/icon_scan"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_qr_code"
+                app:tint="@color/colorPrimary"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/text_scan_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scanned: 2 times today"
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <!-- Scan Timestamps -->
+        <TextView
+            android:id="@+id/text_scan_timestamps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Oct 5, 2025 at 8:12 AM\n• Oct 5, 2025 at 4:45 PM"
+            android:textSize="13sp"
+            android:textColor="@android:color/darker_gray"
+            android:fontFamily="sans-serif"
+            android:layout_marginBottom="16dp" />
 
         <!-- Action Buttons -->
         <LinearLayout

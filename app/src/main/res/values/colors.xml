@@ -23,6 +23,8 @@
 
     <color name="background_light">#F5F5F5</color> <!-- Light gray, subtle and modern -->
     <color name="accentColor">#2196F3</color> <!-- You can change this hex code -->
+    <color name="orange">#FF9800</color> <!-- Vibrant orange for status highlights -->
+    <color name="alert_red">#FF3B30</color> <!-- or any red tone you prefer -->
 
 
 
