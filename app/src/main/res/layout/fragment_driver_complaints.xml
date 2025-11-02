@@ -1,14 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".driver_fragments.DriverComplaints">
+    android:background="@color/colorOnSecondary"
+    android:padding="10dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- 🔍 Search + Filter Bar -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
 
-</FrameLayout>
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Search violation..."
+            android:padding="10dp"
+            android:background="@drawable/search_field_bg"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="6dp"
+            android:textSize="14sp" />
+
+        <Spinner
+            android:id="@+id/dateFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:entries="@array/date_filter_options"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <!-- 🧾 Complaints Scrollable Section -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="12dp">
+
+            <!-- 🔹 ACTIVE COMPLAINTS HEADER -->
+            <TextView
+                android:id="@+id/activeHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ACTIVE COMPLAINTS"
+                android:textStyle="bold"
+                android:textColor="@color/primary_blue"
+                android:textSize="16sp"
+                android:paddingStart="8dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="4dp"
+                android:background="@color/light_blue_background"
+                android:layout_marginBottom="4dp" />
+
+            <!-- 🔹 ACTIVE COMPLAINTS CONTAINER -->
+            <LinearLayout
+                android:id="@+id/activeComplaintsContainer"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dividerPadding="8dp"
+                android:paddingBottom="8dp" />
+
+            <!-- 🔹 HISTORY COMPLAINTS HEADER -->
+            <TextView
+                android:id="@+id/historyHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="COMPLAINT HISTORY"
+                android:textStyle="bold"
+                android:textColor="@color/primary_blue"
+                android:textSize="16sp"
+                android:paddingStart="8dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="4dp"
+                android:background="@color/light_gray_background"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp" />
+
+            <!-- 🔹 HISTORY COMPLAINTS CONTAINER -->
+            <LinearLayout
+                android:id="@+id/historyComplaintsContainer"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dividerPadding="8dp"
+                android:paddingBottom="8dp" />
+
+            <!-- Progress Loader -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:visibility="gone" />
+
+            <!-- Empty Message -->
+            <TextView
+                android:id="@+id/emptyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No complaints found."
+                android:textColor="@color/dark_gray"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

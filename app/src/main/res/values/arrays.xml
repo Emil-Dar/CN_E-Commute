@@ -1,0 +1,8 @@
+<resources>
+    <string-array name="date_filter_options">
+        <item>All Dates</item>
+        <item>Today</item>
+        <item>This Week</item>
+        <item>This Month</item>
+    </string-array>
+</resources>

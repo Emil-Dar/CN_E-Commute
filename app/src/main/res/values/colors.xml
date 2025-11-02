@@ -1,34 +1,51 @@
 <resources>
-    <color name="backgroundColor">#BFDBEF</color> <!-- Updated background color -->
-    <color name="textColor">#000000</color> <!-- Ensure text color is defined -->
-    <color name="colorPrimary">#163F74</color> <!-- Updated primary color -->
-    <color name="colorPrimaryVariant">#0F3558</color> <!-- Updated primary dark color -->
-    <color name="colorOnPrimary">#FFFFFF</color> <!-- Ensure this color is defined -->
-    <color name="colorSecondary">#5FA8D3</color> <!-- Updated secondary color -->
-    <color name="colorSecondaryVariant">#4682B4</color> <!-- Ensure this color is defined -->
-    <color name="colorOnSecondary">#FFFFFF</color> <!-- Ensure this color is defined -->
-    <color name="colorAccent">#5FA8D3</color> <!-- Ensure this color is defined -->
-    <color name="white">#FFFFFF</color> <!-- Ensure this color is defined -->
-    <color name="black">#000000</color>  <!-- Example black color -->
-    <color name="blue">#2196F3</color> <!-- Example blue color -->
-    <color name="skyblue">#A0C5DB</color> <!-- Updated secondary color -->
-    <color name="light_gray">#ECECEC</color>
-    <color name="dark_gray">#333333</color>
-    <color name="medium_gray">#666666</color>
+    <!-- Core Colors -->
+    <color name="backgroundColor">#BFDBEF</color>
+    <color name="foregroundColor">#FFFFFF</color>
+    <color name="textColor">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Primary Theme -->
+    <color name="colorPrimary">#163F74</color>
+    <color name="colorPrimaryVariant">#0F3558</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <!-- Secondary Theme -->
+    <color name="colorSecondary">#5FA8D3</color>
+    <color name="colorSecondaryVariant">#4682B4</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="colorAccent">#5FA8D3</color>
+    <color name="colorSecondaryDark">#4177A3</color>
+
+    <!-- Custom Colors -->
+    <color name="skyblue">#A0C5DB</color>
+    <color name="light_blue">#A0C5DB</color>
     <color name="primary_blue">#3778C2</color>
-    <color name="green">#007F00</color> <!-- Dark green -->
-    <color name="red">#8B0000</color> <!-- Dark red -->
-    <color name="colorSecondaryDark">#4177A3</color> <!-- Darker background for better contrast -->
-    <color name="foregroundColor">#FFFFFF</color> <!-- White for high contrast -->
+    <color name="green">#007F00</color>
+    <color name="red">#8B0000</color>
+    <color name="orange">#FF9800</color>
+    <color name="alert_red">#FF3B30</color>
 
-    <color name="background_light">#F5F5F5</color> <!-- Light gray, subtle and modern -->
-    <color name="accentColor">#2196F3</color> <!-- You can change this hex code -->
-    <color name="orange">#FF9800</color> <!-- Vibrant orange for status highlights -->
-    <color name="alert_red">#FF3B30</color> <!-- or any red tone you prefer -->
+    <!-- Grays -->
+    <color name="light_gray">#ECECEC</color>
+    <color name="medium_gray">#666666</color>
+    <color name="dark_gray">#333333</color>
+
+    <!-- Misc -->
+    <color name="background_light">#F5F5F5</color>
+    <color name="accentColor">#2196F3</color>
+    <color name="blue">#2196F3</color>
+
+    <color name="status_pending_red">#E53935</color>     <!-- Red -->
+    <color name="status_accepted_yellow">#FDD835</color> <!-- Yellow -->
+    <color name="status_resolved_green">#43A047</color>  <!-- Green -->
+    <color name="status_scheduled_blue">#2196F3</color>
+    <color name="status_unresolved_gray">#9E9E9E</color>
 
 
-
-
+    <color name="light_blue_background">#E6F0FF</color>
+    <color name="light_gray_background">#F7F7F7</color>
 
 
 

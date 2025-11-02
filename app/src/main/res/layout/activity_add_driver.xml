@@ -4,129 +4,295 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/light_gray">
+    android:background="@color/colorOnPrimary"
+    android:padding="16dp">
 
-    <!-- Fixed header -->
+    <!-- HEADER -->
     <TextView
         android:id="@+id/headerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add New Driver"
-        android:textSize="24sp"
+        android:text="ADD NEW DRIVER"
         android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
+        android:textSize="22sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:paddingBottom="16dp"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Scrollable form below header -->
+    <!-- SCROLLABLE CONTENT -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/headerText"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLayout"
+        app:layout_constraintBottom_toTopOf="@id/buttonLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp">
 
-            <EditText
-                android:id="@+id/firstNameInput"
+            <!-- PERSONAL INFO -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="First Name"
-                android:inputType="textPersonName|textCapWords"
-                android:padding="12dp"
-                android:layout_marginBottom="12dp"/>
+                android:hint="First Name *">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/middleNameInput"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Middle Name"
-                android:inputType="textPersonName|textCapWords"
-                android:padding="12dp"
-                android:layout_marginBottom="12dp"/>
+                android:hint="Middle Name ">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/middleNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/lastNameInput"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Last Name"
-                android:inputType="textPersonName|textCapWords"
-                android:padding="12dp"
-                android:layout_marginBottom="12dp"/>
+                android:hint="Last Name *">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lastNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/suffixInput"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Suffix"
-                android:inputType="textPersonName|textCapWords"
-                android:padding="12dp"
-                android:layout_marginBottom="12dp"/>
+                android:hint="Suffix (Sr., Jr., ...)">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/suffixInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/addressInput"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Address"
-                android:inputType="textPostalAddress|textCapWords"
-                android:padding="12dp"
-                android:layout_marginBottom="12dp"/>
+                android:hint="Birthdate *">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/birthdateInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:inputType="date"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/contactNumInput"
+            <!-- ADDRESS SECTION -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Contact Number"
-                android:inputType="phone"
-                android:padding="12dp"
-                android:layout_marginBottom="12dp"/>
+                android:hint="House No.">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/houseNoInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/licenseNumInput"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="License Number"
-                android:inputType="text"
-                android:padding="12dp"
-                android:layout_marginBottom="12dp"/>
+                android:hint="Street *">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/streetInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/licenseRestrictionInput"
+            <!-- Barangay Dropdown -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="License Restriction"
-                android:inputType="textCapWords"
-                android:padding="12dp"
-                android:layout_marginBottom="12dp"/>
+                android:orientation="vertical"
+                android:background="@drawable/outlined_box_bg"
+                android:padding="6dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp">
+                <Spinner
+                    android:id="@+id/barangayDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:padding="12dp"/>
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/licenseExpInput"
+            <!-- Municipality Dropdown -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="License Expiration"
-                android:inputType="date"
-                android:padding="12dp"
+                android:orientation="vertical"
+                android:background="@drawable/outlined_box_bg"
+                android:padding="6dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp">
+
+                <Spinner
+                    android:id="@+id/municipalityDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:padding="12dp"/>
+            </LinearLayout>
+
+            <!-- Province Text -->
+            <TextView
+                android:id="@+id/provinceText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Province: Camarines Norte"
+                android:textColor="@color/black"
+                android:padding="19dp"
+                android:background="@drawable/outlined_box_bg"
+                android:textSize="15sp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- CONTACT & LICENSE INFO -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Contact Number *">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/contactNumInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="License Number *">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/licenseNumInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="License Restriction *">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/licenseRestrictionInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="License Expiration *">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/licenseExpInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:inputType="date" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!-- PHOTO UPLOAD SECTION -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Driver License Photo"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+                <ImageView
+                    android:id="@+id/licensePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:background="@color/light_gray"
+                    android:contentDescription="License preview"/>
+
+                <Button
+                    android:id="@+id/uploadLicenseBtn"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:text="📁"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    android:background="?selectableItemBackgroundBorderless"/>
+
+                <ImageButton
+                    android:id="@+id/removeImageBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_close"
+                    android:contentDescription="Remove image"
+                    android:visibility="gone"/>
+            </FrameLayout>
+
+            <!-- CAMERA BUTTON -->
+            <Button
+                android:id="@+id/openCameraBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Open Camera"
                 android:layout_marginBottom="16dp"/>
+
         </LinearLayout>
     </ScrollView>
 
-    <!-- Buttons fixed at the bottom -->
+    <!-- BOTTOM BUTTONS -->
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2"
-        android:paddingTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -137,10 +303,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancel"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/medium_gray"
+            android:backgroundTint="@color/red"
             android:textColor="@android:color/white"
-            android:contentDescription="Cancel adding driver"/>
+            android:layout_marginEnd="8dp"/>
 
         <Button
             android:id="@+id/saveBtn"
@@ -148,10 +313,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Save"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="@color/blue"
-            android:textColor="@android:color/white"
-            android:contentDescription="Save new driver"/>
+            android:backgroundTint="@color/green"
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

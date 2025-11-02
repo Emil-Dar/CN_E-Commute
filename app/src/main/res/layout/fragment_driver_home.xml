@@ -11,11 +11,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Example: 4 Fare Box Cards -->
-        <include layout="@layout/fare_box_layout" />
-        <include layout="@layout/fare_box_layout" />
-        <include layout="@layout/fare_box_layout" />
-        <include layout="@layout/fare_box_layout" />
+        <include
+            android:id="@+id/fareBox1"
+            layout="@layout/fare_box_layout" />
 
+        <include
+            android:id="@+id/fareBox2"
+            layout="@layout/fare_box_layout" />
+
+        <include
+            android:id="@+id/fareBox3"
+            layout="@layout/fare_box_layout" />
+
+        <include
+            android:id="@+id/fareBox4"
+            layout="@layout/fare_box_layout" />
     </LinearLayout>
 </ScrollView>
