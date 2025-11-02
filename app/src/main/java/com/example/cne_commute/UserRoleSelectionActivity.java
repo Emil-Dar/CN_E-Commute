@@ -15,18 +15,16 @@ public class UserRoleSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_role_selection);
 
-        // Initialize LinearLayouts
+        // Initialize role buttons
         LinearLayout commuterButton = findViewById(R.id.commuter_button);
         LinearLayout driverButton = findViewById(R.id.driver_button);
         LinearLayout operatorButton = findViewById(R.id.operator_button);
 
-        // Retrieve the user type from intent
+        // Retrieve the user type (sign in or sign up)
         userType = getIntent().getIntExtra("user_type", -1);
 
-        // Define a click listener for all role buttons
+        // Assign shared click listener
         View.OnClickListener roleButtonClickListener = this::handleRoleSelection;
-
-        // Assign the click listener to all buttons
         commuterButton.setOnClickListener(roleButtonClickListener);
         driverButton.setOnClickListener(roleButtonClickListener);
         operatorButton.setOnClickListener(roleButtonClickListener);
@@ -40,7 +38,7 @@ public class UserRoleSelectionActivity extends AppCompatActivity {
         } else if (userType == R.id.sign_up_button) {
             intent = getSignUpIntent(view.getId());
         } else {
-            return;
+            return; // Invalid user type
         }
 
         intent.putExtra("user_role", view.getId());
@@ -50,16 +48,20 @@ public class UserRoleSelectionActivity extends AppCompatActivity {
     private Intent getSignInIntent(int roleId) {
         if (roleId == R.id.driver_button) {
             return new Intent(this, DriverSignInActivity.class);
+        } else if (roleId == R.id.commuter_button) {
+            return new Intent(this, CommuterSignInActivity.class);
         } else {
-            return new Intent(this, SignInActivity.class);
+            return new Intent(this, SignInActivity.class); // fallback for others
         }
     }
 
     private Intent getSignUpIntent(int roleId) {
         if (roleId == R.id.driver_button) {
             return new Intent(this, DriverSignUpActivity.class);
+        } else if (roleId == R.id.commuter_button) {
+            return new Intent(this, CommuterSignUpActivity.class);
         } else {
-            return new Intent(this, SignUpActivity.class);
+            return new Intent(this, SignUpActivity.class); // fallback for others
         }
     }
 }

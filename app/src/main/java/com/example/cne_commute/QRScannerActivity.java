@@ -1,7 +1,9 @@
 package com.example.cne_commute;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -22,6 +26,7 @@ import java.util.Locale;
 public class QRScannerActivity extends AppCompatActivity {
 
     private static final String TAG = "QRScannerActivity";
+    private static final int CAMERA_PERMISSION_REQUEST = 101;
 
     private DecoratedBarcodeView barcodeScannerView;
     private Button rescanButton;
@@ -35,9 +40,42 @@ public class QRScannerActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: QRScannerActivity started");
 
         setupToolbar();
-        setupScanner();
-        setupRescanButton();
         subtitleText = findViewById(R.id.subtitle_text);
+        rescanButton = findViewById(R.id.scan_qr_button);
+        barcodeScannerView = findViewById(R.id.barcode_scanner_view);
+
+        if (checkCameraPermission()) {
+            setupScanner();
+        } else {
+            requestCameraPermission();
+        }
+
+        setupRescanButton();
+    }
+
+    private boolean checkCameraPermission() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.CAMERA},
+                CAMERA_PERMISSION_REQUEST);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "Camera permission granted");
+                setupScanner();
+            } else {
+                Toast.makeText(this, "Camera permission is required to scan QR codes.", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
     }
 
     private void setupToolbar() {
@@ -53,7 +91,6 @@ public class QRScannerActivity extends AppCompatActivity {
     }
 
     private void setupScanner() {
-        barcodeScannerView = findViewById(R.id.barcode_scanner_view);
         barcodeScannerView.setTorchOff();
         barcodeScannerView.setStatusText("");
 
@@ -62,6 +99,8 @@ public class QRScannerActivity extends AppCompatActivity {
         barcodeScannerView.decodeContinuous(new BarcodeCallback() {
             @Override
             public void barcodeResult(BarcodeResult result) {
+                Log.d(TAG, "barcodeResult triggered");
+
                 if (result == null || result.getText() == null) {
                     Log.w(TAG, "barcodeResult: No barcode detected");
                     Toast.makeText(QRScannerActivity.this, "No barcode detected", Toast.LENGTH_LONG).show();
@@ -84,12 +123,12 @@ public class QRScannerActivity extends AppCompatActivity {
                 handleScan(scannedQrCode);
             }
         });
+
+        barcodeScannerView.resume();
     }
 
     private void handleScan(ScannedQrCode scannedQrCode) {
         String timestamp = getCurrentTimestamp();
-
-        // ✅ Only add timestamp once
         scannedQrCode.setScanTimestamp(timestamp);
         scannedQrCode.addScanTimestamp(timestamp);
 
@@ -119,7 +158,6 @@ public class QRScannerActivity extends AppCompatActivity {
     }
 
     private void setupRescanButton() {
-        rescanButton = findViewById(R.id.scan_qr_button);
         if (rescanButton != null) {
             rescanButton.setOnClickListener(view -> {
                 Log.d(TAG, "Rescan button clicked");
@@ -160,7 +198,6 @@ public class QRScannerActivity extends AppCompatActivity {
 
         Log.d(TAG, "parseQrData: Parsed driver → " + driverName);
 
-        // ✅ Leave timestamp blank — will be set in handleScan()
         return new ScannedQrCode(
                 driverId,
                 franchiseId,

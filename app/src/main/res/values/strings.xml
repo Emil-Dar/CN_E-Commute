@@ -167,5 +167,9 @@
 
     <string name="archived_qr_codes">Archived QR Codes</string>
 
+    <string name="default_web_client_id">290930271329-tcfdhhlq0ac7t16dcdqed8t2harl70hq.apps.googleusercontent.com</string>
+
+    <string name="new_password_edittext">Change Password</string>
+    <string name="update_password_button">Update Password</string>
 
 </resources>

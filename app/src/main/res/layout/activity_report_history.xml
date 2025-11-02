@@ -31,16 +31,7 @@
         android:baselineAligned="false">
 
 
-        <!-- Spinner -->
-        <Spinner
-            android:id="@+id/sort_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
-            android:minWidth="140dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:textAlignment="center"
-            android:popupBackground="@color/white" />
+
     </LinearLayout>
 
     <!-- Progress Bar -->

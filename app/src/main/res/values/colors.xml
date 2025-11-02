@@ -26,6 +26,8 @@
     <color name="orange">#FF9800</color> <!-- Vibrant orange for status highlights -->
     <color name="alert_red">#FF3B30</color> <!-- or any red tone you prefer -->
 
+    <color name="hintColor">#999999</color>
+
 
 
 

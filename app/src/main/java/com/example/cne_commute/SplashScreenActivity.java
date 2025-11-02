@@ -10,7 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -30,25 +34,36 @@ public class SplashScreenActivity extends AppCompatActivity {
         signInButton = findViewById(R.id.sign_in_button);
         signUpButton = findViewById(R.id.sign_up_button);
 
-        buttonLayout.setVisibility(View.GONE); // Hide the buttons initially
+        buttonLayout.setVisibility(View.GONE); // Hide buttons initially
 
-        signInButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SplashScreenActivity.this, UserRoleSelectionActivity.class);
-            intent.putExtra("user_type", R.id.sign_in_button);
-            startActivity(intent);
-        });
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        signUpButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SplashScreenActivity.this, UserRoleSelectionActivity.class);
-            intent.putExtra("user_type", R.id.sign_up_button);
-            startActivity(intent);
-        });
+        if (currentUser != null) {
+            //  Already signed in — go to HomeActivity after short splash delay
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }, 1500); // Optional splash delay
+        } else {
+            //  Not signed in — show splash buttons after animation
+            signInButton.setOnClickListener(v -> {
+                Intent intent = new Intent(SplashScreenActivity.this, UserRoleSelectionActivity.class);
+                intent.putExtra("user_type", R.id.sign_in_button);
+                startActivity(intent);
+            });
 
-        // Delay for 3 seconds before showing buttons with fade-in animation
-        new Handler().postDelayed(() -> {
-            buttonLayout.setVisibility(View.VISIBLE);
-            Animation fadeIn = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.fade_in);
-            buttonLayout.startAnimation(fadeIn);
-        }, 3000); // 3 seconds delay
+            signUpButton.setOnClickListener(v -> {
+                Intent intent = new Intent(SplashScreenActivity.this, UserRoleSelectionActivity.class);
+                intent.putExtra("user_type", R.id.sign_up_button);
+                startActivity(intent);
+            });
+
+            new Handler().postDelayed(() -> {
+                buttonLayout.setVisibility(View.VISIBLE);
+                Animation fadeIn = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.fade_in);
+                buttonLayout.startAnimation(fadeIn);
+            }, 3000); // 3 seconds delay
+        }
     }
 }

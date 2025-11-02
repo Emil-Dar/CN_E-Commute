@@ -14,6 +14,10 @@ public interface SupabaseService {
     @POST("reports")
     Call<Void> submitReport(@Body Map<String, Object> reportData);
 
+    @GET("reports")
+    Call<List<ReportData>> getReportDetails(@retrofit2.http.Query("report_id") String reportId);
+
+
 
 
 

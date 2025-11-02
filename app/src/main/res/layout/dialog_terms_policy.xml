@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="ifContentScrolls">
+
+        <TextView
+            android:id="@+id/terms_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:lineSpacingExtra="6dp"
+            android:text="By creating a commuter account, you agree to the following:\n\n• Your name, email, and contact number will be securely stored and used to personalize your experience.\n• We may use your contact details to send important updates, alerts, or service-related messages.\n• Your data will never be sold or shared with third parties without your consent.\n• You can request to update or delete your account information at any time.\n\nFor full details, please visit our official Terms and Privacy Policy page." />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/terms_ok_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginTop="16dp"
+        android:padding="12dp" />
+
+</LinearLayout>

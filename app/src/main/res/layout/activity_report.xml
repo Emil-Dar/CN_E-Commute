@@ -135,7 +135,7 @@
                 app:boxBackgroundColor="@android:color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/commuter_name_edit_text"
+                    android:id="@+id/edit_commuter_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName|textCapWords" />
@@ -150,7 +150,7 @@
                 app:boxBackgroundColor="@android:color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/commuter_contact_edit_text"
+                    android:id="@+id/edit_commuter_contact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone" />
@@ -196,7 +196,24 @@
                 android:visibility="gone"
                 android:layout_marginBottom="16dp">
 
+                <!--  Search Bar -->
+                <SearchView
+                    android:id="@+id/parking_violations_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:queryHint="Search violations..."
+                    android:iconifiedByDefault="false"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="4dp"
+                    android:padding="14dp"
+                    android:background="@drawable/rounded_white_background"
+                    android:gravity="center_vertical" />
+
+
+
+
                 <CheckBox
+                    android:id="@+id/checkbox_corner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/corner_intersection_violation"
@@ -206,6 +223,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_crosswalk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/crosswalk_violation"
@@ -215,6 +233,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_double_parking"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/double_parking_violation"
@@ -224,6 +243,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_no_parking_sign"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/no_parking_sign_violation"
@@ -233,6 +253,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_overtime_parking"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/overtime_parking_violation"
@@ -242,6 +263,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_obstruction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/obstruction_violation"
@@ -251,6 +273,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_illegal_terminal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/illegal_terminal_violation"
@@ -258,6 +281,7 @@
                     android:layout_marginBottom="4dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp" />
+
 
                 <!--1-->
 
@@ -290,7 +314,23 @@
                 android:visibility="gone"
                 android:layout_marginBottom="16dp">
 
+
+                <!--  Search Bar -->
+                <SearchView
+                    android:id="@+id/traffic_movement_violations_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:queryHint="Search violations..."
+                    android:iconifiedByDefault="false"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="4dp"
+                    android:padding="14dp"
+                    android:background="@drawable/rounded_white_background"
+                    android:gravity="center_vertical" />
+
+
                 <CheckBox
+                    android:id="@+id/checkbox_left_turn_vinzons_jlukban"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/left_turn_vinzons_jlukban"
@@ -300,6 +340,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_left_turn_jlukban"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/left_turn_jlukban"
@@ -309,6 +350,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_left_turn_vinzons_felipe"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/left_turn_vinzons_felipe"
@@ -318,6 +360,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_u_turn_vinzons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/u_turn_vinzons"
@@ -327,6 +370,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_left_turn_fpimentel_vbasit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/left_turn_fpimentel_vbasit"
@@ -336,6 +380,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_left_turn_vbasit_fpimentel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/left_turn_vbasit_fpimentel"
@@ -345,6 +390,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_out_of_line"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/out_of_line"
@@ -354,6 +400,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_disregarding_traffic_sign"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/disregarding_traffic_sign"
@@ -363,6 +410,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_truck_ban"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/truck_ban"
@@ -372,6 +420,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_number_color_coding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/number_color_coding"
@@ -381,6 +430,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_loading_unloading_vinzons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/loading_unloading_vinzons"
@@ -390,6 +440,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_right_of_way_emergency"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/right_of_way_emergency"
@@ -399,6 +450,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_jaywalking"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/jaywalking"
@@ -430,6 +482,7 @@
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical" />
 
+
             <LinearLayout
                 android:id="@+id/driver_behavior_violations_options"
                 android:layout_width="match_parent"
@@ -438,7 +491,22 @@
                 android:visibility="gone"
                 android:layout_marginBottom="16dp">
 
+                <!--  Search Bar -->
+                <SearchView
+                    android:id="@+id/driver_behavior_violations_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:queryHint="Search violations..."
+                    android:iconifiedByDefault="false"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="4dp"
+                    android:padding="14dp"
+                    android:background="@drawable/rounded_white_background"
+                    android:gravity="center_vertical" />
+
+
                 <CheckBox
+                    android:id="@+id/checkbox_refuse_to_convey"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/refuse_to_convey"
@@ -448,6 +516,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_abusive_driver"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/abusive_driver"
@@ -457,6 +526,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_reckless_driving"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/reckless_driving"
@@ -466,6 +536,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_dui_liquor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/dui_liquor"
@@ -475,6 +546,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_hitching"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/hitching"
@@ -514,7 +586,21 @@
                 android:visibility="gone"
                 android:layout_marginBottom="16dp">
 
+                <!--  Search Bar -->
+                <SearchView
+                    android:id="@+id/licensing_documentation_violations_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:queryHint="Search violations..."
+                    android:iconifiedByDefault="false"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="4dp"
+                    android:padding="14dp"
+                    android:background="@drawable/rounded_white_background"
+                    android:gravity="center_vertical" />
+
                 <CheckBox
+                    android:id="@+id/checkbox_no_drivers_license"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/no_drivers_license"
@@ -524,6 +610,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_student_permit_use"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/student_permit_use"
@@ -533,6 +620,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_unregistered_franchise"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/unregistered_franchise"
@@ -540,6 +628,7 @@
                     android:layout_marginBottom="4dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp" />
+
 
                 <!--4-->
 
@@ -572,7 +661,21 @@
                 android:visibility="gone"
                 android:layout_marginBottom="16dp">
 
+                <!--  Search Bar -->
+                <SearchView
+                    android:id="@+id/attire_fare_violations_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:queryHint="Search violations..."
+                    android:iconifiedByDefault="false"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="4dp"
+                    android:padding="14dp"
+                    android:background="@drawable/rounded_white_background"
+                    android:gravity="center_vertical" />
+
                 <CheckBox
+                    android:id="@+id/checkbox_improper_attire"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/improper_attire"
@@ -582,6 +685,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_tricycle_fare_matrix"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/tricycle_fare_matrix"
@@ -591,6 +695,7 @@
                     android:paddingEnd="16dp" />
 
                 <CheckBox
+                    android:id="@+id/checkbox_no_helmet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/no_helmet"
@@ -598,6 +703,18 @@
                     android:layout_marginBottom="4dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp" />
+
+                <CheckBox
+                    android:id="@+id/checkbox_overcharging"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Overcharging"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp" />
+
+
 
                 <!--5-->
 

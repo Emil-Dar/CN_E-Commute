@@ -14,6 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+
+
 public class AccountActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "AccountPrefs";
@@ -91,12 +97,32 @@ public class AccountActivity extends AppCompatActivity {
             Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
         });
 
-        // Logout logic
         logoutText.setOnClickListener(v -> {
-            Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(AccountActivity.this, LoginActivity.class));
-            finish();
+            Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
+
+            // ✅ Sign out from Firebase
+            FirebaseAuth.getInstance().signOut();
+
+            // ✅ Sign out from Google
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
+            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+            googleSignInClient.signOut().addOnCompleteListener(task -> {
+                // ✅ Clear SharedPreferences (optional for testing)
+                SharedPreferences.Editor editor = getSharedPreferences("UserPrefs", MODE_PRIVATE).edit();
+                editor.clear();
+                editor.apply();
+
+                // ✅ Redirect to SplashScreenActivity
+                Intent intent = new Intent(AccountActivity.this, SplashScreenActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
         });
+
 
         // Theme toggle logic
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
