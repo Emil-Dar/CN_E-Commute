@@ -99,12 +99,12 @@ public class DriverNotifications extends Fragment {
                     localReports.clear();
                     localReports.addAll(response.body());
 
-                    // sort newest first
+                    // sort newest first using created_at
                     SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
                     localReports.sort((a, b) -> {
                         try {
-                            Date da = inputFormat.parse(safeGet(a, "timestamp").replace("Z", ""));
-                            Date db = inputFormat.parse(safeGet(b, "timestamp").replace("Z", ""));
+                            Date da = inputFormat.parse(safeGet(a, "created_at").replace("Z", ""));
+                            Date db = inputFormat.parse(safeGet(b, "created_at").replace("Z", ""));
                             return db != null && da != null ? db.compareTo(da) : 0;
                         } catch (Exception e) {
                             return 0;
@@ -136,7 +136,6 @@ public class DriverNotifications extends Fragment {
     private void markAsViewed(String reportId, int position) {
         if (reportId == null || reportId.isEmpty()) return;
 
-        // prevent realtime refresh overriding our update
         suppressRealtimeFetch = true;
 
         adapter.markAsViewed(position);
@@ -159,7 +158,6 @@ public class DriverNotifications extends Fragment {
                     Log.d(TAG, "✅ Marked viewed: " + reportId);
                     DriverHomeActivity.refreshBadgeFromAnywhere();
 
-                    // delay realtime re-fetch to avoid reverting
                     recyclerView.postDelayed(() -> suppressRealtimeFetch = false, 1200);
                 } else {
                     Log.e(TAG, "❌ Failed mark viewed " + response.code());
@@ -254,7 +252,7 @@ public class DriverNotifications extends Fragment {
             boolean viewed = report.get("viewed") instanceof Boolean && (Boolean) report.get("viewed");
 
             holder.message.setText("A commuter filed a report on you.");
-            holder.time.setText(formatDate(safeGet(report, "timestamp")));
+            holder.time.setText(formatDate(safeGet(report, "created_at"))); // ✅ Now using created_at
 
             holder.container.setBackgroundResource(
                     viewed ? R.drawable.bg_notification_viewed : R.drawable.bg_notification_unviewed
@@ -269,7 +267,7 @@ public class DriverNotifications extends Fragment {
         }
 
         private String formatDate(String iso) {
-            if (iso == null) return "Unknown time";
+            if (iso == null || iso.isEmpty()) return "Unknown time";
             try {
                 Date d = inputFormat.parse(iso.replace("Z", ""));
                 return outputFormat.format(d);
