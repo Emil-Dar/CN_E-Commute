@@ -2,7 +2,6 @@ package com.example.cne_commute;
 
 import java.util.List;
 import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -21,9 +20,9 @@ public interface SupabaseService {
     Call<List<Map<String, Object>>> getReportsByDriverId(
             @Header("apikey") String apiKey,
             @Header("Authorization") String authHeader,
-            @Query("driver_id") String driverIdFilter, // e.g. "eq.123"
-            @Query("order") String orderBy,            // e.g. "created_at.desc"
-            @Query("select") String selectFields       // e.g. "report_id,status,created_at"
+            @Query("driver_id") String driverIdFilter,
+            @Query("order") String orderBy,
+            @Query("select") String selectFields
     );
 
     @GET("reports")
@@ -32,17 +31,15 @@ public interface SupabaseService {
             @Header("Authorization") String authHeader
     );
 
-    // ✅ NEW: mark report as viewed
-    // ✅ Mark specific report as viewed
+    // ✅ FIXED: return type changed from Call<Void> → Call<List<Map<String, Object>>>
+    // so it matches OperatorNotificationActivity.markAsViewed()
     @PATCH("reports")
     Call<List<Map<String, Object>>> updateReportViewed(
             @Header("apikey") String apiKey,
             @Header("Authorization") String authHeader,
-            @Query("report_id") String reportIdFilter, // e.g., "eq.123"
+            @Query("report_id") String reportIdFilter,
             @Body Map<String, Object> updates
     );
-
-
 
     // === operators table ===
     @GET("operators")
@@ -76,11 +73,34 @@ public interface SupabaseService {
             @Query("driver_id") String driverIdFilter
     );
 
+    @PATCH("drivers")
+    Call<Void> updateDriver(
+            @Query("driver_id") String driverIdFilter,
+            @Body Map<String, Object> updates,
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader
+    );
+
     @POST("drivers")
-    Call<Void> addDriver(@Body Map<String, Object> driverData);
+    Call<Void> addDriver(
+            @Body Map<String, Object> driverData,
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader
+    );
+
+    // ✅ add required headers to match all other calls
+    @GET("drivers")
+    Call<List<Driver>> getDrivers(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader
+    );
 
     @GET("drivers")
-    Call<List<Driver>> getDrivers();
+    Call<List<Driver>> getVerifiedDrivers(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Query("status") String statusFilter // pass "eq.Verified"
+    );
 
     @GET("drivers")
     Call<List<Map<String, Object>>> getLastDriverId(
@@ -137,13 +157,19 @@ public interface SupabaseService {
             @Query("report_id") String filter
     );
 
-    @GET("reports?driver_id={driverId}")
-    Call<List<Map<String, Object>>> getReportsByDriver(
+    // === Additional utility routes ===
+    @GET("reports")
+    Call<List<Map<String, Object>>> getReportsFiltered(
             @Header("apikey") String apiKey,
-            @Header("Authorization") String bearerToken,
-            @Query("driver_id") String driverId
+            @Header("Authorization") String authHeader,
+            @Query("requested_by") String requestedByFilter
     );
 
-
-
+    @PATCH("reports")
+    Call<List<Map<String, Object>>> updateReport(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Query("id") String idFilter,
+            @Body Map<String, Object> updates
+    );
 }

@@ -41,6 +41,9 @@ public class DriverNotifications extends Fragment {
     private final List<Map<String, Object>> localReports = new ArrayList<>();
     private boolean suppressRealtimeFetch = false;
 
+    // Cache viewed reports locally (to persist UI state)
+    private static final Set<String> viewedCache = new HashSet<>();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -54,20 +57,28 @@ public class DriverNotifications extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new NotificationAdapter((report, position) -> {
-            String reportId = safeGet(report, "report_id");
-            String driverId = safeGet(report, "driver_id");
+            String reportId = safeGet(report, "report_id").trim();
+            String driverId = safeGet(report, "driver_id").trim();
 
-            // Open complaints fragment
-            Fragment complaintsFragment = DriverComplaints.newInstance(driverId, reportId);
-            ((AppCompatActivity) requireContext()).getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, complaintsFragment)
-                    .addToBackStack(null)
-                    .commit();
+            boolean alreadyViewed = report.get("viewed") instanceof Boolean && (Boolean) report.get("viewed");
 
-            // Mark locally and remotely
-            markAsViewed(reportId, position);
+            if (!alreadyViewed) {
+                adapter.markAsViewed(position);
+                updateLocalViewed(reportId);
+                DriverHomeActivity.decrementBadgeCount();
+                markAsViewed(reportId); // ✅ update remotely (async)
+            }
+
+            recyclerView.postDelayed(() -> {
+                Fragment complaintsFragment = DriverComplaints.newInstance(driverId, reportId);
+                ((AppCompatActivity) requireContext()).getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, complaintsFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }, 150);
         });
+
         recyclerView.setAdapter(adapter);
         applyRecyclerAnimation();
 
@@ -99,7 +110,6 @@ public class DriverNotifications extends Fragment {
                     localReports.clear();
                     localReports.addAll(response.body());
 
-                    // sort newest first using created_at
                     SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
                     localReports.sort((a, b) -> {
                         try {
@@ -110,6 +120,13 @@ public class DriverNotifications extends Fragment {
                             return 0;
                         }
                     });
+
+                    for (Map<String, Object> report : localReports) {
+                        String rid = safeGet(report, "report_id");
+                        if (viewedCache.contains(rid)) {
+                            report.put("viewed", true);
+                        }
+                    }
 
                     adapter.setData(new ArrayList<>(localReports));
                     recyclerView.scheduleLayoutAnimation();
@@ -132,14 +149,12 @@ public class DriverNotifications extends Fragment {
         emptyText.setText(show ? msg : "");
     }
 
-    // ---------- MARK VIEWED ----------
-    private void markAsViewed(String reportId, int position) {
+    // ---------- MARK AS VIEWED ----------
+    private void markAsViewed(String reportId) {
         if (reportId == null || reportId.isEmpty()) return;
 
         suppressRealtimeFetch = true;
-
-        adapter.markAsViewed(position);
-        updateLocalViewed(reportId);
+        viewedCache.add(reportId);
 
         SupabaseService service = SupabaseApiClient.getRetrofitInstance().create(SupabaseService.class);
         Map<String, Object> updates = new HashMap<>();
@@ -150,47 +165,46 @@ public class DriverNotifications extends Fragment {
                 "Bearer " + SupabaseApiClient.SUPABASE_API_KEY,
                 "eq." + reportId,
                 updates
-        ).enqueue(new Callback<List<Map<String, Object>>>() {
-            @Override
-            public void onResponse(Call<List<Map<String, Object>>> call,
-                                   Response<List<Map<String, Object>>> response) {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "✅ Marked viewed: " + reportId);
-                    DriverHomeActivity.refreshBadgeFromAnywhere();
+        ).enqueue(new Callback<List<Map<String, Object>>>() { // ✅ aligned with SupabaseService
 
-                    recyclerView.postDelayed(() -> suppressRealtimeFetch = false, 1200);
+            @Override
+            public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "Marked viewed remotely: " + reportId);
                 } else {
-                    Log.e(TAG, "❌ Failed mark viewed " + response.code());
-                    suppressRealtimeFetch = false;
+                    Log.e(TAG, "Failed to mark viewed remotely, code: " + response.code());
                 }
+                recyclerView.postDelayed(() -> suppressRealtimeFetch = false, 1200);
             }
 
             @Override
             public void onFailure(Call<List<Map<String, Object>>> call, Throwable t) {
                 Log.e(TAG, "⚠ Network error", t);
-                suppressRealtimeFetch = false;
+                recyclerView.postDelayed(() -> suppressRealtimeFetch = false, 1200);
             }
         });
     }
 
     private void updateLocalViewed(String reportId) {
+        if (reportId == null || reportId.isEmpty()) return;
         for (Map<String, Object> r : localReports) {
             if (reportId.equals(safeGet(r, "report_id"))) {
                 r.put("viewed", true);
                 break;
             }
         }
+        viewedCache.add(reportId);
     }
 
     // ---------- REALTIME ----------
     private void listenForRealtimeUpdates() {
         realtimeListener = new SupabaseRealtimeListener();
         realtimeListener.startListening(reportId -> {
-            if (suppressRealtimeFetch) {
-                Log.d(TAG, "⏳ Suppressing realtime fetch temporarily...");
+            if (suppressRealtimeFetch || viewedCache.contains(reportId)) {
+                Log.d(TAG, "Ignoring realtime update for viewed report: " + reportId);
                 return;
             }
-            Log.d(TAG, "🔄 Realtime update detected: " + reportId);
+            Log.d(TAG, "Realtime update detected: " + reportId);
             requireActivity().runOnUiThread(this::fetchNotifications);
         });
     }
@@ -233,8 +247,11 @@ public class DriverNotifications extends Fragment {
         void markAsViewed(int position) {
             if (position >= 0 && position < notifications.size()) {
                 Map<String, Object> item = notifications.get(position);
-                item.put("viewed", true);
-                notifyItemChanged(position);
+                boolean alreadyViewed = item.get("viewed") instanceof Boolean && (Boolean) item.get("viewed");
+                if (!alreadyViewed) {
+                    item.put("viewed", true);
+                    notifyItemChanged(position, "viewed_update");
+                }
             }
         }
 
@@ -248,17 +265,31 @@ public class DriverNotifications extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            onBindViewHolder(holder, position, Collections.emptyList());
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
             Map<String, Object> report = notifications.get(position);
-            boolean viewed = report.get("viewed") instanceof Boolean && (Boolean) report.get("viewed");
+            boolean viewed = report.get("viewed") instanceof Boolean && Boolean.TRUE.equals(report.get("viewed"));
+
+            if (payloads.contains("viewed_update")) {
+                holder.container.animate().alpha(0f).setDuration(120).withEndAction(() -> {
+                    holder.container.setBackgroundResource(R.drawable.bg_notification_viewed);
+                    holder.container.animate().alpha(1f).setDuration(120).start();
+                }).start();
+                return;
+            }
 
             holder.message.setText("A commuter filed a report on you.");
-            holder.time.setText(formatDate(safeGet(report, "created_at"))); // ✅ Now using created_at
+            holder.time.setText(formatDate(safeGet(report, "created_at")));
 
             holder.container.setBackgroundResource(
                     viewed ? R.drawable.bg_notification_viewed : R.drawable.bg_notification_unviewed
             );
 
-            holder.itemView.setOnClickListener(v -> listener.onNotificationClick(report, holder.getAdapterPosition()));
+            holder.itemView.setOnClickListener(v ->
+                    listener.onNotificationClick(report, holder.getAdapterPosition()));
         }
 
         private String safeGet(Map<String, Object> map, String key) {
@@ -277,7 +308,9 @@ public class DriverNotifications extends Fragment {
         }
 
         @Override
-        public int getItemCount() { return notifications.size(); }
+        public int getItemCount() {
+            return notifications.size();
+        }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
             CardView card;

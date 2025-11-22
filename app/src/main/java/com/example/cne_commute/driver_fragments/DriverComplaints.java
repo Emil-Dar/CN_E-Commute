@@ -57,6 +57,7 @@ public class DriverComplaints extends Fragment {
         return fragment;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -76,7 +77,7 @@ public class DriverComplaints extends Fragment {
         dateFilter = view.findViewById(R.id.dateFilter);
 
         if (getArguments() != null) {
-            driverId = getArguments().getString("driver_id", "");
+            driverId = toDriverCode(getArguments().getString("driver_id", ""));
             highlightReportId = getArguments().getString("highlight_report_id", "");
             keepHighlightFromNotification = highlightReportId != null && !highlightReportId.trim().isEmpty();
         }
@@ -90,14 +91,17 @@ public class DriverComplaints extends Fragment {
     // ---------- FETCH DATA ----------
     private void fetchComplaints() {
         if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
-        SupabaseService service = SupabaseApiClient.getRetrofitInstance().create(SupabaseService.class);
 
-        service.getReports(
+        SupabaseService service = SupabaseApiClient.getRetrofitInstance()
+                .create(SupabaseService.class);
+
+        service.getReportsByDriverId(
                 SupabaseApiClient.SUPABASE_API_KEY,
-                "Bearer " + SupabaseApiClient.SUPABASE_API_KEY
-
+                "Bearer " + SupabaseApiClient.SUPABASE_API_KEY,
+                "eq." + driverId, // keep original driverId
+                "created_at.desc",
+                "*"
         ).enqueue(new Callback<List<Map<String, Object>>>() {
-
             @Override
             public void onResponse(Call<List<Map<String, Object>>> call,
                                    Response<List<Map<String, Object>>> response) {
@@ -107,11 +111,29 @@ public class DriverComplaints extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     allReports = new ArrayList<>(response.body());
 
-                    // if a driverId was provided, filter client-side
-                    if (driverId != null && !driverId.trim().isEmpty()) {
-                        allReports.removeIf(r -> r.get("driver_id") == null
-                                || !driverId.equals(String.valueOf(r.get("driver_id"))));
+                    // ---------- DEBUG: log fetched reports ----------
+                    for (Map<String, Object> r : allReports) {
+                        Log.d("DriverComplaints", "Fetched ReportID: " + r.get("report_id") +
+                                " DriverID: " + r.get("driver_id"));
                     }
+
+                    // ---------- FIXED DRIVER FILTER ----------
+                    allReports.removeIf(r -> {
+                        Object d = r.get("driver_id");
+                        if (d == null) return true;
+
+                        // just trim and compare case-insensitive
+                        String reportDriverId = d.toString().trim();
+                        String normalizedDriverId = driverId.trim();
+                        boolean match = reportDriverId.equalsIgnoreCase(normalizedDriverId);
+
+                        Log.d("DriverComplaints", "Comparing reportDriverId='" + reportDriverId +
+                                "' vs driverId='" + normalizedDriverId + "' -> " + match);
+
+                        return !match;
+                    });
+
+                    Log.d("DriverComplaints", "After filtering, " + allReports.size() + " reports remain");
 
                     if (allReports.isEmpty()) {
                         showEmpty("No complaints found.");
@@ -120,13 +142,13 @@ public class DriverComplaints extends Fragment {
 
                     displayComplaints(allReports);
 
-                    // highlight if requested (small delay to allow views to be added)
-                    if (highlightReportId != null && !highlightReportId.trim().isEmpty()) {
-                        mainHandler.postDelayed(() -> highlightComplaint(highlightReportId), 400);
+                    if (keepHighlightFromNotification && !highlightReportId.isEmpty()) {
+                        mainHandler.postDelayed(() -> highlightComplaint(highlightReportId), 500);
                     }
+
                 } else {
                     showEmpty("Failed to load complaints.");
-                    Log.w("DriverComplaints", "Unsuccessful response fetching reports: " + response.code());
+                    Log.w("DriverComplaints", "Failed fetching: " + response.code());
                 }
             }
 
@@ -134,10 +156,13 @@ public class DriverComplaints extends Fragment {
             public void onFailure(Call<List<Map<String, Object>>> call, Throwable t) {
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
                 showEmpty("Error loading complaints.");
-                Log.e("DriverComplaints", "Error fetching reports", t);
+                Log.e("DriverComplaints", "Network error fetching reports", t);
             }
         });
     }
+
+
+
 
     // ---------- DISPLAY ----------
     private void displayComplaints(List<Map<String, Object>> reports) {
@@ -158,23 +183,23 @@ public class DriverComplaints extends Fragment {
             String stat = str(r.get("status")).trim();
             String remarks = str(r.get("remarks")).trim();
 
-            // normalize empty status to Pending
-            if (stat.isEmpty()) stat = "Pending";
+            // ✅ Use exact Supabase values, no guessing
+            if (stat.isEmpty() && remarks.isEmpty()) {
+                stat = "Pending";
+            }
 
-            // Put Resolved / Unresolved into history explicitly
+            // Normalize capitalization for display only
+            r.put("status", capitalize(stat));
+            r.put("remarks", capitalize(remarks));
+
+            // ✅ Separate based on status only
             if ("Resolved".equalsIgnoreCase(stat) || "Unresolved".equalsIgnoreCase(stat)) {
-                r.put("status", stat);
                 history.add(r);
             } else {
-                // If remarks explicitly say resolved (backward compatibility), treat as history
-                if (remarks.toLowerCase().contains("resolved")) {
-                    r.put("status", "Resolved");
-                    history.add(r);
-                } else {
-                    active.add(r);
-                }
+                active.add(r);
             }
         }
+
 
         Log.d("DriverComplaints", "Active: " + active.size() + ", History: " + history.size());
 
@@ -203,6 +228,19 @@ public class DriverComplaints extends Fragment {
             showEmpty("No complaints found.");
         }
     }
+
+    private String toDriverCode(String raw) {
+        if (raw == null || raw.trim().isEmpty()) return "";
+        raw = raw.replace("DR", "").replace("dr", "").trim();
+
+        try {
+            int num = Integer.parseInt(raw);
+            return String.format("DR%04d", num);
+        } catch (Exception e) {
+            return raw; // already DR0001 format
+        }
+    }
+
 
 
     private void sortReports(List<Map<String, Object>> list) {
@@ -315,12 +353,21 @@ public class DriverComplaints extends Fragment {
         // ---------------- STATUS BADGE COLOR ----------------
         int badgeColor = ContextCompat.getColor(requireContext(), R.color.dark_gray);
         String displayStatus = stat;
+
         try {
-            if (reportRemarks.toLowerCase().contains("resolved")) {
+            String lowerRemarks = reportRemarks.toLowerCase(Locale.ROOT);
+            String lowerStatus = stat.toLowerCase(Locale.ROOT);
+
+            // ✅ Only consider remarks if they say "resolved" but NOT "unresolved"
+            boolean remarksIndicateResolved =
+                    lowerRemarks.contains("resolved") && !lowerRemarks.contains("unresolved");
+
+            // ✅ Determine final status for display
+            if (remarksIndicateResolved && !"unresolved".equalsIgnoreCase(stat)) {
                 displayStatus = "Resolved";
                 badgeColor = ContextCompat.getColor(requireContext(), R.color.status_resolved_green);
             } else {
-                switch (stat.toLowerCase()) {
+                switch (lowerStatus) {
                     case "pending":
                         badgeColor = ContextCompat.getColor(requireContext(), R.color.status_pending_red);
                         break;
@@ -344,14 +391,21 @@ public class DriverComplaints extends Fragment {
         } catch (Exception e) {
             Log.w("DriverComplaints", "Badge color fallback: " + e.getMessage());
         }
+
         if (status != null) {
             status.setText(displayStatus);
             Drawable drawable = ContextCompat.getDrawable(requireContext(), R.drawable.status_badge_bg);
             if (drawable instanceof GradientDrawable) {
                 GradientDrawable bgShape = (GradientDrawable) drawable.mutate();
-                try { bgShape.setColor(badgeColor); status.setBackground(bgShape); }
-                catch (Exception e) { status.setBackgroundColor(badgeColor); }
-            } else { status.setBackgroundColor(badgeColor); }
+                try {
+                    bgShape.setColor(badgeColor);
+                    status.setBackground(bgShape);
+                } catch (Exception e) {
+                    status.setBackgroundColor(badgeColor);
+                }
+            } else {
+                status.setBackgroundColor(badgeColor);
+            }
         }
 
         // ---------------- HIGHLIGHT CLICKED NOTIFICATION ----------------
@@ -359,22 +413,20 @@ public class DriverComplaints extends Fragment {
             Drawable unviewedBg = ContextCompat.getDrawable(requireContext(), R.drawable.bg_notification_unviewed);
             Drawable viewedBg = ContextCompat.getDrawable(requireContext(), R.drawable.bg_notification_viewed);
 
-            // Apply unviewed background for the highlighted complaint
             cardRoot.setBackground(unviewedBg);
 
-            // Scroll smoothly to it
             if (scrollView != null) {
                 scrollView.post(() -> scrollView.smoothScrollTo(0, cardView.getTop()));
             }
 
-            // If highlight should fade after viewing (non-persistent case)
+            // fade after viewing
             if (!keepHighlightFromNotification) {
                 mainHandler.postDelayed(() -> {
                     if (isAdded()) cardRoot.setBackground(viewedBg);
                 }, 4000);
             }
 
-            // Allow user to tap to clear the highlight and mark as viewed
+            // tap to clear
             cardRoot.setOnClickListener(v -> {
                 cardRoot.setBackground(viewedBg);
                 highlightReportId = "";
@@ -602,8 +654,9 @@ public class DriverComplaints extends Fragment {
         mainHandler.postDelayed(() -> {
             boolean found = highlightInContainer(activeComplaintsContainer, id);
             if (!found) highlightInContainer(historyComplaintsContainer, id);
-        }, 400); // small delay to ensure all views rendered
+        }, 300);
     }
+
 
     private boolean highlightInContainer(LinearLayout container, String reportId) {
         if (container == null) return false;
@@ -612,31 +665,25 @@ public class DriverComplaints extends Fragment {
             View cardView = container.getChildAt(i);
             TextView reportIdView = cardView.findViewById(R.id.reportId);
 
-            if (reportIdView != null && reportIdView.getText() != null &&
-                    reportIdView.getText().toString().contains(reportId)) {
-
+            if (reportIdView != null && reportIdView.getText().toString().contains(reportId)) {
                 CardView card = cardView.findViewById(R.id.cardRoot);
                 if (card != null) {
-                    int highlightColor = ContextCompat.getColor(requireContext(), R.color.light_blue);
-                    int originalColor = ContextCompat.getColor(requireContext(), R.color.white);
+                    Drawable unviewedBg = ContextCompat.getDrawable(requireContext(), R.drawable.bg_notification_unviewed);
+                    Drawable viewedBg = ContextCompat.getDrawable(requireContext(), R.drawable.bg_notification_viewed);
 
-                    // Highlight the card background
-                    card.setCardBackgroundColor(highlightColor);
+                    card.setBackground(unviewedBg);
 
-                    // Smooth scroll to the highlighted card
-                    if (scrollView != null) {
+                    if (scrollView != null)
                         scrollView.post(() -> scrollView.smoothScrollTo(0, cardView.getTop()));
-                    }
 
-                    // If we are not keeping persistent highlight (defensive), fade back after 4s
                     if (!keepHighlightFromNotification) {
                         mainHandler.postDelayed(() -> {
-                            if (isAdded()) card.setCardBackgroundColor(originalColor);
+                            if (isAdded()) card.setBackground(viewedBg);
                         }, 4000);
                     } else {
-                        // keep highlight until user taps card (we will set a tap listener to clear)
+                        // Keep highlighted until user switches tab or clicks
                         card.setOnClickListener(v -> {
-                            card.setCardBackgroundColor(originalColor);
+                            card.setBackground(viewedBg);
                             highlightReportId = "";
                             keepHighlightFromNotification = false;
                         });
@@ -647,6 +694,7 @@ public class DriverComplaints extends Fragment {
         }
         return false;
     }
+
 
     // ---------- HELPERS ----------
     private String str(Object o) {
@@ -733,4 +781,13 @@ public class DriverComplaints extends Fragment {
             return null;
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // When leaving the tab, clear any active highlight
+        keepHighlightFromNotification = false;
+        highlightReportId = "";
+    }
+
 }

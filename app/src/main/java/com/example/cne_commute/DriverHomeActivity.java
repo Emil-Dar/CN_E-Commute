@@ -1,5 +1,6 @@
 package com.example.cne_commute;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,7 +31,7 @@ public class DriverHomeActivity extends AppCompatActivity {
     private String driverId;
     private SupabaseRealtimeListener realtimeListener;
 
-    // 🟢 Global unviewed cache
+    // Global unviewed cache
     public static int cachedUnviewedCount = 0;
 
     @Override
@@ -40,7 +41,11 @@ public class DriverHomeActivity extends AppCompatActivity {
 
         instance = this;
         driverId = getIntent().getStringExtra("driverID");
-        if (driverId == null || driverId.isEmpty()) driverId = "0";
+
+        // Safety: fallback to stored or default driverId if intent extra is missing
+        if (driverId == null || driverId.trim().isEmpty()) {
+            driverId = fetchLoggedInDriverId(); // implement this method from shared prefs or session
+        }
 
         bottomNav = findViewById(R.id.driver_bottom_nav);
         badge = findViewById(R.id.notification_badge);
@@ -59,12 +64,14 @@ public class DriverHomeActivity extends AppCompatActivity {
         updateNotificationBadge();
     }
 
-    // 🔵 Called from DriverNotifications after a report is viewed
+    // Called from DriverNotifications after a report is viewed
     public static void decrementBadgeCount() {
         if (instance != null) {
             instance.runOnUiThread(() -> {
-                if (cachedUnviewedCount > 0) cachedUnviewedCount--;
-                instance.showBadge(cachedUnviewedCount);
+                if (cachedUnviewedCount > 0) {
+                    cachedUnviewedCount--;
+                    instance.showBadge(cachedUnviewedCount);
+                }
             });
         }
     }
@@ -95,8 +102,7 @@ public class DriverHomeActivity extends AppCompatActivity {
                 "Bearer " + SupabaseApiClient.SUPABASE_API_KEY
         ).enqueue(new Callback<List<Map<String, Object>>>() {
             @Override
-            public void onResponse(Call<List<Map<String, Object>>> call,
-                                   Response<List<Map<String, Object>>> response) {
+            public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     int unviewedCount = 0;
                     for (Map<String, Object> r : response.body()) {
@@ -131,6 +137,7 @@ public class DriverHomeActivity extends AppCompatActivity {
                     selected = new DriverRevenue();
                     break;
                 case R.id.driver_complaints:
+                    // Always pass correct driverId
                     selected = DriverComplaints.newInstance(driverId, null);
                     break;
                 case R.id.driver_account:
@@ -156,9 +163,16 @@ public class DriverHomeActivity extends AppCompatActivity {
         if (badge == null) return;
         if (count > 0) {
             badge.setText(String.valueOf(count));
-            badge.setVisibility(View.VISIBLE);
+            badge.setVisibility(TextView.VISIBLE);
         } else {
-            badge.setVisibility(View.GONE);
+            badge.setVisibility(TextView.GONE);
         }
+    }
+
+    // Replace with your method to get logged-in driver's ID
+    private String fetchLoggedInDriverId() {
+        // Example: return from shared preferences or session manager
+        // return SharedPrefManager.getDriverId();
+        return "DR0001"; // temporary fallback for testing
     }
 }

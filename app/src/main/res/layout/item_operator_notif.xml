@@ -1,66 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardRoot"
+    android:id="@+id/notification_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="10dp"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="5dp"
-    android:backgroundTint="@color/white"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:orientation="vertical"
+    android:background="@drawable/bg_notification_unviewed"
+    android:padding="12dp"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginBottom="8dp">
 
+    <!-- Notification summary -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:baselineAligned="false"
+        android:weightSum="1">
 
-        <!-- ================= HEADER ================= -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="6dp">
-
-            <TextView
-                android:id="@+id/reportId"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Report ID: 0001"
-                android:textStyle="bold"
-                android:textColor="@color/primary_blue"
-                android:textSize="14sp"
-                android:layout_marginStart="4dp" />
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pending"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="4dp"
-                android:textColor="@color/white"
-                android:background="@drawable/status_badge_bg"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="4dp" />
-
-        </LinearLayout>
-
-        <!-- ================= COMPLAINT MESSAGE ================= -->
         <TextView
-            android:id="@+id/message"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_message"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="A commuter reported a complaint. The PSTMU office is reviewing it."
-            android:textSize="13sp"
-            android:textColor="@color/dark_gray"
-            android:layout_marginBottom="6dp" />
+            android:layout_weight="1"
+            android:text="Your driver John D. of franchise 001 has received a complaint."
+            android:textColor="#222"
+            android:textSize="15sp"
+            android:layout_marginEnd="8dp" />
+
+        <ImageView
+            android:id="@+id/iv_expand"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_down"
+            app:tint="#555" />
+    </LinearLayout>
+
+    <!-- Dropdown details -->
+    <LinearLayout
+        android:id="@+id/details_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="8dp"
+        android:visibility="gone">
 
         <!-- ================= DETAILS SECTION ================= -->
         <LinearLayout
@@ -111,5 +96,13 @@
                 android:layout_marginTop="2dp" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: Verified"
+            android:textColor="#333"
+            android:textSize="14sp" />
+
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</LinearLayout>

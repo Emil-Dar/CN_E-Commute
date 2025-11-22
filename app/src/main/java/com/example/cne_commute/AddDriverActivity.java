@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.*;
 import androidx.annotation.NonNull;
@@ -19,7 +20,6 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
@@ -29,6 +29,8 @@ import okhttp3.RequestBody;
 import retrofit2.*;
 
 public class AddDriverActivity extends AppCompatActivity {
+
+    private static final String TAG = "AddDriverActivity";
 
     private static final int PICK_IMAGE_REQUEST = 1001;
     private static final int CAMERA_REQUEST_CODE = 1002;
@@ -81,6 +83,28 @@ public class AddDriverActivity extends AppCompatActivity {
         currentOperatorId = getSharedPreferences("UserSession", MODE_PRIVATE)
                 .getString("operator_id", null);
 
+        // Fallbacks for other possible keys or Intent extras
+        if (currentOperatorId == null) {
+            currentOperatorId = getSharedPreferences("UserSession", MODE_PRIVATE)
+                    .getString("operatorId", null);
+        }
+        if (currentOperatorId == null) {
+            currentOperatorId = getSharedPreferences("UserSession", MODE_PRIVATE)
+                    .getString("user_id", null);
+        }
+        if (currentOperatorId == null) {
+            currentOperatorId = getSharedPreferences("UserSession", MODE_PRIVATE)
+                    .getString("id", null);
+        }
+        if (currentOperatorId == null) {
+            // Also check Intent extras (in case the calling Activity passed it)
+            String opFromIntent = getIntent().getStringExtra("operator_id");
+            if (opFromIntent != null && !opFromIntent.trim().isEmpty()) {
+                currentOperatorId = opFromIntent;
+            }
+        }
+
+        Log.d(TAG, "Operator ID resolved: " + currentOperatorId);
 
         // Dropdown setup
         ArrayAdapter<String> barangayAdapter = new ArrayAdapter<>(
@@ -130,9 +154,6 @@ public class AddDriverActivity extends AppCompatActivity {
 
             datePicker.show();
         });
-
-
-
 
         cancelBtn.setOnClickListener(v -> finish());
         uploadLicenseBtn.setOnClickListener(v -> openImagePicker());
@@ -195,7 +216,7 @@ public class AddDriverActivity extends AppCompatActivity {
 
         String fileName = "license_" + System.currentTimeMillis() + ".jpg";
         String bucket = "driver_licenses";
-        String uploadUrl = "https://rtwrbkrroilftdhggxjc.supabase.co/storage/v1/object/" + bucket + "/" + fileName;
+        String uploadUrl = supabaseUrl + "/storage/v1/object/" + bucket + "/" + fileName;
 
         try (InputStream inputStream = getContentResolver().openInputStream(uri)) {
             byte[] bytes = readBytes(inputStream);
@@ -210,8 +231,10 @@ public class AddDriverActivity extends AppCompatActivity {
 
             okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
 
-            uploadLicenseBtn.setText("Uploading...");
-            uploadLicenseBtn.setEnabled(false);
+            runOnUiThread(() -> {
+                uploadLicenseBtn.setText("Uploading...");
+                uploadLicenseBtn.setEnabled(false);
+            });
 
             client.newCall(request).enqueue(new okhttp3.Callback() {
                 @Override
@@ -222,7 +245,7 @@ public class AddDriverActivity extends AppCompatActivity {
                     });
 
                     if (response.isSuccessful()) {
-                        uploadedLicenseUrl = "https://rtwrbkrroilftdhggxjc.supabase.co/storage/v1/object/public/"
+                        uploadedLicenseUrl = supabaseUrl + "/storage/v1/object/public/"
                                 + bucket + "/" + fileName;
                         runOnUiThread(() -> Toast.makeText(AddDriverActivity.this,
                                 "License uploaded successfully ♡", Toast.LENGTH_SHORT).show());
@@ -247,9 +270,6 @@ public class AddDriverActivity extends AppCompatActivity {
             Toast.makeText(this, "Failed to read image file", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
 
     private byte[] readBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -321,6 +341,13 @@ public class AddDriverActivity extends AppCompatActivity {
             return;
         }
 
+        // Ensure we have an operator id before proceeding
+        if (currentOperatorId == null || currentOperatorId.trim().isEmpty()) {
+            Toast.makeText(this, "Operator not found. Please login again.", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "No operator_id available in session. Aborting driver creation.");
+            return;
+        }
+
         String fullAddress = houseNo + ", " + street + ", " + barangay + ", " + municipality + ", Camarines Norte";
 
         fetchAndSaveDriver(firstName, middleName, lastName, suffix, birthdate,
@@ -355,6 +382,7 @@ public class AddDriverActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Map<String, Object>>> call, Throwable t) {
                 Toast.makeText(AddDriverActivity.this, "Failed to fetch latest ID", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "getLastDriverId failure: " + t.getMessage(), t);
                 saveBtn.setEnabled(true);
                 saveBtn.setText("Save");
             }
@@ -397,13 +425,28 @@ public class AddDriverActivity extends AppCompatActivity {
         driverData.put("password", hashedPassword);
         driverData.put("status", "Pending");
         driverData.put("proof_of_license", uploadedLicenseUrl);
-        driverData.put("assigned_by", currentOperatorId);
 
+        // Important: ensure requested_by is present and not null
+        // If your operators table uses integer PKs, convert accordingly before sending
+        if (currentOperatorId != null) {
+            // Example: if operator_id in DB is integer, try to convert:
+            try {
+                int opInt = Integer.parseInt(currentOperatorId);
+                // If you need to send integer:
+                // driverData.put("requested_by", opInt);
+                // If your DB expects a text FK, send as string:
+                driverData.put("requested_by", currentOperatorId);
+            } catch (NumberFormatException nfe) {
+                // keep as string
+                driverData.put("requested_by", currentOperatorId);
+            }
+        }
 
         driverData.put("created_at", createdAt);
 
         SupabaseService service = SupabaseApiClient.getRetrofitInstance().create(SupabaseService.class);
-        Call<Void> call = service.addDriver(driverData);
+        // Pass the required headers when calling addDriver
+        Call<Void> call = service.addDriver(driverData, supabaseKey, "Bearer " + supabaseKey);
 
         saveBtn.setText("Saving...");
 
@@ -419,6 +462,7 @@ public class AddDriverActivity extends AppCompatActivity {
                     finish();
                 } else {
                     Toast.makeText(AddDriverActivity.this, "Failed to save driver (server error)", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "addDriver server response: code=" + response.code() + " message=" + response.message());
                 }
             }
 
@@ -427,6 +471,7 @@ public class AddDriverActivity extends AppCompatActivity {
                 saveBtn.setEnabled(true);
                 saveBtn.setText("Save");
                 Toast.makeText(AddDriverActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "addDriver failure: " + t.getMessage(), t);
             }
         });
     }

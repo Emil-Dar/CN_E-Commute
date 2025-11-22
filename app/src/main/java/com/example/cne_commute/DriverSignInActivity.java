@@ -70,9 +70,8 @@ public class DriverSignInActivity extends AppCompatActivity {
         String apiKey = BuildConfig.SUPABASE_API_KEY;
         String authHeader = "Bearer " + apiKey;
 
-        String filter = "eq." + driverId; // matches @Query("driver_id")
-
-        supabaseService.getDriverById(apiKey, authHeader, filter)
+        // ✅ Fix filter — Retrofit query param expects eq.<value>
+        supabaseService.getDriverById(apiKey, authHeader, "eq." + driverId)
                 .enqueue(new Callback<List<Driver>>() {
                     @Override
                     public void onResponse(Call<List<Driver>> call, Response<List<Driver>> response) {
@@ -81,7 +80,6 @@ public class DriverSignInActivity extends AppCompatActivity {
 
                             boolean isVerified = false;
 
-                            // strict password enforcement
                             if (driver.password != null && !driver.password.isEmpty()) {
                                 isVerified = BCrypt.verifyer()
                                         .verify(password.toCharArray(), driver.password)
@@ -89,8 +87,14 @@ public class DriverSignInActivity extends AppCompatActivity {
                             }
 
                             if (isVerified) {
+                                // ✅ Store driver ID in SharedPreferences for future use
+                                getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                                        .edit()
+                                        .putString("driverId", driver.getDriverId())
+                                        .apply();
+
                                 Intent intent = new Intent(DriverSignInActivity.this, DriverHomeActivity.class);
-                                intent.putExtra("driverID", driverId);
+                                intent.putExtra("driverId", driver.getDriverId());
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                             } else {
@@ -107,4 +111,5 @@ public class DriverSignInActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }

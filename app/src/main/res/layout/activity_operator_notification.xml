@@ -1,20 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#F5F5F5"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:layout_height="match_parent">
 
-    <!-- Notifications Page Content -->
+    <!-- Header -->
     <TextView
         android:id="@+id/tv_notifications"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Operator Notifications"
-        android:textSize="24sp"
+        android:gravity="center"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_centerInParent="true"
+        android:padding="16dp"
         android:textColor="#333333" />
+
+    <!-- 🔍 Search + Filter Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp">
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Search"
+            android:padding="10dp"
+            android:background="@drawable/search_field_bg"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="6dp"
+            android:textSize="14sp" />
+
+        <Spinner
+            android:id="@+id/dateFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:entries="@array/date_filter_options"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <!-- Progress -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:padding="16dp" />
+
+    <!-- Scrollable Notifications -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="80dp">
+
+            <!-- 🔹 DRIVER STATUS SECTION -->
+            <TextView
+                android:id="@+id/statusSectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Driver Status Updates"
+                android:textStyle="bold"
+                android:textColor="@color/primary_blue"
+                android:textSize="18sp"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp" />
+
+            <LinearLayout
+                android:id="@+id/status_notif_container"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp" />
+
+            <!-- 🔹 DRIVER VIOLATION SECTION -->
+            <TextView
+                android:id="@+id/violationSectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Driver Violation Notifications"
+                android:textStyle="bold"
+                android:textColor="@color/primary_blue"
+                android:textSize="18sp"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="4dp" />
+
+            <LinearLayout
+                android:id="@+id/violation_notif_container"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp" />
+        </LinearLayout>
+    </ScrollView>
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -28,4 +123,4 @@
         app:menu="@menu/operator_nav_menu"
         app:labelVisibilityMode="labeled" />
 
-</RelativeLayout>
+</LinearLayout>

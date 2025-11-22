@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/notification_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_notification_unviewed"
+    android:padding="12dp"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginBottom="8dp">
+
+    <!-- Summary -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:baselineAligned="false"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Your driver has received a complaint."
+            android:textColor="#222"
+            android:textSize="15sp"
+            android:layout_marginEnd="8dp" />
+
+        <ImageView
+            android:id="@+id/iv_expand"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_down"
+            app:tint="#555" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: —"
+        android:textColor="#333"
+        android:textSize="14sp" />
+
+    <!-- Details -->
+    <LinearLayout
+        android:id="@+id/details_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="8dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/detailsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_lightgray_bg"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/detailsHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complaint Details"
+                android:textStyle="bold"
+                android:textColor="@color/primary_blue"
+                android:textSize="13sp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/violations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Violations: …"
+                android:textSize="13sp"
+                android:textColor="@color/dark_gray"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/remarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remarks: …"
+                android:textSize="13sp"
+                android:textColor="@color/medium_gray"
+                android:layout_marginBottom="2dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Filed on: Oct 27, 2025 11:15 PM"
+                android:textSize="12sp"
+                android:textColor="@color/medium_gray"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

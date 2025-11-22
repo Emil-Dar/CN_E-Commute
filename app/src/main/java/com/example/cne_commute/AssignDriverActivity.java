@@ -56,31 +56,44 @@ public class AssignDriverActivity extends AppCompatActivity {
 
     private void fetchDrivers() {
         SupabaseService service = SupabaseApiClient.getRetrofitInstance().create(SupabaseService.class);
-        service.getDrivers().enqueue(new Callback<List<Driver>>() {
+
+        service.getVerifiedDrivers(
+                BuildConfig.SUPABASE_API_KEY,
+                "Bearer " + BuildConfig.SUPABASE_API_KEY,
+                "eq.Verified" // ✅ correct Supabase filter
+        ).enqueue(new Callback<List<Driver>>() {
             @Override
             public void onResponse(Call<List<Driver>> call, Response<List<Driver>> response) {
                 if (response.isSuccessful() && response.body() != null) {
+
                     driverMap.clear();
+
                     for (Driver driver : response.body()) {
                         if (driver.getFullName() != null && driver.getDriverId() != null) {
                             driverMap.put(driver.getFullName(), driver.getDriverId());
                         }
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(AssignDriverActivity.this,
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                            AssignDriverActivity.this,
                             android.R.layout.simple_dropdown_item_1line,
-                            driverMap.keySet().toArray(new String[0]));
+                            driverMap.keySet().toArray(new String[0])
+                    );
+
                     driverNameInput.setAdapter(adapter);
+
                 } else {
-                    Toast.makeText(AssignDriverActivity.this, "Failed to load drivers", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AssignDriverActivity.this, "No verified drivers found", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Driver>> call, Throwable t) {
-                Toast.makeText(AssignDriverActivity.this, "Error fetching drivers: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AssignDriverActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     private void generateAssignmentIdAndAssign() {
         String driverName = driverNameInput.getText().toString().trim();

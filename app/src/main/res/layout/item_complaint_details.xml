@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/details_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_lightgray_bg"
+    android:padding="8dp"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/detailsHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Complaint Details"
+        android:textStyle="bold"
+        android:textColor="@color/primary_blue"
+        android:textSize="13sp"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/violations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Violation: —"
+        android:textSize="13sp"
+        android:textColor="@color/dark_gray"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/remarks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remarks: —"
+        android:textSize="13sp"
+        android:textColor="@color/medium_gray"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/appointment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Meeting scheduled on —"
+        android:textSize="12sp"
+        android:textColor="@color/medium_gray"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Filed on —"
+        android:textSize="12sp"
+        android:textColor="@color/medium_gray" />
+</LinearLayout>

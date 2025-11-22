@@ -32,6 +32,9 @@
     <color name="medium_gray">#666666</color>
     <color name="dark_gray">#333333</color>
 
+    <color name="status_verified_green">#3CB371</color>
+    <color name="status_rejected_red">#D9534F</color>
+
     <!-- Misc -->
     <color name="background_light">#F5F5F5</color>
     <color name="accentColor">#2196F3</color>
@@ -46,7 +49,6 @@
 
     <color name="light_blue_background">#E6F0FF</color>
     <color name="light_gray_background">#F7F7F7</color>
-
 
 
 </resources>

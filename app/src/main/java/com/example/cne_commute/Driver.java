@@ -3,6 +3,7 @@ package com.example.cne_commute;
 import com.google.gson.annotations.SerializedName;
 
 public class Driver {
+
     @SerializedName("driver_id")
     public String driverId;
 
@@ -39,7 +40,19 @@ public class Driver {
     @SerializedName("license_restriction")
     public String licenseRestriction;
 
-    // getters
+    // ✅ Add these missing important fields
+    @SerializedName("requested_by")
+    public String requestedBy;
+
+    @SerializedName("status")
+    public String status;
+
+    @SerializedName("created_at")
+    public String createdAt;
+
+    // ======================
+    // ✅ Getters
+    // ======================
     public String getDriverId() { return driverId; }
     public String getPassword() { return password; }
     public String getFullName() { return fullName; }
@@ -53,7 +66,14 @@ public class Driver {
     public String getLicenseExpiration() { return licenseExpiration; }
     public String getLicenseRestriction() { return licenseRestriction; }
 
-    // setters
+    // ✅ Needed by notifications
+    public String getRequestedBy() { return requestedBy; }
+    public String getStatus() { return status; }
+    public String getCreatedAt() { return createdAt; }
+
+    // ======================
+    // ✅ Setters
+    // ======================
     public void setDriverId(String driverId) { this.driverId = driverId; }
     public void setPassword(String password) { this.password = password; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
@@ -66,4 +86,8 @@ public class Driver {
     public void setLicenseExpiration(String licenseExpiration) { this.licenseExpiration = licenseExpiration; }
     public void setLicenseRestriction(String licenseRestriction) { this.licenseExpiration = licenseRestriction; }
 
+    // ✅ Add setters for new fields if needed
+    public void setRequestedBy(String requestedBy) { this.requestedBy = requestedBy; }
+    public void setStatus(String status) { this.status = status; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 }
