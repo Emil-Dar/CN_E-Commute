@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +82,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
+
+import android.os.Build;
+import java.util.Arrays;
+import android.graphics.Typeface;
+import androidx.core.content.ContextCompat;
+
 
 
 public class ReportActivity extends AppCompatActivity {
@@ -156,54 +163,75 @@ public class ReportActivity extends AppCompatActivity {
 
     private Retrofit retrofit;
 
+    private CheckBox cbCorner, cbCrosswalk, cbDoubleParking, cbNoParkingSign,
+            cbOvertimeParking, cbObstruction, cbIllegalTerminal;
+
+    private List<CheckBox> parkingCheckboxes = new ArrayList<>();
+
+    private List<CheckBox> trafficCheckboxes;
+
+    private List<CheckBox> driverBehaviorCheckboxes;
+
+    private List<CheckBox> licensingCheckboxes;
+
+    private List<CheckBox> attireFareCheckboxes;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
-        //  Retrieve scanned QR data from intent and assign to class-level fields
+        // Retrieve scanned QR data from intent and assign to class-level fields
         driverId = getIntent().getStringExtra(EXTRA_DRIVER_ID);
         driverName = getIntent().getStringExtra(EXTRA_DRIVER_NAME);
         franchiseId = getIntent().getStringExtra(EXTRA_FRANCHISE_ID);
         operatorName = getIntent().getStringExtra(EXTRA_OPERATOR_NAME);
         toda = getIntent().getStringExtra(EXTRA_TODA);
 
-        //  Initialize all UI elements and display scanned data
+        // Initialize all UI elements and display scanned data
         initViews();
 
-        //  Optional: Log scanned data for debugging
+        // Autofill commuter name and contact from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String commuterName = prefs.getString("commuter_name", "");
+        String commuterContact = prefs.getString("commuter_contact", "");
+
+        commuterNameEditText = findViewById(R.id.edit_commuter_name);
+        commuterContactEditText = findViewById(R.id.edit_commuter_contact);
+
+        commuterNameEditText.setText(commuterName);
+        commuterContactEditText.setText(commuterContact);
+
+        commuterNameEditText.setEnabled(false);
+        commuterContactEditText.setEnabled(false);
+
         Log.d("ReportActivity", "Scanned QR Data — Driver ID: " + driverId +
                 ", Driver Name: " + driverName +
                 ", Franchise ID: " + franchiseId +
                 ", Operator Name: " + operatorName +
                 ", TODA: " + toda);
 
-        //  Set up activity result launchers (camera/gallery)
         setupActivityResultLaunchers();
 
-        //  Initialize violation headers
         TextView parkingObstructionHeader = findViewById(R.id.parking_obstruction_violations);
         TextView trafficMovementHeader = findViewById(R.id.traffic_movement_violations);
         TextView driverBehaviorHeader = findViewById(R.id.driver_behavior_violations);
         TextView licensingDocumentationHeader = findViewById(R.id.licensing_documentation_violations);
         TextView attireFareHeader = findViewById(R.id.attire_fare_violations);
 
-        //  Initialize violation groups
         LinearLayout parkingObstructionViolations = findViewById(R.id.parking_obstruction_violations_options);
         LinearLayout trafficMovementViolations = findViewById(R.id.traffic_movement_violations_options);
         LinearLayout driverBehaviorViolations = findViewById(R.id.driver_behavior_violations_options);
         LinearLayout licensingDocumentationViolations = findViewById(R.id.licensing_documentation_violations_options);
         LinearLayout attireFareViolations = findViewById(R.id.attire_fare_violations_options);
 
-        //  Set up toggle logic
         setupToggle(parkingObstructionHeader, parkingObstructionViolations);
         setupToggle(trafficMovementHeader, trafficMovementViolations);
         setupToggle(driverBehaviorHeader, driverBehaviorViolations);
         setupToggle(licensingDocumentationHeader, licensingDocumentationViolations);
         setupToggle(attireFareHeader, attireFareViolations);
 
-        //  Initialize Supabase Retrofit client
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request original = chain.request();
@@ -224,13 +252,347 @@ public class ReportActivity extends AppCompatActivity {
         setupSupabaseClient();
         supabaseService = retrofit.create(SupabaseService.class);
 
-        //  Set up image and submission logic
         setupImageButtonListeners();
         setupSubmitButtonListener();
-
-        //  Display full driver info block
         showDriverInfo();
+
+        //  Parking Search Setup
+        SearchView parkingSearch = findViewById(R.id.parking_violations_search);
+
+        CheckBox cbCorner = findViewById(R.id.checkbox_corner);
+        CheckBox cbCrosswalk = findViewById(R.id.checkbox_crosswalk);
+        CheckBox cbDoubleParking = findViewById(R.id.checkbox_double_parking);
+        CheckBox cbNoParkingSign = findViewById(R.id.checkbox_no_parking_sign);
+        CheckBox cbOvertimeParking = findViewById(R.id.checkbox_overtime_parking);
+        CheckBox cbObstruction = findViewById(R.id.checkbox_obstruction);
+        CheckBox cbIllegalTerminal = findViewById(R.id.checkbox_illegal_terminal);
+
+        parkingCheckboxes = Arrays.asList(
+                cbCorner, cbCrosswalk, cbDoubleParking,
+                cbNoParkingSign, cbOvertimeParking,
+                cbObstruction, cbIllegalTerminal
+        );
+
+        parkingSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("ParkingSearch", "Query submitted: " + query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("ParkingSearch", "Query changed: " + newText);
+                filterParkingViolations(newText);
+                return true;
+            }
+        });
+        int parkingSearchTextId = parkingSearch.getContext().getResources()
+                .getIdentifier("android:id/search_src_text", null, null);
+        TextView parkingSearchText = parkingSearch.findViewById(parkingSearchTextId);
+        if (parkingSearchText != null) {
+            parkingSearchText.setTextColor(ContextCompat.getColor(this, R.color.black));
+            parkingSearchText.setTextSize(16);
+            parkingSearchText.setTypeface(Typeface.DEFAULT);
+            parkingSearchText.setPadding(
+                    parkingSearchText.getPaddingLeft(),
+                    parkingSearchText.getPaddingTop(),
+                    parkingSearchText.getPaddingRight(),
+                    parkingSearchText.getPaddingBottom() + 10
+            );
+        }
+
+
+
+
+        //  Traffic Movement Search Setup
+        SearchView trafficSearch = findViewById(R.id.traffic_movement_violations_search);
+
+        // Bind each CheckBox
+        CheckBox cbLeftTurnVinzonsJlukban = findViewById(R.id.checkbox_left_turn_vinzons_jlukban);
+        CheckBox cbLeftTurnJlukban = findViewById(R.id.checkbox_left_turn_jlukban);
+        CheckBox cbLeftTurnVinzonsFelipe = findViewById(R.id.checkbox_left_turn_vinzons_felipe);
+        CheckBox cbUTurnVinzons = findViewById(R.id.checkbox_u_turn_vinzons);
+        CheckBox cbLeftTurnFPimentelVBasit = findViewById(R.id.checkbox_left_turn_fpimentel_vbasit);
+        CheckBox cbLeftTurnVBasitFPimentel = findViewById(R.id.checkbox_left_turn_vbasit_fpimentel);
+        CheckBox cbOutOfLine = findViewById(R.id.checkbox_out_of_line);
+        CheckBox cbDisregardingSign = findViewById(R.id.checkbox_disregarding_traffic_sign);
+        CheckBox cbTruckBan = findViewById(R.id.checkbox_truck_ban);
+        CheckBox cbNumberCoding = findViewById(R.id.checkbox_number_color_coding);
+        CheckBox cbLoadingUnloading = findViewById(R.id.checkbox_loading_unloading_vinzons);
+        CheckBox cbRightOfWay = findViewById(R.id.checkbox_right_of_way_emergency);
+        CheckBox cbJaywalking = findViewById(R.id.checkbox_jaywalking);
+
+        // Group into list
+        trafficCheckboxes = Arrays.asList(
+                cbLeftTurnVinzonsJlukban, cbLeftTurnJlukban, cbLeftTurnVinzonsFelipe,
+                cbUTurnVinzons, cbLeftTurnFPimentelVBasit, cbLeftTurnVBasitFPimentel,
+                cbOutOfLine, cbDisregardingSign, cbTruckBan,
+                cbNumberCoding, cbLoadingUnloading, cbRightOfWay, cbJaywalking
+        );
+
+        // Search listener
+        trafficSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("TrafficSearch", "Query submitted: " + query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("TrafficSearch", "Query changed: " + newText);
+                filterTrafficViolations(newText);
+                return true;
+            }
+        });
+        int trafficSearchTextId = trafficSearch.getContext().getResources()
+                .getIdentifier("android:id/search_src_text", null, null);
+        TextView trafficSearchText = trafficSearch.findViewById(trafficSearchTextId);
+        if (trafficSearchText != null) {
+            trafficSearchText.setTextColor(ContextCompat.getColor(this, R.color.black));
+            trafficSearchText.setTextSize(16);
+            trafficSearchText.setTypeface(Typeface.DEFAULT);
+            trafficSearchText.setPadding(
+                    trafficSearchText.getPaddingLeft(),
+                    trafficSearchText.getPaddingTop(),
+                    trafficSearchText.getPaddingRight(),
+                    trafficSearchText.getPaddingBottom() + 10
+            );
+        }
+
+
+        //  Driver Behavior Search Setup
+        SearchView driverBehaviorSearch = findViewById(R.id.driver_behavior_violations_search);
+
+        // Bind each CheckBox
+        CheckBox cbRefuseToConvey = findViewById(R.id.checkbox_refuse_to_convey);
+        CheckBox cbAbusiveDriver = findViewById(R.id.checkbox_abusive_driver);
+        CheckBox cbRecklessDriving = findViewById(R.id.checkbox_reckless_driving);
+        CheckBox cbDuiLiquor = findViewById(R.id.checkbox_dui_liquor);
+        CheckBox cbHitching = findViewById(R.id.checkbox_hitching);
+
+        // Group into list
+        driverBehaviorCheckboxes = Arrays.asList(
+                cbRefuseToConvey, cbAbusiveDriver, cbRecklessDriving,
+                cbDuiLiquor, cbHitching
+        );
+
+        // Search listener
+        driverBehaviorSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("DriverBehaviorSearch", "Query submitted: " + query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("DriverBehaviorSearch", "Query changed: " + newText);
+                filterDriverBehaviorViolations(newText);
+                return true;
+            }
+        });
+        int driverBehaviorSearchTextId = driverBehaviorSearch.getContext().getResources()
+                .getIdentifier("android:id/search_src_text", null, null);
+        TextView searchText = parkingSearch.findViewById(driverBehaviorSearchTextId);
+        if (searchText != null) {
+            searchText.setTextColor(ContextCompat.getColor(this, R.color.black));
+            searchText.setTextSize(16); // Same as header
+            searchText.setTypeface(Typeface.DEFAULT); // Not bold
+
+            // Add bottom padding to push the underline lower
+            searchText.setPadding(
+                    searchText.getPaddingLeft(),
+                    searchText.getPaddingTop(),
+                    searchText.getPaddingRight(),
+                    searchText.getPaddingBottom() + 10 // Adjust this value as needed
+            );
+        }
+
+        //  Licensing Documentation Search Setup
+        SearchView licensingSearch = findViewById(R.id.licensing_documentation_violations_search);
+
+        // Bind each CheckBox
+        CheckBox cbNoDriversLicense = findViewById(R.id.checkbox_no_drivers_license);
+        CheckBox cbStudentPermitUse = findViewById(R.id.checkbox_student_permit_use);
+        CheckBox cbUnregisteredFranchise = findViewById(R.id.checkbox_unregistered_franchise);
+
+        // Group into list
+        licensingCheckboxes = Arrays.asList(
+                cbNoDriversLicense, cbStudentPermitUse, cbUnregisteredFranchise
+        );
+
+        // Search listener
+        licensingSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("LicensingSearch", "Query submitted: " + query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("LicensingSearch", "Query changed: " + newText);
+                filterLicensingViolations(newText);
+                return true;
+            }
+        });
+        int licensingSearchTextId = licensingSearch.getContext().getResources()
+                .getIdentifier("android:id/search_src_text", null, null);
+        TextView licensingSearchText = licensingSearch.findViewById(licensingSearchTextId);
+        if (licensingSearchText != null) {
+            licensingSearchText.setTextColor(ContextCompat.getColor(this, R.color.black));
+            licensingSearchText.setTextSize(16); // Match header font size
+            licensingSearchText.setTypeface(Typeface.DEFAULT); // Not bold
+            licensingSearchText.setPadding(
+                    licensingSearchText.getPaddingLeft(),
+                    licensingSearchText.getPaddingTop(),
+                    licensingSearchText.getPaddingRight(),
+                    licensingSearchText.getPaddingBottom() + 10 // Push underline lower
+            );
+        }
+
+
+        //  Attire Fare Search Setup
+        SearchView attireFareSearch = findViewById(R.id.attire_fare_violations_search);
+
+        // Bind each CheckBox
+        CheckBox cbImproperAttire = findViewById(R.id.checkbox_improper_attire);
+        CheckBox cbTricycleFareMatrix = findViewById(R.id.checkbox_tricycle_fare_matrix);
+        CheckBox cbNoHelmet = findViewById(R.id.checkbox_no_helmet);
+        CheckBox cbOvercharging = findViewById(R.id.checkbox_overcharging);
+
+
+        // Group into list
+        attireFareCheckboxes = Arrays.asList(
+                cbImproperAttire, cbTricycleFareMatrix, cbNoHelmet, cbOvercharging
+        );
+
+        // Search listener
+        attireFareSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("AttireFareSearch", "Query submitted: " + query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("AttireFareSearch", "Query changed: " + newText);
+                filterAttireFareViolations(newText);
+                return true;
+            }
+        });
+        int attireFareSearchTextId = attireFareSearch.getContext().getResources()
+                .getIdentifier("android:id/search_src_text", null, null);
+        TextView attireFareSearchText = attireFareSearch.findViewById(attireFareSearchTextId);
+        if (attireFareSearchText != null) {
+            attireFareSearchText.setTextColor(ContextCompat.getColor(this, R.color.black));
+            attireFareSearchText.setTextSize(16); // Match header font size
+            attireFareSearchText.setTypeface(Typeface.DEFAULT); // Not bold
+            attireFareSearchText.setPadding(
+                    attireFareSearchText.getPaddingLeft(),
+                    attireFareSearchText.getPaddingTop(),
+                    attireFareSearchText.getPaddingRight(),
+                    attireFareSearchText.getPaddingBottom() + 10 // Push underline lower
+            );
+        }
+
+
     }
+
+
+    private void filterParkingViolations(String query) {
+        String normalizedQuery = query.toLowerCase().trim();
+
+        for (CheckBox checkbox : parkingCheckboxes) {
+            if (checkbox == null) {
+                Log.e("ParkingSearch", "Checkbox is null — skipping");
+                continue;
+            }
+
+            String label = checkbox.getText().toString().toLowerCase().trim();
+            Log.d("ParkingSearch", "Comparing label: '" + label + "' with query: '" + normalizedQuery + "'");
+            checkbox.setVisibility(label.contains(normalizedQuery) ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void filterTrafficViolations(String query) {
+        String normalizedQuery = query.toLowerCase().trim();
+
+        for (CheckBox checkbox : trafficCheckboxes) {
+            if (checkbox == null) {
+                Log.e("TrafficSearch", "Checkbox is null — skipping");
+                continue;
+            }
+
+            String label = checkbox.getText().toString().toLowerCase().trim();
+            Log.d("TrafficSearch", "Comparing label: '" + label + "' with query: '" + normalizedQuery + "'");
+            checkbox.setVisibility(label.contains(normalizedQuery) ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void filterDriverBehaviorViolations(String query) {
+        String normalizedQuery = query.toLowerCase().trim();
+
+        for (CheckBox checkbox : driverBehaviorCheckboxes) {
+            if (checkbox == null) {
+                Log.e("DriverBehaviorSearch", "Checkbox is null — skipping");
+                continue;
+            }
+
+            String label = checkbox.getText().toString().toLowerCase().trim();
+            Log.d("DriverBehaviorSearch", "Comparing label: '" + label + "' with query: '" + normalizedQuery + "'");
+            checkbox.setVisibility(label.contains(normalizedQuery) ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void filterLicensingViolations(String query) {
+        String normalizedQuery = query.toLowerCase().trim();
+
+        for (CheckBox checkbox : licensingCheckboxes) {
+            if (checkbox == null) {
+                Log.e("LicensingSearch", "Checkbox is null — skipping");
+                continue;
+            }
+
+            String label = checkbox.getText().toString().toLowerCase().trim();
+            Log.d("LicensingSearch", "Comparing label: '" + label + "' with query: '" + normalizedQuery + "'");
+            checkbox.setVisibility(label.contains(normalizedQuery) ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void filterAttireFareViolations(String query) {
+        String normalizedQuery = query.toLowerCase().trim();
+
+        for (CheckBox checkbox : attireFareCheckboxes) {
+            if (checkbox == null) {
+                Log.e("AttireFareSearch", "Checkbox is null — skipping");
+                continue;
+            }
+
+            String label = checkbox.getText().toString().toLowerCase().trim();
+            Log.d("AttireFareSearch", "Comparing label: '" + label + "' with query: '" + normalizedQuery + "'");
+            checkbox.setVisibility(label.contains(normalizedQuery) ? View.VISIBLE : View.GONE);
+        }
+    }
+
+
+    private void toggleCheckboxVisibility(CheckBox checkbox, String query) {
+        if (checkbox == null) {
+            Log.e("ParkingSearch", "Checkbox is null — skipping");
+            return;
+        }
+
+        String label = checkbox.getText().toString().toLowerCase().trim();
+        String normalizedQuery = query.toLowerCase().trim();
+
+        Log.d("ParkingSearch", "Comparing label: '" + label + "' with query: '" + normalizedQuery + "'");
+
+        checkbox.setVisibility(label.contains(normalizedQuery) ? View.VISIBLE : View.GONE);
+    }
+
 
 
 
@@ -281,8 +643,18 @@ public class ReportActivity extends AppCompatActivity {
         Log.d("ReportActivity", "Driver ID: " + driverId + ", Name: " + driverName +
                 ", Franchise ID: " + franchiseId +
                 ", Operator Name: " + operatorName + ", TODA: " + toda);
-    }
 
+        // Display scanned data in the driver info block
+        driverInfoText = findViewById(R.id.driver_info_text); // Make sure this TextView exists in your XML
+
+        String info = "Driver Name: " + driverName + "\n" +
+                "Driver ID: " + driverId + "\n" +
+                "Franchise ID: " + franchiseId + "\n" +
+                "Operator: " + operatorName + "\n" +
+                "TODA: " + toda;
+
+        driverInfoText.setText(info);
+    }
 
 
     private String getSafeExtra(String key, String fallback) {
@@ -305,22 +677,27 @@ public class ReportActivity extends AppCompatActivity {
         }
 
         // Commuter details input
-        commuterNameEditText = findViewById(R.id.commuter_name_edit_text);
-        commuterContactEditText = findViewById(R.id.commuter_contact_edit_text);
+        commuterNameEditText = findViewById(R.id.edit_commuter_name);
+        commuterContactEditText = findViewById(R.id.edit_commuter_contact);
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String name = currentUser.getDisplayName();
-            String phone = currentUser.getPhoneNumber();
+        // Fallback: If SharedPreferences didn't populate fields, try Firebase
+        if ((commuterNameEditText.getText() == null || commuterNameEditText.getText().toString().isEmpty()) ||
+                (commuterContactEditText.getText() == null || commuterContactEditText.getText().toString().isEmpty())) {
 
-            if (name != null && commuterNameEditText != null) {
-                commuterNameEditText.setText(name);
-                commuterNameEditText.setEnabled(false);
-            }
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                String name = currentUser.getDisplayName();
+                String phone = currentUser.getPhoneNumber();
 
-            if (phone != null && commuterContactEditText != null) {
-                commuterContactEditText.setText(phone);
-                commuterContactEditText.setEnabled(false);
+                if (name != null && commuterNameEditText != null) {
+                    commuterNameEditText.setText(name);
+                    commuterNameEditText.setEnabled(false);
+                }
+
+                if (phone != null && commuterContactEditText != null) {
+                    commuterContactEditText.setText(phone);
+                    commuterContactEditText.setEnabled(false);
+                }
             }
         }
 
@@ -331,7 +708,7 @@ public class ReportActivity extends AppCompatActivity {
         TextView operatorIdTextView = findViewById(R.id.operator_id_text_view);
         TextView todaTextView = findViewById(R.id.toda_text_view);
 
-        //  Display scanned QR data
+        // Display scanned QR data
         driverIdTextView.setText("Driver ID: " + (driverId != null ? driverId : "Unknown"));
         driverNameTextView.setText("Driver Name: " + (driverName != null ? driverName : "Unknown"));
         franchiseIdTextView.setText("Franchise ID: " + (franchiseId != null ? franchiseId : "Unknown"));
@@ -363,7 +740,6 @@ public class ReportActivity extends AppCompatActivity {
     }
 
 
-
     private void setupImageButtonListeners() {
         setupClickListener(selectFileButton, this::openFileChooser);
         setupClickListener(openCameraButton, this::checkCameraPermissionAndOpen);
@@ -379,16 +755,32 @@ public class ReportActivity extends AppCompatActivity {
     private void setupSubmitButtonListener() {
         if (submitButton != null) {
             submitButton.setOnClickListener(v -> {
+                // Validate driver info from QR
                 if (driverId == null || driverName == null || franchiseId == null) {
-                    Toast.makeText(this, "Missing driver info. Please rescan.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Missing driver info. Please rescan the QR code.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                showReportSummaryDialog(); //  Show preview before submitting
+                // Validate commuter info
+                String commuterName = commuterNameEditText.getText().toString().trim();
+                String commuterContact = commuterContactEditText.getText().toString().trim();
+
+                if (commuterName.isEmpty() || commuterContact.isEmpty()) {
+                    Toast.makeText(this, "Please ensure your name and contact number are filled in.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Optional: Validate image presence
+                if (imagePreview.getDrawable() == null) {
+                    Toast.makeText(this, "Please attach a photo before submitting.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // All good — show preview
+                showReportSummaryDialog();
             });
         }
     }
-
 
 
     private void setupListeners() {
@@ -419,7 +811,7 @@ public class ReportActivity extends AppCompatActivity {
                 boolean isVisible = targetGroup.getVisibility() == View.VISIBLE;
                 targetGroup.setVisibility(isVisible ? View.GONE : View.VISIBLE);
 
-                // Optional: Add rotation or icon feedback
+                // Rotate toggle icon for feedback
                 toggleAnchor.setRotation(isVisible ? 0f : 0f);
             });
         }
@@ -458,7 +850,10 @@ public class ReportActivity extends AppCompatActivity {
                         Uri uri = result.getData().getData();
                         Log.d("ReportActivity", "Selected image URI: " + uri);
                         if (isValidImage(uri)) {
+                            photoUri = uri; // Store for consistency
                             previewImage(uri);
+                            imagePreview.setContentDescription("Selected image preview");
+                            submitButton.setEnabled(true);
                         } else {
                             showToast("Unsupported image format.");
                         }
@@ -471,7 +866,9 @@ public class ReportActivity extends AppCompatActivity {
                         Log.d("ReportActivity", "Captured photo URI: " + photoUri);
                         if (isValidImage(photoUri)) {
                             previewImage(photoUri);
+                            imagePreview.setContentDescription("Captured photo preview");
                             showToast("Photo captured successfully!");
+                            submitButton.setEnabled(true);
                         } else {
                             showToast("Captured photo is not a valid image.");
                         }
@@ -485,11 +882,28 @@ public class ReportActivity extends AppCompatActivity {
             imagePreview.setImageURI(uri);
             imagePreview.setTag(uri);
             imagePreview.setContentDescription("Selected violation photo");
+
+            // Animate image appearance
+            imagePreview.setAlpha(0f);
+            imagePreview.animate().alpha(1f).setDuration(300).start();
+
+            // Enable submit button
+            submitButton.setEnabled(true);
+
+            // Show remove button
             if (removePhotoButton != null) {
                 removePhotoButton.setVisibility(View.VISIBLE);
             }
+
+            // Log dimensions
+            imagePreview.post(() -> {
+                int width = imagePreview.getWidth();
+                int height = imagePreview.getHeight();
+                Log.d("ReportActivity", "Preview dimensions: " + width + "x" + height);
+            });
         }
     }
+
 
     private boolean isValidImage(Uri uri) {
         ContentResolver resolver = getContentResolver();
@@ -502,22 +916,44 @@ public class ReportActivity extends AppCompatActivity {
         Log.d("ReportActivity", "openFileChooser triggered");
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/jpeg", "image/png", "image/webp"});
         pickImageLauncher.launch(Intent.createChooser(i, "Select an image"));
     }
 
 
     private void checkCameraPermissionAndOpen() {
         Log.d("ReportActivity", "checkCameraPermissionAndOpen triggered");
+
+        // Determine required permissions based on Android version
+        String[] permissions;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_MEDIA_IMAGES};
+        } else {
+            permissions = new String[]{Manifest.permission.CAMERA};
+        }
+
+        // Check if camera permission is already granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
             openCamera();
         } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_MEDIA_IMAGES},
-                    CAMERA_PERMISSION_REQUEST_CODE);
+            // Show rationale if needed
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Camera Permission Required")
+                        .setMessage("To capture a violation photo, the app needs access to your camera.")
+                        .setPositiveButton("Allow", (dialog, which) -> {
+                            ActivityCompat.requestPermissions(this, permissions, CAMERA_PERMISSION_REQUEST_CODE);
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            } else {
+                // Directly request permissions
+                ActivityCompat.requestPermissions(this, permissions, CAMERA_PERMISSION_REQUEST_CODE);
+            }
         }
     }
-
 
     private void openCamera() {
         try {
@@ -558,23 +994,31 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void submitReport() {
+        Log.d("ReportActivity", "submitReport() triggered");
+
         String commuterName = commuterNameEditText != null ? commuterNameEditText.getText().toString().trim() : "";
         String commuterContact = commuterContactEditText != null ? commuterContactEditText.getText().toString().trim() : "";
 
-        // Detect if fields were auto-filled and disabled
+        Log.d("ReportActivity", "Commuter name: " + commuterName);
+        Log.d("ReportActivity", "Commuter contact: " + commuterContact);
+
+        // Normalize contact number
+        commuterContact = commuterContact.replaceAll("[\\s-]", "");
+
         boolean isAutoFilledName = commuterNameEditText != null && !commuterNameEditText.isEnabled();
         boolean isAutoFilledContact = commuterContactEditText != null && !commuterContactEditText.isEnabled();
 
-        // Validate only if fields are editable
         if (!isAutoFilledName && (commuterName.isEmpty() || commuterName.matches(".*\\d.*"))) {
             commuterNameEditText.setError("Please enter a valid name.");
             showToast("Name is required and must not contain numbers.");
+            Log.d("ReportActivity", "Invalid commuter name");
             return;
         }
 
         if (!isAutoFilledContact && (commuterContact.isEmpty() || !commuterContact.matches("^09\\d{9}$"))) {
             commuterContactEditText.setError("Invalid Philippine mobile number.");
             showToast("Please enter a valid contact number.");
+            Log.d("ReportActivity", "Invalid commuter contact");
             return;
         }
 
@@ -586,8 +1030,11 @@ public class ReportActivity extends AppCompatActivity {
         String imgDesc = imageDescriptionInput != null ? imageDescriptionInput.getText().toString().trim() : "";
         Uri uri = (imagePreview != null && imagePreview.getTag() instanceof Uri) ? (Uri) imagePreview.getTag() : null;
 
+        Log.d("ReportActivity", "Image URI: " + uri);
+
         if (isAllEmpty(parking, movement, behavior, licensing, attire) && uri == null) {
             showToast("Provide at least one violation or an image.");
+            Log.d("ReportActivity", "No violations or image provided");
             return;
         }
 
@@ -602,7 +1049,7 @@ public class ReportActivity extends AppCompatActivity {
                 driverId,
                 driverName,
                 franchiseId,
-                operatorName, //  updated
+                operatorName,
                 toda,
                 commuterName,
                 commuterContact,
@@ -612,18 +1059,23 @@ public class ReportActivity extends AppCompatActivity {
                 licensing,
                 attire,
                 imgDesc,
-                null,       // imageUrl will be set after upload
+                null,
                 timestamp,
-                "Pending",  // default status
-                null        // remarks (can be null at submission)
+                "Pending",
+                null
         );
 
+        Log.d("ReportActivity", "Report object created: " + new Gson().toJson(report));
+
         if (uri != null) {
+            Log.d("ReportActivity", "Uploading image before submitting report");
             uploadImageThenSubmit(uri, report);
         } else {
+            Log.d("ReportActivity", "No image attached. Submitting report directly");
             submitToSupabase(report);
         }
     }
+
 
 
     private void showReportSummaryDialog() {
@@ -643,8 +1095,6 @@ public class ReportActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
-
 
 
     private void submitToSupabase(Report report) {
@@ -676,25 +1126,29 @@ public class ReportActivity extends AppCompatActivity {
     }
 
 
-
     private void uploadImageThenSubmit(Uri uri, Report report) {
         String filename = report.getUserId() + "_" + System.currentTimeMillis() + ".jpg";
 
-        try {
-            InputStream stream = getContentResolver().openInputStream(uri);
-            byte[] imageBytes = readBytes(stream); // Your existing helper method
+        try (InputStream stream = getContentResolver().openInputStream(uri)) {
+            byte[] imageBytes = readBytes(stream);
 
             RequestBody body = RequestBody.create(imageBytes, MediaType.parse("image/jpeg"));
+            String uploadUrl = buildImageUrl(filename);
+
             Request request = new Request.Builder()
-                    .url("https://rtwrbkrroilftdhggxjc.supabase.co/storage/v1/s3/uploads_debug_0/" + filename)
+                    .url(uploadUrl)
                     .put(body)
                     .build();
+
+            // Optional: show loading indicator here
 
             client.newCall(request).enqueue(new okhttp3.Callback() {
                 @Override
                 public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                    // Optional: hide loading indicator here
+
                     if (response.isSuccessful()) {
-                        String imageUrl = "https://rtwrbkrroilftdhggxjc.supabase.co/storage/v1/s3/uploads_debug_0/" + filename;
+                        String imageUrl = buildImageUrl(filename);
                         report.setImageUrl(imageUrl);
 
                         Log.d(TAG, "Image URL: " + imageUrl);
@@ -713,6 +1167,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(okhttp3.Call call, IOException e) {
+                    // Optional: hide loading indicator here
                     Log.e(TAG, "Upload error: " + e.getMessage(), e);
                     runOnUiThread(() -> {
                         showToast("Upload error. Submitting without image.");
@@ -722,13 +1177,17 @@ public class ReportActivity extends AppCompatActivity {
                 }
             });
 
-
         } catch (IOException e) {
             Log.e(TAG, "Failed to read image: " + e.getMessage(), e);
             showToast("Failed to read image.");
             submitToSupabase(report);
         }
     }
+
+    private String buildImageUrl(String filename) {
+        return "https://rtwrbkrroilftdhggxjc.supabase.co/storage/v1/object/report-images/" + filename;
+    }
+
 
 
     // Utility method for reading image bytes from InputStream
@@ -749,7 +1208,7 @@ public class ReportActivity extends AppCompatActivity {
             return;
         }
 
-        // ✅ Retrieve and log Firebase UID
+        //  Retrieve and log Firebase UID
         String userId = FirebaseAuth.getInstance().getCurrentUser() != null
                 ? FirebaseAuth.getInstance().getCurrentUser().getUid()
                 : "null";
@@ -798,11 +1257,6 @@ public class ReportActivity extends AppCompatActivity {
 
         Log.d(TAG, " Report saved to local history.");
     }
-
-
-
-
-
 
 
     private void saveReport(String reportId, Map<String, Object> data) {
@@ -859,9 +1313,6 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 
 
     private String extractInput(LinearLayout section) {
@@ -924,6 +1375,5 @@ public class ReportActivity extends AppCompatActivity {
             openCamera();
         }
     }
-
 
 }

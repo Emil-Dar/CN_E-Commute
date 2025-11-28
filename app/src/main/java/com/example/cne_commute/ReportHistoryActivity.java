@@ -3,14 +3,12 @@ package com.example.cne_commute;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -44,7 +42,6 @@ public class ReportHistoryActivity extends AppCompatActivity {
     private ReportHistoryAdapter adapter;
     private ProgressBar progressBar;
     private TextView noReportsText;
-    private Spinner sortSpinner;
 
     private FirebaseAuth mAuth;
     private List<ReportData> originalList = new ArrayList<>();
@@ -76,33 +73,20 @@ public class ReportHistoryActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progress_bar);
         noReportsText = findViewById(R.id.no_reports_text);
-        sortSpinner = findViewById(R.id.sort_spinner);
 
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
-                this, R.array.sort_options, R.layout.spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sortSpinner.setAdapter(spinnerAdapter);
-
-        setupSortSpinner();
         fetchReports();
     }
 
-    private void setupSortSpinner() {
-        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                List<ReportData> sorted = new ArrayList<>(originalList);
-                if (position == 0) {
-                    Collections.sort(sorted, (r1, r2) -> safe(r2.getTimestamp()).compareTo(safe(r1.getTimestamp())));
-                } else {
-                    Collections.sort(sorted, Comparator.comparing(r -> safe(r.getDriverName()), String.CASE_INSENSITIVE_ORDER));
-                }
-                adapter.updateList(sorted);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+    private void applySort(int position) {
+        List<ReportData> sorted = new ArrayList<>(originalList);
+        if (position == 0) {
+            // Sort by date (newest first)
+            Collections.sort(sorted, (r1, r2) -> safe(r2.getTimestamp()).compareTo(safe(r1.getTimestamp())));
+        } else {
+            // Sort by driver name
+            Collections.sort(sorted, Comparator.comparing(r -> safe(r.getDriverName()), String.CASE_INSENSITIVE_ORDER));
+        }
+        adapter.updateList(sorted);
     }
 
     private void fetchReports() {
@@ -138,6 +122,8 @@ public class ReportHistoryActivity extends AppCompatActivity {
                         originalList = reports;
                         recyclerView.setVisibility(View.VISIBLE);
                         adapter.updateList(new ArrayList<>(originalList));
+                        // Default sort by date
+                        applySort(0);
                     }
                 } else {
                     handleError(response);
@@ -187,6 +173,8 @@ public class ReportHistoryActivity extends AppCompatActivity {
             originalList = ReportMapper.toReportDataList(reportList);
             recyclerView.setVisibility(View.VISIBLE);
             adapter.updateList(new ArrayList<>(originalList));
+            // Default sort by date
+            applySort(0);
         }
     }
 
@@ -222,12 +210,27 @@ public class ReportHistoryActivity extends AppCompatActivity {
         return value != null ? value : "";
     }
 
+    // ---------------- Toolbar Menu for Sorting ----------------
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_report_history, menu);
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
             overridePendingTransition(R.anim.fade_in, 0);
             return true;
+        }
+        switch (item.getItemId()) {
+            case R.id.action_sort_date:
+                applySort(0);
+                return true;
+            case R.id.action_sort_driver:
+                applySort(1);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

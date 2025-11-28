@@ -50,13 +50,15 @@
 
         <!-- Launcher Activity -->
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".SplashScreenActivityNew"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
 
         <!-- QR Scanner -->
         <activity android:name=".QRScannerActivity" android:exported="false" />
@@ -115,10 +117,17 @@
         <!-- Archive -->
         <activity android:name=".ArchivedQrCodesActivity" android:exported="true" />
 
+        <!-- Commuter SignUp, SignIn -->
+        <activity android:name=".CommuterSignInActivity" android:exported="true" />
+        <activity android:name=".CommuterSignUpActivity" android:exported="true" />
+
+        <activity android:name=".ChangePasswordActivity" android:exported="true" />
+        <activity android:name=".CommuterAccountActivity" android:exported="true" />
+
+        <activity android:name=".ReportNotificationDetailsActivity" android:exported="true" />
+        <activity android:name=".AppointmentNotificationDetailsActivity" android:exported="true" />
 
 
 
-
-
-    </application>
-</manifest>
+      </application>
+  </manifest>

@@ -1,4 +1,5 @@
 <resources>
+
     <!-- Core Colors -->
     <color name="backgroundColor">#BFDBEF</color>
     <color name="foregroundColor">#FFFFFF</color>
@@ -26,29 +27,27 @@
     <color name="red">#8B0000</color>
     <color name="orange">#FF9800</color>
     <color name="alert_red">#FF3B30</color>
+    <color name="blue">#2196F3</color>
 
     <!-- Grays -->
     <color name="light_gray">#ECECEC</color>
     <color name="medium_gray">#666666</color>
     <color name="dark_gray">#333333</color>
 
-    <color name="status_verified_green">#3CB371</color>
-    <color name="status_rejected_red">#D9534F</color>
-
-    <!-- Misc -->
+    <!-- Misc UI Colors -->
     <color name="background_light">#F5F5F5</color>
     <color name="accentColor">#2196F3</color>
-    <color name="blue">#2196F3</color>
+    <color name="hintColor">#999999</color>
 
-    <color name="status_pending_red">#E53935</color>     <!-- Red -->
-    <color name="status_accepted_yellow">#FDD835</color> <!-- Yellow -->
-    <color name="status_resolved_green">#43A047</color>  <!-- Green -->
+    <!-- Status Colors -->
+    <color name="status_pending_red">#E53935</color>
+    <color name="status_accepted_yellow">#FDD835</color>
+    <color name="status_resolved_green">#43A047</color>
     <color name="status_scheduled_blue">#2196F3</color>
     <color name="status_unresolved_gray">#9E9E9E</color>
 
-
+    <!-- Background Variants -->
     <color name="light_blue_background">#E6F0FF</color>
     <color name="light_gray_background">#F7F7F7</color>
-
 
 </resources>

@@ -6,10 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
-    <!-- Notification Icon (uses PNG now) -->
-    <!-- Notification Icon - Upper Right Corner -->
-    <!-- Notification Icon - Properly aligned to top-right -->
-    <!-- Notification Icon - Top Right (Fixed Size & Position) -->
+    <!-- Notification Icon -->
     <FrameLayout
         android:id="@+id/notification_container"
         android:layout_width="wrap_content"
@@ -43,23 +40,73 @@
             android:text="0" />
     </FrameLayout>
 
-    <!-- Title -->
+    <!-- Greeting Title -->
     <TextView
         android:id="@+id/home_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
-        android:text="@string/home_description"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:layout_below="@id/notification_container"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="16dp"
+        android:text="Welcome back to CNE-Commute!"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+
+    <!-- Profile Section -->
+    <LinearLayout
+        android:id="@+id/profile_info_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/home_title"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="16dp"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground">
+
+        <ImageView
+            android:id="@+id/profile_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_profile"
+            android:background="@drawable/circle_background"
+            android:scaleType="centerCrop"
+            android:contentDescription="Commuter avatar" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/profile_fullname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Krizza Heart Esperas"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/profile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="krizzaheart.esperas@gmail.com"
+                android:textSize="14sp"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- ScrollView wraps card section -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/home_title"
+        android:layout_below="@id/profile_info_container"
         android:layout_above="@id/fab_qr_code"
         android:layout_marginBottom="25dp"
         android:layout_marginTop="16dp"
@@ -72,7 +119,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <!-- CARD 1: Scan QR -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_scan_qr"
@@ -104,8 +150,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/scan_qr_code"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textSize="16sp"
+
                         android:layout_marginStart="16dp"
                         app:layout_constraintStart_toEndOf="@id/icon_scan_qr"
                         app:layout_constraintTop_toTopOf="@id/icon_scan_qr"
@@ -156,8 +202,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/fare_matrix"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textSize="16sp"
+
                         android:layout_marginStart="16dp"
                         app:layout_constraintStart_toEndOf="@id/icon_fare_calculator"
                         app:layout_constraintTop_toTopOf="@id/icon_fare_calculator"
@@ -208,8 +254,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/report_issues"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textSize="16sp"
+
                         android:layout_marginStart="16dp"
                         app:layout_constraintStart_toEndOf="@id/icon_report_issues"
                         app:layout_constraintTop_toTopOf="@id/icon_report_issues"

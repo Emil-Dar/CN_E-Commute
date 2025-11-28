@@ -7,19 +7,22 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     private ImageView logoImageView;
     private TextView taglineTextView;
-    private ProgressBar progressBar;
+    private LinearLayout buttonLayout;
+    private Button signInButton, signUpButton;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -31,39 +34,63 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         logoImageView = findViewById(R.id.logo);
         taglineTextView = findViewById(R.id.tagline);
-        progressBar = findViewById(R.id.progressBar);
+        buttonLayout = findViewById(R.id.button_layout);
+        signInButton = findViewById(R.id.sign_in_button);
+        signUpButton = findViewById(R.id.sign_up_button);
+
+        buttonLayout.setVisibility(View.GONE);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        if (mAuth.getCurrentUser() != null) {
-            String uid = mAuth.getCurrentUser().getUid();
-            showProgressBar();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-            db.collection("users").document(uid).get()
-                    .addOnSuccessListener(doc -> {
-                        hideProgressBar();
-                        if (doc.exists()) {
-                            String role = doc.getString("userType");
-                            if ("Operator".equalsIgnoreCase(role)) {
-                                goToActivity(OperatorHomeActivity.class);
-                            } else if ("Driver".equalsIgnoreCase(role)) {
-                                goToActivity(DriverHomeActivity.class);
-                            } else if ("Commuter".equalsIgnoreCase(role)) {
-                                goToActivity(HomeActivity.class);
+        if (currentUser != null) {
+
+            // 🔹 User is signed in — fetch their role first
+            new Handler().postDelayed(() -> {
+                db.collection("users").document(currentUser.getUid())
+                        .get()
+                        .addOnSuccessListener(doc -> {
+                            if (doc.exists() && doc.getString("userType") != null) {
+                                String role = doc.getString("userType");
+
+                                if ("Operator".equalsIgnoreCase(role)) {
+                                    goToActivity(OperatorHomeActivity.class);
+                                } else if ("Driver".equalsIgnoreCase(role)) {
+                                    goToActivity(DriverHomeActivity.class);
+                                } else if ("Commuter".equalsIgnoreCase(role)) {
+                                    goToActivity(HomeActivity.class);
+                                } else {
+                                    goToRoleSelection();
+                                }
                             } else {
-                                goToRoleSelectionWithAnimation();
+                                goToRoleSelection();
                             }
-                        } else {
-                            goToRoleSelectionWithAnimation();
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        hideProgressBar();
-                        goToRoleSelectionWithAnimation();
-                    });
+                        })
+                        .addOnFailureListener(e -> goToRoleSelection());
+            }, 1500); // Krizza's short splash delay
+
         } else {
-            goToRoleSelectionWithAnimation(); // not logged in
+
+            // 🔹 Not logged in — show sign-in/sign-up buttons after animation
+            signInButton.setOnClickListener(v -> {
+                Intent intent = new Intent(SplashScreenActivity.this, UserRoleSelectionActivity.class);
+                intent.putExtra("user_type", R.id.sign_in_button);
+                startActivity(intent);
+            });
+
+            signUpButton.setOnClickListener(v -> {
+                Intent intent = new Intent(SplashScreenActivity.this, UserRoleSelectionActivity.class);
+                intent.putExtra("user_type", R.id.sign_up_button);
+                startActivity(intent);
+            });
+
+            new Handler().postDelayed(() -> {
+                buttonLayout.setVisibility(View.VISIBLE);
+                Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+                buttonLayout.startAnimation(fadeIn);
+            }, 3000); // Krizza's 3 sec delay
         }
     }
 
@@ -74,32 +101,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         finish();
     }
 
-    private void showProgressBar() {
-        progressBar.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void hideProgressBar() {
-        Animation fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
-        progressBar.startAnimation(fadeOut);
-        progressBar.setVisibility(View.GONE);
-    }
-
-    private void goToRoleSelectionWithAnimation() {
-        new Handler().postDelayed(() -> {
-            Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_up);
-            logoImageView.startAnimation(slideUp);
-            taglineTextView.startAnimation(slideUp);
-
-            slideUp.setAnimationListener(new Animation.AnimationListener() {
-                @Override public void onAnimationStart(Animation animation) {}
-                @Override public void onAnimationEnd(Animation animation) {
-                    Intent intent = new Intent(SplashScreenActivity.this, UserRoleSelectionActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                @Override public void onAnimationRepeat(Animation animation) {}
-            });
-        }, 3000);
+    private void goToRoleSelection() {
+        Intent intent = new Intent(SplashScreenActivity.this, UserRoleSelectionActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

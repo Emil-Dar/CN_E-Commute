@@ -1,104 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="6dp"
-    android:background="@android:color/white">
+    android:padding="12dp"
+    android:background="@color/backgroundColor">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <!-- Driver ID (main title) -->
+    <TextView
+        android:id="@+id/description_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:text="Driver ID: FX-123"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/text_timestamp"
+        app:layout_constraintHorizontal_bias="0" />
 
-        <!-- Timestamp -->
-        <TextView
-            android:id="@+id/text_timestamp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Reported on: Sep 21, 2025 at 10:23 PM"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
-            android:fontFamily="sans-serif"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <!-- Timestamp (aligned to the right) -->
+    <TextView
+        android:id="@+id/text_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sep 21, 2025 10:23 pm"
+        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif"
+        app:layout_constraintTop_toTopOf="@id/description_text"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Driver ID -->
-        <TextView
-            android:id="@+id/description_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Driver ID: FX-123"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginTop="6dp"
-            android:fontFamily="sans-serif-medium"
-            app:layout_constraintTop_toBottomOf="@id/text_timestamp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <!-- TODA -->
+    <TextView
+        android:id="@+id/text_toda"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TODA: Vinzons"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif"
+        app:layout_constraintTop_toBottomOf="@id/description_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/text_status" />
 
-        <!-- TODA -->
-        <TextView
-            android:id="@+id/text_toda"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="TODA: Vinzons"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="4dp"
-            android:fontFamily="sans-serif"
-            app:layout_constraintTop_toBottomOf="@id/description_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <!-- Status (aligned right, colored) -->
+    <TextView
+        android:id="@+id/text_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pending"
+        android:textSize="14sp"
+        android:textColor="@android:color/holo_orange_dark"
+        android:fontFamily="sans-serif-medium"
+        app:layout_constraintBaseline_toBaselineOf="@id/text_toda"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Status -->
-        <TextView
-            android:id="@+id/text_status"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Status: Pending"
-            android:textSize="14sp"
-            android:textColor="@android:color/holo_orange_dark"
-            android:layout_marginTop="4dp"
-            android:fontFamily="sans-serif"
-            app:layout_constraintTop_toBottomOf="@id/text_toda"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <!-- Violations -->
+    <TextView
+        android:id="@+id/violation_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Violations: 2 reported"
+        android:textSize="13sp"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif"
+        app:layout_constraintTop_toBottomOf="@id/text_toda"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Violations -->
-        <TextView
-            android:id="@+id/violation_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Violations: 2 reported"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
-            android:layout_marginTop="4dp"
-            android:fontFamily="sans-serif"
-            app:layout_constraintTop_toBottomOf="@id/text_status"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <!-- View Report (action link) -->
+    <TextView
+        android:id="@+id/text_view_report"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Report"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toBottomOf="@id/violation_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- Clickable View Report Text -->
-        <TextView
-            android:id="@+id/text_view_report"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View Report"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
-            android:layout_marginTop="12dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintTop_toBottomOf="@id/violation_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+    <!-- Divider line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/text_view_report"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

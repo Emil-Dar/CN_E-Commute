@@ -2,6 +2,7 @@ package com.example.cne_commute;
 
 import java.util.List;
 import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -31,8 +32,7 @@ public interface SupabaseService {
             @Header("Authorization") String authHeader
     );
 
-    // ✅ FIXED: return type changed from Call<Void> → Call<List<Map<String, Object>>>
-    // so it matches OperatorNotificationActivity.markAsViewed()
+    // Mark a report as viewed
     @PATCH("reports")
     Call<List<Map<String, Object>>> updateReportViewed(
             @Header("apikey") String apiKey,
@@ -73,34 +73,11 @@ public interface SupabaseService {
             @Query("driver_id") String driverIdFilter
     );
 
-    @PATCH("drivers")
-    Call<Void> updateDriver(
-            @Query("driver_id") String driverIdFilter,
-            @Body Map<String, Object> updates,
-            @Header("apikey") String apiKey,
-            @Header("Authorization") String authHeader
-    );
-
     @POST("drivers")
-    Call<Void> addDriver(
-            @Body Map<String, Object> driverData,
-            @Header("apikey") String apiKey,
-            @Header("Authorization") String authHeader
-    );
-
-    // ✅ add required headers to match all other calls
-    @GET("drivers")
-    Call<List<Driver>> getDrivers(
-            @Header("apikey") String apiKey,
-            @Header("Authorization") String authHeader
-    );
+    Call<Void> addDriver(@Body Map<String, Object> driverData);
 
     @GET("drivers")
-    Call<List<Driver>> getVerifiedDrivers(
-            @Header("apikey") String apiKey,
-            @Header("Authorization") String authHeader,
-            @Query("status") String statusFilter // pass "eq.Verified"
-    );
+    Call<List<Driver>> getDrivers();
 
     @GET("drivers")
     Call<List<Map<String, Object>>> getLastDriverId(
@@ -157,19 +134,25 @@ public interface SupabaseService {
             @Query("report_id") String filter
     );
 
-    // === Additional utility routes ===
-    @GET("reports")
-    Call<List<Map<String, Object>>> getReportsFiltered(
+    @GET("reports?driver_id={driverId}")
+    Call<List<Map<String, Object>>> getReportsByDriver(
             @Header("apikey") String apiKey,
-            @Header("Authorization") String authHeader,
-            @Query("requested_by") String requestedByFilter
+            @Header("Authorization") String bearerToken,
+            @Query("driver_id") String driverId
     );
 
-    @PATCH("reports")
-    Call<List<Map<String, Object>>> updateReport(
-            @Header("apikey") String apiKey,
-            @Header("Authorization") String authHeader,
-            @Query("id") String idFilter,
-            @Body Map<String, Object> updates
+
+    // -----------------------------
+    // ⭐ KRIZZA'S NEW METHODS ADDED
+    // -----------------------------
+
+    // Get full details for a report
+    @GET("reports")
+    Call<List<ReportData>> getReportDetails(
+            @Query("report_id") String reportIdFilter
     );
+
+    // Get latest report ID only
+    @GET("reports?select=report_id&order=report_id.desc&limit=1")
+    Call<List<ReportIdOnly>> getLatestReportId();
 }

@@ -4,11 +4,14 @@ import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +23,8 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -31,9 +36,14 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
     private static final String CHANNEL_ID = "report_channel";
+
     private FloatingActionButton fabQRCode;
     private ImageButton btnNotifications;
     private TextView notificationCount;
+    private TextView homeTitle;
+    private TextView fullNameText;
+    private TextView emailText;
+    private LinearLayout profileInfoContainer;
     private boolean notificationsViewed = false;
 
     @Override
@@ -43,15 +53,19 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         fabQRCode = findViewById(R.id.fab_qr_code);
+        btnNotifications = findViewById(R.id.btn_notifications);
+        notificationCount = findViewById(R.id.notification_count);
+        homeTitle = findViewById(R.id.home_title);
+        fullNameText = findViewById(R.id.profile_fullname);
+        emailText = findViewById(R.id.profile_email);
+        profileInfoContainer = findViewById(R.id.profile_info_container);
+
         fabQRCode.bringToFront();
         fabQRCode.setOnClickListener(v -> {
             Log.d(TAG, "FAB QR clicked — launching QRScannerActivity");
             startActivity(new Intent(HomeActivity.this, QRScannerActivity.class));
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
-
-        btnNotifications = findViewById(R.id.btn_notifications);
-        notificationCount = findViewById(R.id.notification_count);
 
         btnNotifications.setOnClickListener(v -> {
             Log.d(TAG, "Notification icon clicked — launching NotificationActivity");
@@ -60,9 +74,13 @@ public class HomeActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
+        profileInfoContainer.setOnClickListener(v -> {
+            Log.d(TAG, "Profile section clicked — launching AccountActivity");
+            startActivity(new Intent(HomeActivity.this, CommuterAccountActivity.class));
+        });
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
-
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             Log.d(TAG, "Bottom nav item selected: " + itemId);
@@ -78,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     return true;
                 case R.id.nav_account:
-                    startActivity(new Intent(this, AccountActivity.class));
+                    startActivity(new Intent(this, CommuterAccountActivity.class));
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     return true;
                 default:
@@ -86,7 +104,39 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        setupCardActions(); // Cards are now passive only
+        setupGreeting();
+        setupCardActions();
+    }
+
+    private void setupGreeting() {
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String name = prefs.getString("commuter_name", null);
+        String email = prefs.getString("email_address", null);
+
+        if (name == null || email == null) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                if (name == null) name = user.getDisplayName();
+                if (email == null) email = user.getEmail();
+            }
+        }
+
+        if (name != null && !name.isEmpty()) {
+            String firstName = name.split(" ")[0];
+            homeTitle.setText("Welcome back to CNE-Commute, " + firstName + "!");
+            fullNameText.setText(name);
+            Log.d(TAG, "Greeting set: Welcome back to CNE-Commute, " + firstName);
+        } else {
+            homeTitle.setText("Welcome back to CNE-Commute!");
+            fullNameText.setText("Commuter");
+            Log.d(TAG, "Greeting set without name");
+        }
+
+        if (email != null && !email.isEmpty()) {
+            emailText.setText(email);
+        } else {
+            emailText.setText("commuter@email.com");
+        }
     }
 
     @Override
@@ -117,17 +167,9 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<ReportData>> call, Response<List<ReportData>> response) {
                 Log.d(TAG, "API response received");
-                Log.d(TAG, "Response successful: " + response.isSuccessful());
-
                 if (response.body() != null) {
-                    Log.d(TAG, "Response body not null");
                     List<ReportData> acceptedReports = response.body();
                     Log.d(TAG, "Accepted reports count: " + acceptedReports.size());
-
-                    for (ReportData report : acceptedReports) {
-                        Log.d(TAG, "Report ID: " + report.getReportId() + ", Status: " + report.getStatus());
-                        Log.d(TAG, "Report object: " + report.toString());
-                    }
 
                     if (!acceptedReports.isEmpty()) {
                         showNotificationBadge(acceptedReports.size());
@@ -173,13 +215,10 @@ public class HomeActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1001);
                 return;
-            } else {
-                Log.d(TAG, "Notification permission already granted");
             }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.d(TAG, "Creating notification channel");
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
                     "Report Notifications",
@@ -191,7 +230,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-        Log.d(TAG, "Building and showing notification");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notify)
                 .setContentTitle(title)

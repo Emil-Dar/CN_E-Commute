@@ -336,7 +336,7 @@ public class FareCalculatorActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.fade_in, 0);
                 return true;
             } else if (itemId == R.id.nav_account) {
-                startActivity(new Intent(FareCalculatorActivity.this, AccountActivity.class));
+                startActivity(new Intent(FareCalculatorActivity.this, CommuterAccountActivity.class));
                 overridePendingTransition(R.anim.fade_in, 0);
                 return true;
             } else {

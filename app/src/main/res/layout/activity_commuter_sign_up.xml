@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#163F74"
+    android:gravity="center"
+    android:padding="16dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/create_account_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CREATE COMMUTER ACCOUNT"
+        android:textSize="22sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Subtitle -->
+    <TextView
+        android:id="@+id/create_account_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register to get started as a commuter"
+        android:textSize="14sp"
+        android:textColor="#A9C4E8"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <!-- First Name -->
+    <EditText
+        android:id="@+id/first_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="First Name"
+        android:drawableStart="@drawable/ic_person"
+        android:drawablePadding="10dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#A9C4E8"
+        android:layout_marginBottom="16dp"
+        android:inputType="textPersonName"
+        android:autofillHints="givenName" />
+
+    <!-- Surname -->
+    <EditText
+        android:id="@+id/surname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Surname"
+        android:drawableStart="@drawable/ic_person"
+        android:drawablePadding="10dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#A9C4E8"
+        android:layout_marginBottom="16dp"
+        android:inputType="textPersonName"
+        android:autofillHints="familyName" />
+
+    <!-- Email -->
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="10dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#A9C4E8"
+        android:layout_marginBottom="16dp"
+        android:inputType="textEmailAddress"
+        android:autofillHints="emailAddress" />
+
+    <!-- Contact Number -->
+    <EditText
+        android:id="@+id/contact_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Contact Number"
+        android:drawableStart="@drawable/ic_phone"
+        android:drawablePadding="10dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#A9C4E8"
+        android:layout_marginBottom="16dp"
+        android:inputType="phone"
+        android:autofillHints="phone" />
+
+    <!-- Password Field with Eye Icon -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp">
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:drawableStart="@drawable/ic_passwordd"
+            android:drawablePadding="10dp"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#A9C4E8"
+            android:inputType="textPassword"
+            android:autofillHints="password" />
+
+        <ImageView
+            android:id="@+id/password_eye_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_eye_off"
+            android:contentDescription="Show password"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="12dp" />
+    </FrameLayout>
+
+
+
+    <!-- Terms and Privacy Policy Checkbox -->
+    <CheckBox
+        android:id="@+id/terms_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I agree to the Terms and Privacy Policy"
+        android:textColor="#A9C4E8"
+        android:textSize="14sp"
+        android:layout_marginBottom="24dp" />
+
+
+
+    <!-- Sign Up Button -->
+    <Button
+        android:id="@+id/sign_up_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="SIGN UP"
+        android:background="@drawable/button_background"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Google Sign-In Button -->
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_gravity="center_horizontal" />
+
+    <!-- Login Link -->
+    <TextView
+        android:id="@+id/login_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Already have an account? Log in"
+        android:textSize="14sp"
+        android:textColor="#A9C4E8"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

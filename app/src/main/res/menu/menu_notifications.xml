@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Sort by date -->
+    <item
+        android:id="@+id/action_sort_date"
+        android:title="Sort by Date"
+        app:showAsAction="never" />
+
+    <!-- Sort by report notifications -->
+    <item
+        android:id="@+id/action_sort_report"
+        android:title="Sort by Report"
+        app:showAsAction="never" />
+
+    <!-- Sort by appointment notifications -->
+    <item
+        android:id="@+id/action_sort_appointment"
+        android:title="Sort by Appointment"
+        app:showAsAction="never" />
+
+    <!-- Clear all notifications -->
+    <item
+        android:id="@+id/action_clear_all"
+        android:title="Clear All"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_delete_selected"
+        android:title="Delete Selected"
+        app:showAsAction="never" />
+
+
+</menu>

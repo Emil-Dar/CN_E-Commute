@@ -150,7 +150,7 @@ public class Report implements Serializable {
         map.put("timestamp", timestamp);
         map.put("status", status);
         map.put("remarks", remarks);
-        map.put("report_code", reportCode); // ✅ Include in submission
+        map.put("report_code", reportCode); //  Include in submission
         return map;
     }
 
@@ -159,7 +159,7 @@ public class Report implements Serializable {
         Report report = new Report();
 
         report.reportId = reportId;
-        report.reportCode = (String) data.get("report_code"); // ✅ NEW
+        report.reportCode = (String) data.get("report_code"); //  NEW
         report.userId = (String) data.get("user_id");
         report.driverId = (String) data.get("driver_id");
         report.driverName = (String) data.get("driver_name");
