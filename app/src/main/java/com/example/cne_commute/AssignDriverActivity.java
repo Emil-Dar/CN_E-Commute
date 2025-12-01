@@ -179,7 +179,11 @@ public class AssignDriverActivity extends AppCompatActivity {
 
         SupabaseService service = SupabaseApiClient.getRetrofitInstance().create(SupabaseService.class);
 
-        service.assignDriver(assignment).enqueue(new Callback<Void>() {
+        service.assignDriver(
+                BuildConfig.SUPABASE_API_KEY,
+                "Bearer " + BuildConfig.SUPABASE_API_KEY,
+                assignment
+        ).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
@@ -188,14 +192,19 @@ public class AssignDriverActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(AssignDriverActivity.this, "Failed to assign driver (server error)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AssignDriverActivity.this,
+                            "Failed to assign driver (server error)",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(AssignDriverActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AssignDriverActivity.this,
+                        "Error: " + t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 }

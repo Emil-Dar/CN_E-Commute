@@ -241,10 +241,10 @@ public class DriverAccount extends Fragment {
             updates.put("address", fullAddress);
 
             apiService.updateDriver(
-                    "eq." + driverId,
-                    updates,
                     SUPABASE_API_KEY,
-                    "Bearer " + SUPABASE_API_KEY
+                    "Bearer " + SUPABASE_API_KEY,
+                    "eq." + driverId,
+                    updates
             ).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
@@ -255,6 +255,7 @@ public class DriverAccount extends Fragment {
 
                 @Override public void onFailure(Call<Void> call, Throwable t) {}
             });
+
         });
 
         cancelBtn.setOnClickListener(v -> dialog.dismiss());
@@ -345,10 +346,10 @@ public class DriverAccount extends Fragment {
                 update.put("password", newHash);
 
                 apiService.updateDriver(
-                        "eq." + driverId,
-                        update,
                         SUPABASE_API_KEY,
-                        "Bearer " + SUPABASE_API_KEY
+                        "Bearer " + SUPABASE_API_KEY,
+                        "eq." + driverId,
+                        update
                 ).enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
@@ -362,6 +363,7 @@ public class DriverAccount extends Fragment {
 
                     @Override public void onFailure(Call<Void> call, Throwable t) {}
                 });
+
             }
 
             @Override public void onFailure(Call<List<Driver>> call, Throwable t) {}

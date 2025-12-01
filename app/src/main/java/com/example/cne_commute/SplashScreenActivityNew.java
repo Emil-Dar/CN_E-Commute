@@ -23,30 +23,31 @@ public class SplashScreenActivityNew extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen_new);
 
-
         logoImageView = findViewById(R.id.logo);
         taglineTextView = findViewById(R.id.tagline);
 
-        // Optional: animate logo and tagline
+        // Animate logo + tagline
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         logoImageView.startAnimation(fadeIn);
         taglineTextView.startAnimation(fadeIn);
 
-        // Delay before routing
+        // Splash delay
         new Handler().postDelayed(() -> {
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
             Intent intent;
+
             if (currentUser != null) {
-                //  Already signed in — go to HomeActivity
+                // User already logged in → go straight to HomeActivity
                 intent = new Intent(SplashScreenActivityNew.this, HomeActivity.class);
             } else {
-                //  Not signed in — go to CommuterSignInActivity
-                intent = new Intent(SplashScreenActivityNew.this, CommuterSignInActivity.class);
+                // Not logged in → show UserRoleSelectionActivity
+                intent = new Intent(SplashScreenActivityNew.this, UserRoleSelectionActivity.class);
             }
 
             startActivity(intent);
             finish();
-        }, 2000); // 2 seconds splash delay
+
+        }, 2000); // 2 seconds
     }
 }

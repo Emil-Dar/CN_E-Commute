@@ -34,9 +34,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         logoImageView = findViewById(R.id.logo);
         taglineTextView = findViewById(R.id.tagline);
-        buttonLayout = findViewById(R.id.button_layout);
-        signInButton = findViewById(R.id.sign_in_button);
-        signUpButton = findViewById(R.id.sign_up_button);
 
         buttonLayout.setVisibility(View.GONE);
 

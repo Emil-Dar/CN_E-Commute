@@ -445,8 +445,14 @@ public class AddDriverActivity extends AppCompatActivity {
         driverData.put("created_at", createdAt);
 
         SupabaseService service = SupabaseApiClient.getRetrofitInstance().create(SupabaseService.class);
-        // Pass the required headers when calling addDriver
-        Call<Void> call = service.addDriver(driverData, supabaseKey, "Bearer " + supabaseKey);
+
+// Create the Retrofit call (this was missing)
+        Call<Void> call = service.addDriver(
+                SupabaseApiClient.SUPABASE_API_KEY,
+                "Bearer " + SupabaseApiClient.SUPABASE_API_KEY,
+                driverData
+        );
+
 
         saveBtn.setText("Saving...");
 
@@ -474,6 +480,7 @@ public class AddDriverActivity extends AppCompatActivity {
                 Log.e(TAG, "addDriver failure: " + t.getMessage(), t);
             }
         });
+
     }
 
     // endregion

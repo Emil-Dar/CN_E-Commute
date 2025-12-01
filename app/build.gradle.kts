@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services") //  Firebase plugin
+    id("com.google.gms.google-services") // Firebase
 }
 
 android {
@@ -56,13 +56,13 @@ android {
 }
 
 dependencies {
-    //  Firebase BOM and Authentication
+    // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
 
-    //  Google Sign-In
+    // Google Sign-In
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     // AndroidX Core
@@ -89,16 +89,14 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    implementation("com.google.android.material:material:1.12.0")
-
-    // JSON Handling
+    // JSON
     implementation("org.json:json:20231013")
 
     // Image Loading
     implementation("com.github.bumptech.glide:glide:4.11.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
 
-    // File & Stream Utilities
+    // File Utils
     implementation("commons-io:commons-io:2.11.0")
 
     // Testing
@@ -106,19 +104,15 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
-    // ViewPager and UI
+    // ViewPager 2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.google.code.gson:gson:2.10.1")
-<<<<<<< HEAD
 
     // Supabase
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.0.2") // core + postgrest
-    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.2") // for auth if needed
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.0.2")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // bcrypt library for Java/Android
+    // Bcrypt
     implementation("at.favre.lib:bcrypt:0.9.0")
-
-=======
->>>>>>> Krizza
 }

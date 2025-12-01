@@ -15,7 +15,11 @@ public interface SupabaseService {
 
     // === reports table ===
     @POST("reports")
-    Call<Void> submitReport(@Body Map<String, Object> reportData);
+    Call<Void> submitReport(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Body Map<String, Object> reportData
+    );
 
     @GET("reports")
     Call<List<Map<String, Object>>> getReportsByDriverId(
@@ -32,7 +36,6 @@ public interface SupabaseService {
             @Header("Authorization") String authHeader
     );
 
-    // Mark a report as viewed
     @PATCH("reports")
     Call<List<Map<String, Object>>> updateReportViewed(
             @Header("apikey") String apiKey,
@@ -41,7 +44,7 @@ public interface SupabaseService {
             @Body Map<String, Object> updates
     );
 
-    // === operators table ===
+    // === operators ===
     @GET("operators")
     Call<List<Operator>> getOperatorById(
             @Header("apikey") String apiKey,
@@ -51,13 +54,13 @@ public interface SupabaseService {
 
     @PATCH("operators")
     Call<Void> updateOperator(
-            @Query("operator_id") String operatorIdFilter,
-            @Body Map<String, Object> updates,
             @Header("apikey") String apiKey,
-            @Header("Authorization") String authHeader
+            @Header("Authorization") String authHeader,
+            @Query("operator_id") String operatorIdFilter,
+            @Body Map<String, Object> updates
     );
 
-    // === franchises table ===
+    // === franchises ===
     @GET("franchises")
     Call<List<Franchise>> getFranchisesByOperatorId(
             @Header("apikey") String apiKey,
@@ -65,7 +68,7 @@ public interface SupabaseService {
             @Query("operator_id") String operatorIdFilter
     );
 
-    // === drivers table ===
+    // === drivers ===
     @GET("drivers")
     Call<List<Driver>> getDriverById(
             @Header("apikey") String apiKey,
@@ -74,10 +77,17 @@ public interface SupabaseService {
     );
 
     @POST("drivers")
-    Call<Void> addDriver(@Body Map<String, Object> driverData);
+    Call<Void> addDriver(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Body Map<String, Object> driverData
+    );
 
     @GET("drivers")
-    Call<List<Driver>> getDrivers();
+    Call<List<Driver>> getDrivers(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader
+    );
 
     @GET("drivers")
     Call<List<Map<String, Object>>> getLastDriverId(
@@ -88,9 +98,30 @@ public interface SupabaseService {
             @Query("limit") int limit
     );
 
-    // === assignments table ===
+    @GET("drivers")
+    Call<List<Driver>> getVerifiedDrivers(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Query("status") String statusFilter
+    );
+
+    @PATCH("drivers")
+    Call<Void> updateDriver(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Query("driver_id") String driverIdFilter,
+            @Body Map<String, Object> updates
+    );
+
+
+
+    // === assignments ===
     @POST("assignments")
-    Call<Void> assignDriver(@Body Assignment assignment);
+    Call<Void> assignDriver(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Body Assignment assignment
+    );
 
     @GET("assignments")
     Call<List<Map<String, Object>>> getLastAssignmentId(
@@ -110,7 +141,7 @@ public interface SupabaseService {
             @Query("limit") int limit
     );
 
-    // === reports management ===
+    // reports
     @PATCH("reports")
     Call<Void> updateReportStatus(
             @Header("apikey") String apiKey,
@@ -119,7 +150,7 @@ public interface SupabaseService {
             @Body Map<String, Object> updates
     );
 
-    // === appointments table ===
+    // appointments
     @POST("appointments")
     Call<Void> createAppointment(
             @Header("apikey") String apiKey,
@@ -134,25 +165,27 @@ public interface SupabaseService {
             @Query("report_id") String filter
     );
 
-    @GET("reports?driver_id={driverId}")
+    // FIXED - Removed invalid {driverId}
+    @GET("reports")
     Call<List<Map<String, Object>>> getReportsByDriver(
             @Header("apikey") String apiKey,
             @Header("Authorization") String bearerToken,
             @Query("driver_id") String driverId
     );
 
-
-    // -----------------------------
-    // ⭐ KRIZZA'S NEW METHODS ADDED
-    // -----------------------------
-
-    // Get full details for a report
     @GET("reports")
     Call<List<ReportData>> getReportDetails(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
             @Query("report_id") String reportIdFilter
     );
 
-    // Get latest report ID only
-    @GET("reports?select=report_id&order=report_id.desc&limit=1")
-    Call<List<ReportIdOnly>> getLatestReportId();
+    @GET("reports")
+    Call<List<ReportIdOnly>> getLatestReportId(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Query("select") String select,
+            @Query("order") String order,
+            @Query("limit") int limit
+    );
 }

@@ -122,11 +122,12 @@ public class OperatorAccountActivity extends AppCompatActivity {
         updates.put("address", address.isEmpty() ? com.google.gson.JsonNull.INSTANCE : address);
 
         apiService.updateOperator(
-                "eq." + operatorId,
-                updates,
-                SUPABASE_API_KEY,
-                "Bearer " + SUPABASE_API_KEY
-        ).enqueue(new Callback<Void>() {
+                        SUPABASE_API_KEY,
+                        "Bearer " + SUPABASE_API_KEY,
+                        "eq." + operatorId,
+                        updates
+                )
+                .enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
@@ -215,10 +216,10 @@ public class OperatorAccountActivity extends AppCompatActivity {
                         updates.put("password", hashedNewPassword);
 
                         apiService.updateOperator(
-                                "eq." + operatorId,
-                                updates,
                                 SUPABASE_API_KEY,
-                                "Bearer " + SUPABASE_API_KEY
+                                "Bearer " + SUPABASE_API_KEY,
+                                "eq." + operatorId,
+                                updates
                         ).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {

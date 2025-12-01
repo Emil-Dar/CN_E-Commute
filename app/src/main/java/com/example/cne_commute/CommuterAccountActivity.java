@@ -135,27 +135,35 @@ public class CommuterAccountActivity extends AppCompatActivity {
         });
 
         logoutText.setOnClickListener(v -> {
-            Log.d(TAG, "Logout clicked — clearing SharedPreferences and launching SplashScreenActivityNew");
+            Log.d(TAG, "Logout clicked — clearing SharedPreferences and launching UserRoleSelectionActivity");
             Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
 
+            // Firebase logout
             FirebaseAuth.getInstance().signOut();
 
+            // Google logout
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
                     .build();
+
             GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+
             googleSignInClient.signOut().addOnCompleteListener(task -> {
+                // Clear SharedPreferences
                 SharedPreferences.Editor editor = getSharedPreferences("UserPrefs", MODE_PRIVATE).edit();
                 editor.clear();
                 editor.apply();
 
-                Intent intent = new Intent(CommuterAccountActivity.this, SplashScreenActivityNew.class);
+                // Redirect to user role selection screen
+                Intent intent = new Intent(CommuterAccountActivity.this, UserRoleSelectionActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+
                 finish();
             });
         });
+
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             Toast.makeText(this, isChecked ? "Dark Mode (placeholder)" : "Light Mode (placeholder)", Toast.LENGTH_SHORT).show();

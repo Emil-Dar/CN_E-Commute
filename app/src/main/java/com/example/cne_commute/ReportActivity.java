@@ -1097,11 +1097,22 @@ public class ReportActivity extends AppCompatActivity {
     }
 
 
+    // -----------------------------------------------
+// Submit report to Supabase
+// -----------------------------------------------
     private void submitToSupabase(Report report) {
-        supabaseService.submitReport(report.toMap()).enqueue(new Callback<Void>() {
+
+        Call<Void> call = supabaseService.submitReport(
+                SupabaseApiClient.SUPABASE_API_KEY,
+                "Bearer " + SupabaseApiClient.SUPABASE_API_KEY,
+                report.toMap()
+        );
+
+        call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+
                     showToast("Report submitted successfully!");
                     Log.d("ReportActivity", "Report submitted: " + new Gson().toJson(report));
 
@@ -1111,6 +1122,7 @@ public class ReportActivity extends AppCompatActivity {
 
                     startActivity(new Intent(ReportActivity.this, ReportHistoryActivity.class));
                     finish();
+
                 } else {
                     showToast("Failed to submit report. Code: " + response.code());
                     Log.e("ReportActivity", "Submit failed: " + response.errorBody());
@@ -1126,13 +1138,19 @@ public class ReportActivity extends AppCompatActivity {
     }
 
 
+
+    // -----------------------------------------------
+// Upload Image -> Then Submit Report
+// -----------------------------------------------
     private void uploadImageThenSubmit(Uri uri, Report report) {
+
         String filename = report.getUserId() + "_" + System.currentTimeMillis() + ".jpg";
 
         try (InputStream stream = getContentResolver().openInputStream(uri)) {
-            byte[] imageBytes = readBytes(stream);
 
+            byte[] imageBytes = readBytes(stream);
             RequestBody body = RequestBody.create(imageBytes, MediaType.parse("image/jpeg"));
+
             String uploadUrl = buildImageUrl(filename);
 
             Request request = new Request.Builder()
@@ -1140,14 +1158,12 @@ public class ReportActivity extends AppCompatActivity {
                     .put(body)
                     .build();
 
-            // Optional: show loading indicator here
-
             client.newCall(request).enqueue(new okhttp3.Callback() {
                 @Override
                 public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                    // Optional: hide loading indicator here
 
                     if (response.isSuccessful()) {
+
                         String imageUrl = buildImageUrl(filename);
                         report.setImageUrl(imageUrl);
 
@@ -1155,8 +1171,11 @@ public class ReportActivity extends AppCompatActivity {
                         Log.d(TAG, "Report data: " + new Gson().toJson(report));
 
                         runOnUiThread(() -> submitToSupabase(report));
+
                     } else {
+
                         Log.e(TAG, "Upload failed with code: " + response.code());
+
                         runOnUiThread(() -> {
                             showToast("Upload failed. Submitting without image.");
                             Log.d(TAG, "Report data (no image): " + new Gson().toJson(report));
@@ -1167,8 +1186,9 @@ public class ReportActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(okhttp3.Call call, IOException e) {
-                    // Optional: hide loading indicator here
+
                     Log.e(TAG, "Upload error: " + e.getMessage(), e);
+
                     runOnUiThread(() -> {
                         showToast("Upload error. Submitting without image.");
                         Log.d(TAG, "Report data (upload failed): " + new Gson().toJson(report));
@@ -1178,56 +1198,70 @@ public class ReportActivity extends AppCompatActivity {
             });
 
         } catch (IOException e) {
+
             Log.e(TAG, "Failed to read image: " + e.getMessage(), e);
             showToast("Failed to read image.");
             submitToSupabase(report);
         }
     }
 
+
+
+    // -----------------------------------------------
+// Build public image URL
+// -----------------------------------------------
     private String buildImageUrl(String filename) {
         return "https://rtwrbkrroilftdhggxjc.supabase.co/storage/v1/object/report-images/" + filename;
     }
 
 
 
-    // Utility method for reading image bytes from InputStream
+    // -----------------------------------------------
+// Read bytes from InputStream
+// -----------------------------------------------
     private byte[] readBytes(InputStream inputStream) throws IOException {
+
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        int nRead;
         byte[] data = new byte[16384];
+        int nRead;
+
         while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
             buffer.write(data, 0, nRead);
         }
-        buffer.flush();
+
         return buffer.toByteArray();
     }
 
+
+
+    // -----------------------------------------------
+// Submit report with Map form
+// -----------------------------------------------
     private void submitToSupabase(final String reportId, final Map<String, Object> data) {
+
         if (supabaseService == null) {
             showToast("Supabase client not initialized.");
             return;
         }
 
-        //  Retrieve and log Firebase UID
         String userId = FirebaseAuth.getInstance().getCurrentUser() != null
                 ? FirebaseAuth.getInstance().getCurrentUser().getUid()
                 : "null";
 
-        Log.d("SubmitReport", "Firebase UID: [" + userId + "]");
-
-        //  Inject UID into the data map
         data.put("user_id", userId);
 
-        //  Log the full data map before submission
         Log.d("SubmitReport", "Final data map: " + new Gson().toJson(data));
 
-        Call<Void> call = supabaseService.submitReport(data);
-        call.enqueue(new Callback<Void>() {
+        supabaseService.submitReport(
+                SupabaseApiClient.SUPABASE_API_KEY,
+                "Bearer " + SupabaseApiClient.SUPABASE_API_KEY,
+                data
+        ).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     showToast("Report submitted successfully!");
-                    finish(); // or redirect to ReportHistoryActivity
+                    finish();
                 } else {
                     showToast("Failed to submit report. Code: " + response.code());
                     Log.e("SubmitReport", "Error body: " + response.errorBody());
@@ -1242,7 +1276,13 @@ public class ReportActivity extends AppCompatActivity {
         });
     }
 
+
+
+    // -----------------------------------------------
+// Local History Saving for Anonymous Reports
+// -----------------------------------------------
     private void saveReportToHistory(Report report) {
+
         SharedPreferences prefs = getSharedPreferences("report_history", MODE_PRIVATE);
         String existing = prefs.getString("reports", "[]");
 
@@ -1250,23 +1290,34 @@ public class ReportActivity extends AppCompatActivity {
         Type type = new TypeToken<List<Report>>() {}.getType();
         List<Report> reportList = gson.fromJson(existing, type);
 
-        reportList.add(report); // Add the new report
+        reportList.add(report);
 
-        String updated = gson.toJson(reportList);
-        prefs.edit().putString("reports", updated).apply();
+        prefs.edit().putString("reports", gson.toJson(reportList)).apply();
 
-        Log.d(TAG, " Report saved to local history.");
+        Log.d(TAG, "Report saved to local history.");
     }
 
 
+
+    // -----------------------------------------------
+// Save report to Firestore + backend
+// -----------------------------------------------
     private void saveReport(String reportId, Map<String, Object> data) {
+
         db.collection("Reports").document(reportId).set(data)
                 .addOnSuccessListener(u -> {
+
                     Log.d(TAG, "Report saved to Firestore successfully.");
+
                     sendReportToBackend(data);
+
                     showToast("Report submitted.");
-                    startActivity(new Intent(this, HistoryActivity.class)
-                            .putExtra("reportId", reportId));
+
+                    startActivity(
+                            new Intent(this, HistoryActivity.class)
+                                    .putExtra("reportId", reportId)
+                    );
+
                     finish();
                 })
                 .addOnFailureListener(e -> {
@@ -1275,27 +1326,39 @@ public class ReportActivity extends AppCompatActivity {
                 });
     }
 
+
+
+    // -----------------------------------------------
+// Send to backend (Supabase)
+// -----------------------------------------------
     private void sendReportToBackend(Map<String, Object> data) {
+
         Log.d(TAG, "Preparing to send report to backend...");
 
         SupabaseService apiService = retrofit.create(SupabaseService.class);
 
-        Call<Void> reportCall = apiService.submitReport(data);
+        apiService.submitReport(
+                SupabaseApiClient.SUPABASE_API_KEY,
+                "Bearer " + SupabaseApiClient.SUPABASE_API_KEY,
+                data
+        ).enqueue(new Callback<Void>() {
 
-        reportCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+
                 if (response.isSuccessful()) {
-                    Log.d(TAG, " Report submitted successfully to backend.");
-                    Log.d(TAG, " Submitted report: " + new Gson().toJson(data));
+
+                    Log.d(TAG, "Report submitted successfully to backend.");
+                    Log.d(TAG, "Submitted report: " + new Gson().toJson(data));
 
                     if ("Anonymous".equals(data.get("user_id"))) {
-                        Report report = Report.fromMap("local", data); // helper method to reconstruct Report
-                        saveReportToHistory(report);
+                        saveReportToHistory(Report.fromMap("local", data));
                     }
 
                 } else {
+
                     String errorBody = "Unknown error";
+
                     try {
                         if (response.errorBody() != null) {
                             errorBody = response.errorBody().string();
@@ -1303,16 +1366,18 @@ public class ReportActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         Log.e(TAG, "Failed to parse error body: " + e.getMessage());
                     }
-                    Log.e(TAG, " Failed to submit to backend. Code: " + response.code() + ", Error: " + errorBody);
+
+                    Log.e(TAG, "Failed backend submit. Code: " + response.code() + ", Error: " + errorBody);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Log.e(TAG, " API call to backend failed: " + t.getMessage(), t);
+                Log.e(TAG, "API call failed: " + t.getMessage(), t);
             }
         });
     }
+
 
 
     private String extractInput(LinearLayout section) {
