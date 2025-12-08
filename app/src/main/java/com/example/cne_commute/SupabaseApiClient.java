@@ -48,6 +48,7 @@ public class SupabaseApiClient {
                 Request request = original.newBuilder()
                         .header("apikey", SUPABASE_API_KEY)
                         .header("Authorization", "Bearer " + SUPABASE_API_KEY)
+                        .header("Content-Type", "application/json")
                         .method(original.method(), original.body())
                         .build();
                 return chain.proceed(request);
@@ -56,6 +57,11 @@ public class SupabaseApiClient {
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(logging)
                     .addInterceptor(headerInterceptor)
+                    // 🔹 Increase timeout to 30s
+                    .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                    .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                    .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                    .retryOnConnectionFailure(true) // retry automatically
                     .build();
 
             Gson gson = new GsonBuilder().serializeNulls().create();
@@ -69,19 +75,4 @@ public class SupabaseApiClient {
         return retrofit;
     }
 
-    // 🔹 Retrofit instance for Storage operations (optional)
-    public static Retrofit getStorageInstance() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build();
-
-        return new Retrofit.Builder()
-                .baseUrl(SUPABASE_PROJECT_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
-    }
 }

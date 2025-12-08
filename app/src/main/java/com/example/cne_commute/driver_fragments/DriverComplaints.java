@@ -122,16 +122,17 @@ public class DriverComplaints extends Fragment {
                         Object d = r.get("driver_id");
                         if (d == null) return true;
 
-                        // just trim and compare case-insensitive
-                        String reportDriverId = d.toString().trim();
-                        String normalizedDriverId = driverId.trim();
+                        String reportDriverId = toDriverCode(d.toString());
+                        String normalizedDriverId = toDriverCode(driverId);
+
                         boolean match = reportDriverId.equalsIgnoreCase(normalizedDriverId);
 
-                        Log.d("DriverComplaints", "Comparing reportDriverId='" + reportDriverId +
-                                "' vs driverId='" + normalizedDriverId + "' -> " + match);
+                        Log.d("DriverComplaints", "Comparing '" + reportDriverId +
+                                "' vs '" + normalizedDriverId + "' -> " + match);
 
                         return !match;
                     });
+
 
                     Log.d("DriverComplaints", "After filtering, " + allReports.size() + " reports remain");
 
@@ -431,6 +432,8 @@ public class DriverComplaints extends Fragment {
                 cardRoot.setBackground(viewedBg);
                 highlightReportId = "";
                 keepHighlightFromNotification = false;
+
+                displayComplaints(allReports);
             });
         } else {
             // Normal viewed state
@@ -441,6 +444,15 @@ public class DriverComplaints extends Fragment {
         // ---------------- ADD TO CONTAINER ----------------
         container.addView(cardView);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!keepHighlightFromNotification) {
+            highlightReportId = "";
+        }
+    }
+
 
     // ---------- DATE UTILITIES ----------
     private Date parseManila(String iso) throws ParseException {

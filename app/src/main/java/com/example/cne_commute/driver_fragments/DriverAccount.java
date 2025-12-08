@@ -1,6 +1,7 @@
 package com.example.cne_commute.driver_fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,10 @@ import com.example.cne_commute.R;
 import com.example.cne_commute.SupabaseApiClient;
 import com.example.cne_commute.SupabaseService;
 import com.example.cne_commute.UserRoleSelectionActivity;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.MultiFormatWriter;
 
 import java.util.*;
 
@@ -30,6 +35,11 @@ public class DriverAccount extends Fragment {
     // DISPLAY TEXTS
     private TextView driverIdText, nameTextView, contactTextView, logoutText;
     private Button editButton, changePasswordButton;
+
+    // QR UI elements (moved to fields to avoid lambda/finality issues)
+    private ImageView qrImage;
+    private LinearLayout qrDropdown;
+    private ImageView ivExpand;
 
     private String driverId;
     private SupabaseService apiService;
@@ -63,7 +73,7 @@ public class DriverAccount extends Fragment {
     ) {
         View view = inflater.inflate(R.layout.fragment_driver_account, container, false);
 
-        // Load driverId
+        // Load driverId from args or prefs
         if (getArguments() != null)
             driverId = getArguments().getString("driverId");
 
@@ -90,9 +100,27 @@ public class DriverAccount extends Fragment {
         changePasswordButton = view.findViewById(R.id.change_password_button);
         logoutText = view.findViewById(R.id.logout_text);
 
+        // QR UI bindings (fields)
+        qrImage = view.findViewById(R.id.qr_image);
+        qrDropdown = view.findViewById(R.id.qr_dropdown);
+        ivExpand = view.findViewById(R.id.iv_expand);
+
+        // Expand/collapse logic for QR section
+        qrDropdown.setOnClickListener(v -> {
+            if (qrImage.getVisibility() == View.GONE) {
+                qrImage.setVisibility(View.VISIBLE);
+                ivExpand.setImageResource(R.drawable.ic_arrow_up);
+            } else {
+                qrImage.setVisibility(View.GONE);
+                ivExpand.setImageResource(R.drawable.ic_arrow_down);
+            }
+        });
+
         driverIdText.setText(driverId != null ? driverId : "N/A");
 
+        // initial data load
         loadDriverData();
+        loadQrData(qrImage);
 
         editButton.setOnClickListener(v -> showEditDialog());
         changePasswordButton.setOnClickListener(v -> showChangePasswordDialog());
@@ -105,6 +133,8 @@ public class DriverAccount extends Fragment {
     public void onResume() {
         super.onResume();
         loadDriverData();
+        // safe to call since qrImage is a field
+        loadQrData(qrImage);
     }
 
     // ===============================================================
@@ -139,7 +169,90 @@ public class DriverAccount extends Fragment {
     }
 
     // ===============================================================
+    //  LOAD QR DATA
+    // ===============================================================
+    private void loadQrData(ImageView qrImage) {
+
+        if (driverId == null) return;
+
+        // 1. Fetch driver + operator + toda info using the driver_qr_info view
+        apiService.getDriverFullInfo(
+                SUPABASE_API_KEY,
+                "Bearer " + SUPABASE_API_KEY,
+                "eq." + driverId
+        ).enqueue(new Callback<List<Map<String, Object>>>() {
+            @Override
+            public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
+
+                if (!response.isSuccessful() || response.body() == null || response.body().isEmpty()) {
+                    Toast.makeText(requireContext(), "QR data not found", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Map<String, Object> data = response.body().get(0);
+
+                try {
+                    // note: use keys returned by your view (adjust if different)
+                    String driverFirst = Objects.toString(data.get("driver_first_name"), "");
+                    String driverMiddle = Objects.toString(data.get("driver_middle_name"), "");
+                    String driverLast = Objects.toString(data.get("driver_last_name"), "");
+                    String franchiseId = Objects.toString(data.get("franchise_id"), "");
+                    String operatorFirst = Objects.toString(data.get("operator_first_name"), "");
+                    String operatorMiddle = Objects.toString(data.get("operator_middle_name"), "");
+                    String operatorLast = Objects.toString(data.get("operator_last_name"), "");
+                    String todaCode = Objects.toString(data.get("accredited_toda"), "");
+                    String todaName = Objects.toString(data.get("toda_name"), "");
+
+                    String fullDriverName = (driverFirst + " " + (driverMiddle.isEmpty() ? "" : driverMiddle + " ") + driverLast).trim();
+                    String fullOperatorName = (operatorFirst + " " + (operatorMiddle.isEmpty() ? "" : operatorMiddle + " ") + operatorLast).trim();
+
+                    // Build compact JSON payload for QR
+                    String qrPayload = "{"
+                            + "\"driver_id\":\"" + Objects.toString(data.get("driver_id"), "") + "\","
+                            + "\"driver_name\":\"" + escapeJson(fullDriverName) + "\","
+                            + "\"franchise_id\":\"" + escapeJson(franchiseId) + "\","
+                            + "\"operator_name\":\"" + escapeJson(fullOperatorName) + "\","
+                            + "\"toda_accredited\":\"" + escapeJson(todaCode) + "\","
+                            + "\"toda_name\":\"" + escapeJson(todaName) + "\""
+                            + "}";
+
+                    generateQrCode(qrPayload, qrImage);
+
+                } catch (Exception e) {
+                    Toast.makeText(requireContext(), "QR build error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Map<String, Object>>> call, Throwable t) {
+                Toast.makeText(requireContext(), "QR load failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Very small helper to escape double quotes in values
+    private String escapeJson(String s) {
+        return s == null ? "" : s.replace("\"", "\\\"");
+    }
+
+    private void generateQrCode(String text, ImageView imageView) {
+        try {
+            MultiFormatWriter writer = new MultiFormatWriter();
+            BitMatrix matrix = writer.encode(text, BarcodeFormat.QR_CODE, 600, 600);
+
+            BarcodeEncoder encoder = new BarcodeEncoder();
+            Bitmap bitmap = encoder.createBitmap(matrix);
+
+            imageView.setImageBitmap(bitmap);
+
+        } catch (Exception e) {
+            Toast.makeText(requireContext(), "QR failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // ===============================================================
     //  EDIT PROFILE DIALOG
+    //  (unchanged, omitted here for brevity in explanation)
     // ===============================================================
     private void showEditDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.edit_profile_dialog, null);
@@ -174,7 +287,7 @@ public class DriverAccount extends Fragment {
         municipalityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         municipalitySpinner.setAdapter(municipalityAdapter);
 
-// ------------------ Get driver data ------------------
+        // ------------------ Get driver data ------------------
         apiService.getDriverById(
                 SUPABASE_API_KEY,
                 "Bearer " + SUPABASE_API_KEY,

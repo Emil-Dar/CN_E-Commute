@@ -31,7 +31,6 @@ import retrofit2.*;
 public class AddDriverActivity extends AppCompatActivity {
 
     private static final String TAG = "AddDriverActivity";
-
     private static final int PICK_IMAGE_REQUEST = 1001;
     private static final int CAMERA_REQUEST_CODE = 1002;
     private static final int PERMISSION_CODE = 1003;
@@ -51,7 +50,6 @@ public class AddDriverActivity extends AppCompatActivity {
 
     private final String supabaseUrl = SupabaseApiClient.getProjectUrl();
     private final String supabaseKey = SupabaseApiClient.getApiKey();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,32 +77,22 @@ public class AddDriverActivity extends AppCompatActivity {
         licensePreview = findViewById(R.id.licensePreview);
         removeImageBtn = findViewById(R.id.removeImageBtn);
 
-        // Retrieve operator_id from SharedPreferences (or session)
+        // -----------------------------------------------
+        // CLEAN OPERATOR_ID HANDLING (fixed)
+        // -----------------------------------------------
         currentOperatorId = getSharedPreferences("UserSession", MODE_PRIVATE)
                 .getString("operator_id", null);
 
-        // Fallbacks for other possible keys or Intent extras
-        if (currentOperatorId == null) {
-            currentOperatorId = getSharedPreferences("UserSession", MODE_PRIVATE)
-                    .getString("operatorId", null);
-        }
-        if (currentOperatorId == null) {
-            currentOperatorId = getSharedPreferences("UserSession", MODE_PRIVATE)
-                    .getString("user_id", null);
-        }
-        if (currentOperatorId == null) {
-            currentOperatorId = getSharedPreferences("UserSession", MODE_PRIVATE)
-                    .getString("id", null);
-        }
-        if (currentOperatorId == null) {
-            // Also check Intent extras (in case the calling Activity passed it)
-            String opFromIntent = getIntent().getStringExtra("operator_id");
-            if (opFromIntent != null && !opFromIntent.trim().isEmpty()) {
-                currentOperatorId = opFromIntent;
-            }
-        }
+        Log.d(TAG, "Operator ID loaded from session: " + currentOperatorId);
 
-        Log.d(TAG, "Operator ID resolved: " + currentOperatorId);
+        if (currentOperatorId == null || currentOperatorId.trim().isEmpty()) {
+            Toast.makeText(this,
+                    "Operator not found. Please login again.",
+                    Toast.LENGTH_LONG
+            ).show();
+            Log.e(TAG, "No operator_id found in SharedPreferences.");
+        }
+        // -----------------------------------------------
 
         // Dropdown setup
         ArrayAdapter<String> barangayAdapter = new ArrayAdapter<>(
@@ -149,8 +137,8 @@ public class AddDriverActivity extends AppCompatActivity {
 
             Calendar maxCalendar = Calendar.getInstance();
             maxCalendar.add(Calendar.YEAR, 10);
-            datePicker.getDatePicker().setMinDate(System.currentTimeMillis()); // can’t expire before today
-            datePicker.getDatePicker().setMaxDate(maxCalendar.getTimeInMillis()); // up to 10 years ahead
+            datePicker.getDatePicker().setMinDate(System.currentTimeMillis());
+            datePicker.getDatePicker().setMaxDate(maxCalendar.getTimeInMillis());
 
             datePicker.show();
         });
@@ -161,6 +149,7 @@ public class AddDriverActivity extends AppCompatActivity {
         removeImageBtn.setOnClickListener(v -> removeImage());
         saveBtn.setOnClickListener(v -> validateAndFetch());
     }
+
 
     // region 📸 CAMERA + GALLERY
     private void openImagePicker() {

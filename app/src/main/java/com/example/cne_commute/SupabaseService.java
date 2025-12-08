@@ -165,13 +165,6 @@ public interface SupabaseService {
             @Query("report_id") String filter
     );
 
-    // FIXED - Removed invalid {driverId}
-    @GET("reports")
-    Call<List<Map<String, Object>>> getReportsByDriver(
-            @Header("apikey") String apiKey,
-            @Header("Authorization") String bearerToken,
-            @Query("driver_id") String driverId
-    );
 
     @GET("reports")
     Call<List<ReportData>> getReportDetails(
@@ -188,4 +181,28 @@ public interface SupabaseService {
             @Query("order") String order,
             @Query("limit") int limit
     );
+
+    @GET("driver_qr_info")
+    Call<List<Map<String, Object>>> getDriverFullInfo(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String bearer,
+            @Query("driver_id") String filter
+    );
+
+    @GET("drivers")
+    Call<List<Driver>> getDriversByOperator(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Query("requested_by") String operatorFilter // <-- add this
+    );
+
+    @GET("reports")
+    Call<List<Map<String, Object>>> getReportsByOperator(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Query("operator_id") String operatorFilter
+    );
+
+
 }
+

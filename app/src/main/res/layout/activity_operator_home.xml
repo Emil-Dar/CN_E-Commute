@@ -5,16 +5,24 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
-    <!-- Home Page Content -->
-    <TextView
-        android:id="@+id/tv_home"
-        android:layout_width="wrap_content"
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Operator Home"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"
-        android:textColor="#333333" />
+        android:background="@color/primary_blue"
+        android:minHeight="?attr/actionBarSize"
+        android:elevation="4dp"
+        app:title="Operator Dashboard"
+        app:titleTextColor="@android:color/white" />
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_drivers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:paddingBottom="80dp" />
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

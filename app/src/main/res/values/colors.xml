@@ -50,4 +50,11 @@
     <color name="light_blue_background">#E6F0FF</color>
     <color name="light_gray_background">#F7F7F7</color>
 
+    <color name="daily_rev">#EF4944</color>
+    <color name="weekly_rev">#F4D350</color>
+    <color name="monthly_rev">#64C869</color>
+    <color name="yearly_rev">#042138</color>
+
+
+
 </resources>

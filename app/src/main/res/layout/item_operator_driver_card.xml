@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="12dp">
+
+    <!-- Apply your drawable as background + left spacing -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_white_background"
+        android:paddingStart="20dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/tv_driver_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DR0001 • Janelle Montes"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/tv_franchise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Franchise: 2263"
+            android:textSize="15sp"
+            android:layout_marginTop="4dp"
+            android:textColor="#333333"/>
+
+        <TextView
+            android:id="@+id/tv_assigned_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Assigned Date: Jan 10, 2024"
+            android:textSize="15sp"
+            android:layout_marginTop="2dp"
+            android:textColor="#333333"/>
+
+        <TextView
+            android:id="@+id/tv_report_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Violation Reports:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="12dp"
+            android:textColor="#111111"/>
+
+        <TextView
+            android:id="@+id/tv_report_counts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pending: 0   Scheduled: 0
+Resolved: 0   Unresolved: 0"
+            android:textSize="15sp"
+            android:layout_marginTop="4dp"
+            android:textColor="#444444"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -72,6 +72,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.cardview:cardview:1.0.0")
 
+    implementation("io.github.jan-tennert.supabase:realtime-kt:2.1.0")
+
     // Material Design
     implementation("com.google.android.material:material:1.12.0")
 

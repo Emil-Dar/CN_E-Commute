@@ -6,17 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Header -->
-    <TextView
-        android:id="@+id/tv_notifications"
+    <!-- ░░░ TOOLBAR ░░░ -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/operatorToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Operator Notifications"
-        android:gravity="center"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:padding="16dp"
-        android:textColor="#333333" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_blue"
+        app:title="Operator Notifications"
+        app:titleTextColor="@android:color/white"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <!-- 🔍 Search + Filter Bar -->
     <LinearLayout
@@ -25,6 +23,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp">
 
         <EditText

@@ -31,7 +31,6 @@ public class DriverHomeActivity extends AppCompatActivity {
     private String driverId;
     private SupabaseRealtimeListener realtimeListener;
 
-    // Global unviewed cache
     public static int cachedUnviewedCount = 0;
 
     @Override
@@ -40,11 +39,23 @@ public class DriverHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_driver_home);
 
         instance = this;
-        driverId = getIntent().getStringExtra("driverID");
 
-        // Safety: fallback to stored or default driverId if intent extra is missing
+        // 🔥 FIX 1 — Correct key from Login Activity
+        driverId = getIntent().getStringExtra("driverId");
+
+        // 🔥 FIX 2 — Fallback to SharedPreferences instead of DR0001
         if (driverId == null || driverId.trim().isEmpty()) {
-            driverId = fetchLoggedInDriverId(); // implement this method from shared prefs or session
+            driverId = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                    .getString("driverId", null);
+        }
+
+        // 🔥 FIX 3 — If still null, block navigation to avoid wrong data
+        if (driverId == null) {
+            // Force re-login safely
+            Intent i = new Intent(this, DriverSignInActivity.class);
+            startActivity(i);
+            finish();
+            return;
         }
 
         bottomNav = findViewById(R.id.driver_bottom_nav);
@@ -64,7 +75,9 @@ public class DriverHomeActivity extends AppCompatActivity {
         updateNotificationBadge();
     }
 
-    // Called from DriverNotifications after a report is viewed
+
+    /** ---------- BADGE HANDLERS ---------- */
+
     public static void decrementBadgeCount() {
         if (instance != null) {
             instance.runOnUiThread(() -> {
@@ -94,23 +107,31 @@ public class DriverHomeActivity extends AppCompatActivity {
         if (realtimeListener != null) realtimeListener.stopListening();
     }
 
+    /** ---------- FETCH BADGE DATA ---------- */
+
     private void updateNotificationBadge() {
         SupabaseService service = SupabaseApiClient.getRetrofitInstance().create(SupabaseService.class);
 
-        service.getReports(
+        service.getReportsByDriverId(
                 SupabaseApiClient.SUPABASE_API_KEY,
-                "Bearer " + SupabaseApiClient.SUPABASE_API_KEY
+                "Bearer " + SupabaseApiClient.SUPABASE_API_KEY,
+                "eq." + driverId,
+                "created_at.desc",
+                "*"
         ).enqueue(new Callback<List<Map<String, Object>>>() {
             @Override
             public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    int unviewedCount = 0;
+
+                    int unviewed = 0;
+
                     for (Map<String, Object> r : response.body()) {
-                        Object viewed = r.get("viewed");
-                        if (!(viewed instanceof Boolean && (Boolean) viewed)) unviewedCount++;
+                        boolean viewed = Boolean.TRUE.equals(r.get("viewed"));
+                        if (!viewed) unviewed++;
                     }
-                    cachedUnviewedCount = unviewedCount;
-                    showBadge(unviewedCount);
+
+                    cachedUnviewedCount = unviewed;
+                    showBadge(unviewed);
                 }
             }
 
@@ -121,10 +142,16 @@ public class DriverHomeActivity extends AppCompatActivity {
         });
     }
 
+
+    /** ---------- REALTIME LISTENER ---------- */
+
     private void startRealtimeBadgeListener() {
         realtimeListener = new SupabaseRealtimeListener();
         realtimeListener.startListening(reportId -> runOnUiThread(this::updateNotificationBadge));
     }
+
+
+    /** ---------- NAVIGATION ---------- */
 
     private void setupBottomNav() {
         bottomNav.setOnItemSelectedListener(item -> {
@@ -137,7 +164,6 @@ public class DriverHomeActivity extends AppCompatActivity {
                     selected = new DriverRevenue();
                     break;
                 case R.id.driver_complaints:
-                    // Always pass correct driverId
                     selected = DriverComplaints.newInstance(driverId, null);
                     break;
                 case R.id.driver_account:
@@ -159,6 +185,9 @@ public class DriverHomeActivity extends AppCompatActivity {
                 .commit();
     }
 
+
+    /** ---------- BADGE UI ---------- */
+
     private void showBadge(int count) {
         if (badge == null) return;
         if (count > 0) {
@@ -169,10 +198,13 @@ public class DriverHomeActivity extends AppCompatActivity {
         }
     }
 
-    // Replace with your method to get logged-in driver's ID
-    private String fetchLoggedInDriverId() {
-        // Example: return from shared preferences or session manager
-        // return SharedPrefManager.getDriverId();
-        return "DR0001"; // temporary fallback for testing
+
+    /** ---------- STATIC ACCESSOR ---------- */
+
+    public static String getLoggedInDriverId() {
+        if (instance == null) return null;
+
+        return instance.driverId;
     }
+
 }

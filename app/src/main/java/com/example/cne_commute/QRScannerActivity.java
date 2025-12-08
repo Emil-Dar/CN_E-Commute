@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -31,6 +34,9 @@ public class QRScannerActivity extends AppCompatActivity {
     private DecoratedBarcodeView barcodeScannerView;
     private Button rescanButton;
     private View subtitleText;
+
+    private boolean hasScanned = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,28 +107,27 @@ public class QRScannerActivity extends AppCompatActivity {
             public void barcodeResult(BarcodeResult result) {
                 Log.d(TAG, "barcodeResult triggered");
 
-                if (result == null || result.getText() == null) {
-                    Log.w(TAG, "barcodeResult: No barcode detected");
-                    Toast.makeText(QRScannerActivity.this, "No barcode detected", Toast.LENGTH_LONG).show();
-                    return;
-                }
+                if (result == null || result.getText() == null) return;
+
+                if (hasScanned) return;   // IMPORTANT FIX
+                hasScanned = true;
 
                 String scannedData = result.getText();
-                Log.d(TAG, "barcodeResult: Scanned Raw Data → " + scannedData);
+                Log.d(TAG, "Scanned Raw Data → " + scannedData);
 
                 ScannedQrCode scannedQrCode = parseQrData(scannedData);
 
                 if (scannedQrCode == null) {
-                    Log.w(TAG, "barcodeResult: QR data parsing failed");
-                    Toast.makeText(QRScannerActivity.this, "Invalid or incomplete QR data", Toast.LENGTH_SHORT).show();
+                    hasScanned = false; // allow retry
+                    Toast.makeText(QRScannerActivity.this, "Invalid QR", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Log.d(TAG, "barcodeResult: QR data parsed successfully");
                 barcodeScannerView.pause();
                 handleScan(scannedQrCode);
             }
         });
+
 
         barcodeScannerView.resume();
     }
@@ -160,56 +165,44 @@ public class QRScannerActivity extends AppCompatActivity {
     private void setupRescanButton() {
         if (rescanButton != null) {
             rescanButton.setOnClickListener(view -> {
-                Log.d(TAG, "Rescan button clicked");
-                Toast.makeText(this, "Rescanning...", Toast.LENGTH_SHORT).show();
+                hasScanned = false;
                 barcodeScannerView.resume();
             });
         }
     }
-
     private ScannedQrCode parseQrData(String raw) {
-        Log.d(TAG, "parseQrData: Parsing raw QR data");
+        Log.d(TAG, "parseQrData: Parsing JSON QR data");
+        try {
+            JSONObject obj = new JSONObject(raw);
 
-        String[] lines = raw.split("\\r?\\n");
+            String driverId = obj.optString("driver_id", "");
+            String franchiseId = obj.optString("franchise_id", "");
+            String driverName = obj.optString("driver_name", "");
+            String operatorName = obj.optString("operator_name", "");
+            String toda = obj.optString("accredited_toda", "");
 
-        String driverId = "", franchiseId = "", driverName = "";
-        String vehiclePlate = "", route = "", operatorName = "", toda = "";
-
-        for (String line : lines) {
-            String normalized = line.toLowerCase().replaceAll("[^a-z0-9]", "");
-
-            if (normalized.contains("driverid")) {
-                driverId = line.substring(line.indexOf(":") + 1).trim();
-            } else if (normalized.contains("drivername")) {
-                driverName = line.substring(line.indexOf(":") + 1).trim();
-            } else if (normalized.contains("franchiseid")) {
-                franchiseId = line.substring(line.indexOf(":") + 1).trim();
-            } else if (normalized.contains("operatorname")) {
-                operatorName = line.substring(line.indexOf(":") + 1).trim();
-            } else if (normalized.contains("toda")) {
-                toda = line.substring(line.indexOf(":") + 1).trim();
+            if (driverName.isEmpty()) {
+                Log.w(TAG, "parseQrData: Missing required field → driver_name");
+                return null;
             }
-        }
 
-        if (driverName.isEmpty()) {
-            Log.w(TAG, "parseQrData: Missing required field → driverName");
+            return new ScannedQrCode(
+                    driverId,
+                    franchiseId,
+                    driverName,
+                    "", "", "",
+                    operatorName,
+                    toda,
+                    ""
+            );
+
+        } catch (Exception e) {
+            Log.e(TAG, "parseQrData: Invalid JSON → " + raw, e);
             return null;
         }
-
-        Log.d(TAG, "parseQrData: Parsed driver → " + driverName);
-
-        return new ScannedQrCode(
-                driverId,
-                franchiseId,
-                driverName,
-                "", // contact removed
-                vehiclePlate,
-                route,
-                operatorName,
-                toda,
-                ""
-        );
     }
+
+
 
     private String getCurrentTimestamp() {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());

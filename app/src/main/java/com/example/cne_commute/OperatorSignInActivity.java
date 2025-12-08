@@ -46,11 +46,14 @@ public class OperatorSignInActivity extends AppCompatActivity {
 
             if (operatorId.isEmpty()) {
                 Toast.makeText(this, "Please enter Operator ID", Toast.LENGTH_SHORT).show();
-            } else if (password.isEmpty()) {
-                Toast.makeText(this, "Please enter Password", Toast.LENGTH_SHORT).show();
-            } else {
-                loginOperator(operatorId, password);
+                return;
             }
+            if (password.isEmpty()) {
+                Toast.makeText(this, "Please enter Password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            loginOperator(operatorId, password);
         });
     }
 
@@ -70,40 +73,70 @@ public class OperatorSignInActivity extends AppCompatActivity {
         String apiKey = BuildConfig.SUPABASE_API_KEY;
         String authHeader = "Bearer " + apiKey;
 
-        String filter = "eq." + operatorId; // matches @Query("operator_id")
+        // filter for eq.operatorId
+        String filter = "eq." + operatorId;
 
         supabaseService.getOperatorById(apiKey, authHeader, filter)
                 .enqueue(new Callback<List<Operator>>() {
                     @Override
                     public void onResponse(Call<List<Operator>> call, Response<List<Operator>> response) {
-                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                            Operator operator = response.body().get(0);
 
-                            boolean isVerified = false;
-
-                            // strict password enforcement
-                            if (operator.getPassword() != null && !operator.getPassword().isEmpty()) {
-                                isVerified = BCrypt.verifyer()
-                                        .verify(password.toCharArray(), operator.getPassword())
-                                        .verified;
-                            }
-
-                            if (isVerified) {
-                                Intent intent = new Intent(OperatorSignInActivity.this, OperatorHomeActivity.class);
-                                intent.putExtra("operatorId", operatorId);
-                                finish();
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(OperatorSignInActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(OperatorSignInActivity.this, "Operator not found", Toast.LENGTH_SHORT).show();
+                        if (!response.isSuccessful() || response.body() == null) {
+                            Toast.makeText(OperatorSignInActivity.this,
+                                    "Server error. Try again.",
+                                    Toast.LENGTH_LONG).show();
+                            return;
                         }
+
+                        List<Operator> operators = response.body();
+
+                        if (operators.isEmpty()) {
+                            Toast.makeText(OperatorSignInActivity.this,
+                                    "Operator ID does not exist.",
+                                    Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        Operator operator = operators.get(0);
+
+                        boolean isVerified = false;
+
+                        if (operator.getPassword() != null && !operator.getPassword().isEmpty()) {
+                            isVerified = BCrypt.verifyer()
+                                    .verify(password.toCharArray(), operator.getPassword())
+                                    .verified;
+                        }
+
+                        if (!isVerified) {
+                            Toast.makeText(OperatorSignInActivity.this,
+                                    "Incorrect password.",
+                                    Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        // ----------------------------------------
+                        // SUCCESSFUL LOGIN — SAVE SESSION
+                        // ----------------------------------------
+                        getSharedPreferences("UserSession", MODE_PRIVATE)
+                                .edit()
+                                .putString("operator_id", operatorId)
+                                .apply();
+
+                        Toast.makeText(OperatorSignInActivity.this,
+                                "Login successful!",
+                                Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(OperatorSignInActivity.this, OperatorHomeActivity.class);
+                        intent.putExtra("operatorId", operatorId);
+                        startActivity(intent);
+                        finish();
                     }
 
                     @Override
                     public void onFailure(Call<List<Operator>> call, Throwable t) {
-                        Toast.makeText(OperatorSignInActivity.this, "Login failed: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(OperatorSignInActivity.this,
+                                "Login failed: " + t.getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
     }
